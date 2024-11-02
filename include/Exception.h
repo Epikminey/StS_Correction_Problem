@@ -1,36 +1,37 @@
 #ifndef EXCEPTION_H
 #define EXCEPTION_H
 
-class Exception
-{
+#include <exception>
+
+class Exception final : public std::exception {
 private:
-	//***Attributs***//
-	unsigned int valeur_;
+    //***Attributs***//
+    unsigned int valeur_;
 
 public:
-	//***Constructeurs et destructeurs***//
+    //***Constructeurs et destructeurs***//
 
-	/*************************************************
-	***** Exception : le constructeur de confort *****
-	*************************************************/
-	explicit Exception(unsigned int valeur);
+    /*************************************************
+    ***** Exception : le constructeur de confort *****
+    *************************************************/
+    explicit Exception(unsigned int valeur);
 
-	//***Methodes***//
+    //***Methodes***//
 
-	/***************************************************************
-	***** LireValeur : accesseur direct de lecture sur valeur_ *****
-	***************************************************************/
-	[[nodiscard]] unsigned int lireValeur() const;
+    /***************************************************************
+    ***** LireValeur : accesseur direct de lecture sur valeur_ *****
+    ***************************************************************/
+    [[nodiscard]] unsigned int lireValeur() const;
 
-	/********************************************************************
-	***** ModifierValeur : accesseur direct en ecriture sur valeur_ *****
-	********************************************************************/
-	void modifierValeur(unsigned int valeur);
+    /********************************************************************
+    ***** ModifierValeur : accesseur direct en ecriture sur valeur_ *****
+    ********************************************************************/
+    void modifierValeur(unsigned int valeur);
 
-	/*****************************************************
-	***** LireMessage : precise l'exception survenue *****
-	*****************************************************/
-	void lireMessage() const;
+    /*****************************************************
+    ***** LireMessage : precise l'exception survenue *****
+    *****************************************************/
+    void lireMessage() const;
 };
 
 #endif //EXCEPTION_H
