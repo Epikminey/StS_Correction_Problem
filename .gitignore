@@ -32,3 +32,4 @@
 *.exe
 *.out
 *.app
+cmake-build-debug/Testing/Temporary/LastTest.log
