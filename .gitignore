@@ -2,6 +2,7 @@
 *.d
 
 *.log
+*.json
 
 # Compiled Object files
 *.slo
