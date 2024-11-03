@@ -7,8 +7,7 @@
 #include <vector>
 
 // Contient tous les mouvements pour modifier une sequence.
-class Sequence
-{
+class Sequence {
 private:
     /*** Attributs ***/
     vector<Case> listeCases_; //La sequence composee d'objets Case
@@ -52,6 +51,11 @@ public:
     ***** AfficherCase : Affiche la valeur de la case choisie dans la liste *****
     ****************************************************************************/
     void afficherCase(unsigned int index) const;
+
+    /********************************************************************************
+    ***** ObtenirCase : Pour obtenir la valeur de la case choisie dans la liste *****
+    ********************************************************************************/
+    [[nodiscard]] const Case &obtenirCase(unsigned int index) const;
 
     /***************************************************************************
     ***** AfficherSequence : Affiche la composition de la sequence entiere *****

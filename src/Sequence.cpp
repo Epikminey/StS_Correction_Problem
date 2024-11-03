@@ -1,6 +1,7 @@
 #include "Sequence.h"
 
-#include<iostream>
+#include <algorithm>
+#include <iostream>
 
 /************************************************
 ***** Sequence : Le constructeur par defaut *****
@@ -38,6 +39,16 @@ void Sequence::afficherCase(const unsigned int index) const {
     listeCases_[index].afficherCase();
 }
 
+/********************************************************************************
+***** ObtenirCase : Pour obtenir la valeur de la case choisie dans la liste *****
+********************************************************************************/
+const Case & Sequence::obtenirCase(const unsigned int index) const {
+    if (index >= listeCases_.size()) {
+        throw out_of_range("Index hors limites");
+    }
+    return listeCases_[index];
+}
+
 /***************************************************************************
 ***** AfficherSequence : Affiche la composition de la sequence entiere *****
 ***************************************************************************/
@@ -51,39 +62,54 @@ void Sequence::afficherSequence() const {
 /************************************************************************************************************
 ***** Inverser : Prend et inverse une partie de la sequence, puis change le signe de la partie inversee *****
 ************************************************************************************************************/
-void Sequence::inverser(unsigned int index, unsigned int nombreCases) {
-
+void Sequence::inverser(const unsigned int index, const unsigned int nombreCases) {
+    if (!listeCases_.empty() && index < listeCases_.size()) {
+        if (index + nombreCases < listeCases_.size()) {
+            reverse(listeCases_.begin() + index, listeCases_.begin() + index + nombreCases);
+            for (unsigned int it = listeCases_.begin() + index; it != listeCases_.begin() + index + nombreCases; ++it) {
+                listeCases_[it].afficherCase();
+            }
+        } else {
+            reverse(listeCases_.begin() + index, listeCases_.end());
+            for (auto it = listeCases_.begin() + index; it != listeCases_.end(); ++it) {
+                std::cout << " ";
+            }
+        }
+    }
 }
 
 /************************************************************************
 ***** Transposer : Deplace une partie de la sequence dans elle-meme *****
 ************************************************************************/
-void Sequence::transposer(unsigned int index, unsigned int nombreCases, unsigned int indexEmplacement) {
-
+void Sequence::transposer(const unsigned int index, const unsigned int nombreCases,
+                          const unsigned int indexEmplacement) {
+    printf("coucou");
 }
 
 /***************************************************************************************************************
 ***** InverserTransposer : Effectue une inversion d'un morceau de la sequence puis deplace ce meme morceau *****
 ***************************************************************************************************************/
-void Sequence::inverserTransposer(unsigned int index, unsigned int nombreCases, unsigned int indexEmplacement) {
-
+void Sequence::inverserTransposer(const unsigned int index, unsigned int nombreCases,
+                                  unsigned int indexEmplacement) {
 }
 
 /*****************************************************************************************************************
 ***** Dupliquer : Fait une copie d'une partie de la sequence et place cette duplication a cote du bloc copie *****
 *****************************************************************************************************************/
-void Sequence::dupliquer(unsigned int index, unsigned int nombreCases) {
-
+void Sequence::dupliquer(const unsigned int index, const unsigned int nombreCases) {
 }
 
 /*******************************************************
 ***** Supprimer : Retire une partie de la sequence *****
 *******************************************************/
-void Sequence::supprimer(const unsigned int index, unsigned int nombreCases) {
-    /*if (!listeCases_.empty()) {
-        if (index < listeCases_.size())
+void Sequence::supprimer(const unsigned int index, const unsigned int nombreCases) {
+    if (!listeCases_.empty() && index < listeCases_.size()) {
+        if (index + nombreCases < listeCases_.size()) {
+            listeCases_.erase(listeCases_.begin() + index, listeCases_.begin() + index + nombreCases);
+        } else {
+            listeCases_.erase(listeCases_.begin() + index, listeCases_.end());
+        }
     }
-    monVector.erase(monVector.begin() + 5);*/
 }
 
 /**********************************************************

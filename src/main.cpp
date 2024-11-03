@@ -23,8 +23,9 @@ int main()
     auto sequence6 = Sequence(ADN6);
 
 
+    sequence1.ajouterCase(12, "+A");
     sequence1.ajouterCase(12, "-A");
-    sequence1.modifierCase(12, "-Af");
+    sequence1.inverser(2, 2);
 
     sequence1.afficherSequence();
 
