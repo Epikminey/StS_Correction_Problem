@@ -14,6 +14,7 @@ int main()
     const string ADN4 = "+A-D+V-F+S-V-S";
     const string ADN5 = "+F+G-D+X+S+C-V+F-R";
     const string ADN6 = "+B-E+D+V+E-Z";
+    const string ADN7 = "+B-E+D+V+E-C";
 
     auto sequence1 = Sequence(ADN1);
     auto sequence2 = Sequence(ADN2);
@@ -21,6 +22,7 @@ int main()
     auto sequence4 = Sequence(ADN4);
     auto sequence5 = Sequence(ADN5);
     auto sequence6 = Sequence(ADN6);
+    auto sequence7 = Sequence(ADN7);
 
 
     sequence1.ajouterCase(12, "+A");
@@ -42,5 +44,13 @@ int main()
     printf(algorithme1.resultat);*/
 
     cout << "Hello, World!" << endl;
+
+    /*int test = DistanceLevenshtein::calculerDistanceLevenshtein(sequence6, sequence7);
+
+    cout << "Dist Levenshtein entre seq6 et seq7 : " << test << endl;
+    sequence6.afficherSequence();
+    sequence7.afficherSequence();*/
+
+
     return 0;
 }
