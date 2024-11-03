@@ -66,13 +66,13 @@ void Sequence::inverser(const unsigned int index, const unsigned int nombreCases
     if (!listeCases_.empty() && index < listeCases_.size()) {
         if (index + nombreCases < listeCases_.size()) {
             reverse(listeCases_.begin() + index, listeCases_.begin() + index + nombreCases);
-            for (unsigned int it = listeCases_.begin() + index; it != listeCases_.begin() + index + nombreCases; ++it) {
-                listeCases_[it].afficherCase();
+            for (unsigned int boucle =  index; boucle < index + nombreCases ; boucle++) {
+                listeCases_[boucle].modifierSigne();
             }
         } else {
             reverse(listeCases_.begin() + index, listeCases_.end());
-            for (auto it = listeCases_.begin() + index; it != listeCases_.end(); ++it) {
-                std::cout << " ";
+            for (auto boucle = index; boucle < listeCases_.size(); ++boucle) {
+                listeCases_[boucle].modifierSigne();
             }
         }
     }
