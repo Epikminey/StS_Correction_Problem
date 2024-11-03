@@ -1,92 +1,76 @@
 #include "Case.h"
 
-#include <Exception.h>
 #include <iostream>
 
 using namespace std;
 
 /********************************************
-***** Case : le constructeur de confort *****
+***** Case : Le constructeur de confort *****
 ********************************************/
-Case::Case(const char lettre, const bool signe) {
-    if ((lettre >= 'A' && lettre <= 'Z') || lettre == '_') {
+Case::Case(const char signe, const char lettre) {
+    if (lettre >= 'A' && lettre <= 'Z') {
         lettre_ = lettre;
     } else {
-        throw Exception(1);
+        throw runtime_error("Le caractere n'est pas une lettre majuscule.");
     }
-    signe_ = signe;
+    if (signe == '+' || signe == '-') {
+        signe_ = signe;
+    } else {
+        throw runtime_error("Il faut donner un signe '+' ou '-'.");
+    }
 }
 
-/*************************************************************
-***** LireChar : accesseur direct de lecture sur lettre_ *****
-*************************************************************/
-char Case::lireChar() const {
+/***************************************************************
+***** LireLettre : Accesseur direct de lecture sur lettre_ *****
+***************************************************************/
+char Case::lireLettre() const {
     return lettre_;
 }
 
 /*************************************************************
-***** Exception : accesseur direct de lecture sur signe_ *****
+***** LireSigne : Accesseur direct de lecture sur signe_ *****
 *************************************************************/
-bool Case::lireBooleen() const {
+char Case::lireSigne() const {
     return signe_;
 }
 
-/************************************************************************
-***** Exception : accesseur direct de lecture sur lettre_ et signe_ *****
-************************************************************************/
-tuple<char, bool> Case::lireCase() const {
-    return {lettre_, signe_};
+/***********************************************************************
+***** LireCase : Accesseur direct de lecture sur lettre_ et signe_ *****
+***********************************************************************/
+tuple<char, char> Case::lireCase() const {
+    return {signe_, lettre_};
 }
 
-/***************************************************
-***** Exception : affiche la valeur de la case *****
-***************************************************/
+/******************************************************
+***** AfficherCase : Affiche la valeur de la case *****
+******************************************************/
 void Case::afficherCase() const {
-    char signe;
-    if (lettre_ == '_') {
-        signe = '_';
-    } else if (signe_ == true) {
-        signe = '+';
-    } else {
-        signe = '-';
-    }
-    cout << signe << lettre_;
+    cout << signe_ << lettre_;
 }
 
-/***************************************************************
-***** Exception : accesseur direct en ecriture sur lettre_ *****
-***************************************************************/
-void Case::modifierChar(const char lettre) {
-    if ((lettre >= 'A' && lettre <= 'Z') || lettre == '_') {
+/******************************************************************
+***** ModifierSigne : Accesseur direct en ecriture sur signe_ *****
+******************************************************************/
+void Case::modifierSigne() {
+    if (signe_ == '+') {
+        signe_ = '-';
+    } else {
+        signe_ = '+';
+    }
+}
+
+/****************************************************************************
+***** ModifierCase : Accesseur direct en ecriture sur lettre_ et signe_ *****
+****************************************************************************/
+void Case::modifierCase(const char signe, const char lettre) {
+    if (lettre >= 'A' && lettre <= 'Z') {
         lettre_ = lettre;
     } else {
-        throw Exception(1);
+        throw runtime_error("Le caractere n'est pas une lettre majuscule.");
     }
-}
-
-/**************************************************************
-***** Exception : accesseur direct en ecriture sur signe_ *****
-**************************************************************/
-void Case::modifierBooleen() {
-    if (signe_ == true) {
-        signe_ = false;
+    if (signe == '+' || signe == '-') {
+        signe_ = signe;
     } else {
-        signe_ = true;
-    }
-}
-
-/*************************************************************************
-***** Exception : accesseur direct en ecriture sur lettre_ et signe_ *****
-*************************************************************************/
-void Case::modifierCase(const char lettre) {
-    if ((lettre >= 'A' && lettre <= 'Z') || lettre == '_') {
-        lettre_ = lettre;
-    } else {
-        throw Exception(1);
-    }
-    if (signe_ == true) {
-        signe_ = false;
-    } else {
-        signe_ = true;
+        throw runtime_error("Il faut donner un signe '+' ou '-'.");
     }
 }

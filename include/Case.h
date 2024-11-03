@@ -5,11 +5,12 @@
 
 using namespace std;
 
+// Contient la structure d'une case de la sequence.
 class Case {
 private:
     //***Attributs***//
     char lettre_; // Une lettre de l'alphabet majuscule.
-    bool signe_; //true = '+' , false = '-'.
+    char signe_; //'+' ou '-'.
 
 public:
     //***Constructeurs et destructeurs***//
@@ -18,61 +19,56 @@ public:
     Case() = delete;
 
     /********************************************
-    ***** Case : le constructeur de confort *****
+    ***** Case : Le constructeur de confort *****
     ********************************************/
-    Case(char lettre, bool signe);
+    Case(char signe, char lettre);
 
     /*********************************************************
-    ***** Case : le constructeur de recopie (par defaut) *****
+    ***** Case : Le constructeur de recopie (par defaut) *****
     *********************************************************/
     Case(const Case &Param) = default;
 
-    /*********************************************
-    ***** Case : le destructeur (par defaut) *****
-    *********************************************/
+    /**********************************************
+    ***** ~Case : Le destructeur (par defaut) *****
+    **********************************************/
     ~Case() = default;
 
     //***Methodes***//
 
     /*****************************************************************************
-    ***** Operator= : pour recopier un objet Case sur un objet deja existant *****
+    ***** Operator= : Pour recopier un objet Case sur un objet deja existant *****
     *****************************************************************************/
     Case &operator=(const Case &Param) = default;
 
-    /*************************************************************
-    ***** LireChar : accesseur direct de lecture sur lettre_ *****
-    *************************************************************/
-    [[nodiscard]] char lireChar() const;
+    /***************************************************************
+    ***** LireLettre : Accesseur direct de lecture sur lettre_ *****
+    ***************************************************************/
+    [[nodiscard]] char lireLettre() const;
 
     /*************************************************************
-    ***** Exception : accesseur direct de lecture sur signe_ *****
+    ***** LireSigne : Accesseur direct de lecture sur signe_ *****
     *************************************************************/
-    [[nodiscard]] bool lireBooleen() const;
+    [[nodiscard]] char lireSigne() const;
 
-    /************************************************************************
-    ***** Exception : accesseur direct de lecture sur lettre_ et signe_ *****
-    ************************************************************************/
-    [[nodiscard]] tuple<char, bool> lireCase() const;
+    /***********************************************************************
+    ***** LireCase : Accesseur direct de lecture sur lettre_ et signe_ *****
+    ***********************************************************************/
+    [[nodiscard]] tuple<char, char> lireCase() const;
 
-    /***************************************************
-    ***** Exception : affiche la valeur de la case *****
-    ***************************************************/
+    /******************************************************
+    ***** AfficherCase : Affiche la valeur de la case *****
+    ******************************************************/
     void afficherCase() const;
 
-    /***************************************************************
-    ***** Exception : accesseur direct en ecriture sur lettre_ *****
-    ***************************************************************/
-    void modifierChar(char lettre);
+    /******************************************************************
+    ***** ModifierSigne : Accesseur direct en ecriture sur signe_ *****
+    ******************************************************************/
+    void modifierSigne();
 
-    /**************************************************************
-    ***** Exception : accesseur direct en ecriture sur signe_ *****
-    **************************************************************/
-    void modifierBooleen();
-
-    /*************************************************************************
-    ***** Exception : accesseur direct en ecriture sur lettre_ et signe_ *****
-    *************************************************************************/
-    void modifierCase(char lettre);
+    /****************************************************************************
+    ***** ModifierCase : Accesseur direct en ecriture sur lettre_ et signe_ *****
+    ****************************************************************************/
+    void modifierCase(char signe, char lettre);
 };
 
 #endif //CASE_H

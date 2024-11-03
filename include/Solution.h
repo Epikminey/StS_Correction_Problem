@@ -1,13 +1,8 @@
 #ifndef SOLUTION_H
 #define SOLUTION_H
 
-class Solution
-{
-public:
-    Solution();            // Constructeur
-    void myMethod();      // Méthode publique
-private:
-         // Attribut privé
+class Solution {
+
 };
 
 #endif //SOLUTION_H
