@@ -1,10 +1,9 @@
 #include "DistanceLevenshtein.h"
 
-#include <vector>
-
-using namespace std;
-
-int DistanceLevenshtein::calculerDistanceLevenshtein(const Sequence& sequence1, const Sequence& sequence2) {
+/******************************************************************************************************************
+***** DistanceLevenshtein : Le constructeur de confort calculant la distance de Levenshtein entre 2 séquences *****
+******************************************************************************************************************/
+DistanceLevenshtein::DistanceLevenshtein(const Sequence &sequence1, const Sequence &sequence2) {
     const unsigned int tailleSequence1 = sequence1.obtenirTailleSequence();
     const unsigned int tailleSequence2 = sequence2.obtenirTailleSequence();
     // D est un tableau de longueurChaine1+1 rangées et longueurChaine2+1 colonnes
@@ -25,16 +24,24 @@ int DistanceLevenshtein::calculerDistanceLevenshtein(const Sequence& sequence1, 
             int coutSubstitution = 0;
             const char lettre1 = sequence1.obtenirCase(ligne - 1).lireLettre();
             const char lettre2 = sequence2.obtenirCase(colonne - 1).lireLettre();
-            if ( lettre1 != lettre2) {
+            if (lettre1 != lettre2) {
                 coutSubstitution = 1;
             }
-            D[ligne][colonne] = min(D[ligne - 1][colonne] + 1,             // effacement du nouveau caractère de séquence1
-                     min(D[ligne][colonne - 1] + 1,                        // insertion dans séquence2 du nouveau caractère de séquence1
-                           D[ligne - 1][colonne - 1] + coutSubstitution) // substitution
-                           );
+            D[ligne][colonne] = min(D[ligne - 1][colonne] + 1, // effacement du nouveau caractère de séquence1
+                                    min(D[ligne][colonne - 1] + 1,
+                                        // insertion dans séquence2 du nouveau caractère de séquence1
+                                        D[ligne - 1][colonne - 1] + coutSubstitution) // substitution
+            );
         }
     }
 
     // On retourne la distance de Levenshtein qui se trouve à la dernière ligne/colonne de la matrice D
-    return D[tailleSequence1][tailleSequence2];
+    distanceDeLevenshtein_ = D[tailleSequence1][tailleSequence2];
+}
+
+/****************************************************************************************************
+***** ObtenirDistanceLevenshtein : Pour obtenir la distance de Levenshtein entre deux séquences *****
+****************************************************************************************************/
+unsigned int DistanceLevenshtein::obtenirDistanceLevenshtein() const {
+    return distanceDeLevenshtein_;
 }

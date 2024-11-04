@@ -28,7 +28,7 @@ public:
     /*************************************************************
     ***** Sequence : Le constructeur de recopie (par defaut) *****
     *************************************************************/
-    Sequence(const Sequence &Param) = default;
+    Sequence(const Sequence &param) = default;
 
     /**************************************************
     ***** ~Sequence : Le destructeur (par defaut) *****
@@ -40,7 +40,7 @@ public:
     /*****************************************************************************
     ***** Operator= : Pour recopier un objet Case sur un objet deja existant *****
     *****************************************************************************/
-    Sequence &operator=(const Sequence &Param) = default;
+    Sequence &operator=(const Sequence &param) = default;
 
     /************************************************************************************
     ***** ObtenirTailleSequence : Pour connaitre le nombre d'elements dans la liste *****

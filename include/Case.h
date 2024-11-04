@@ -26,7 +26,7 @@ public:
     /*********************************************************
     ***** Case : Le constructeur de recopie (par defaut) *****
     *********************************************************/
-    Case(const Case &Param) = default;
+    Case(const Case &param) = default;
 
     /**********************************************
     ***** ~Case : Le destructeur (par defaut) *****
@@ -38,7 +38,7 @@ public:
     /*****************************************************************************
     ***** Operator= : Pour recopier un objet Case sur un objet deja existant *****
     *****************************************************************************/
-    Case &operator=(const Case &Param) = default;
+    Case &operator=(const Case &param) = default;
 
     /***************************************************************
     ***** LireLettre : Accesseur direct de lecture sur lettre_ *****

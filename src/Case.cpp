@@ -2,8 +2,6 @@
 
 #include <iostream>
 
-using namespace std;
-
 /********************************************
 ***** Case : Le constructeur de confort *****
 ********************************************/
