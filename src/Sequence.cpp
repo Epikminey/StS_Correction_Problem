@@ -42,7 +42,7 @@ void Sequence::afficherCase(const unsigned int index) const {
 /********************************************************************************
 ***** ObtenirCase : Pour obtenir la valeur de la case choisie dans la liste *****
 ********************************************************************************/
-const Case & Sequence::obtenirCase(const unsigned int index) const {
+const Case &Sequence::obtenirCase(const unsigned int index) const {
     if (index >= listeCases_.size()) {
         throw out_of_range("Index hors limites");
     }
@@ -62,16 +62,16 @@ void Sequence::afficherSequence() const {
 /************************************************************************************************************
 ***** Inverser : Prend et inverse une partie de la sequence, puis change le signe de la partie inversee *****
 ************************************************************************************************************/
-void Sequence::inverser(const unsigned int index, const unsigned int nombreCases) {
-    if (!listeCases_.empty() && index < listeCases_.size()) {
-        if (index + nombreCases < listeCases_.size()) {
-            reverse(listeCases_.begin() + index, listeCases_.begin() + index + nombreCases);
-            for (unsigned int boucle =  index; boucle < index + nombreCases ; boucle++) {
+void Sequence::inverser(const unsigned int indexDepart, const unsigned int nombreCases) {
+    if (!listeCases_.empty() && indexDepart < listeCases_.size() && nombreCases != 0) {
+        if (indexDepart + nombreCases < listeCases_.size()) {
+            reverse(listeCases_.begin() + indexDepart, listeCases_.begin() + indexDepart + nombreCases);
+            for (unsigned int boucle = indexDepart; boucle < indexDepart + nombreCases; boucle++) {
                 listeCases_[boucle].modifierSigne();
             }
         } else {
-            reverse(listeCases_.begin() + index, listeCases_.end());
-            for (auto boucle = index; boucle < listeCases_.size(); ++boucle) {
+            reverse(listeCases_.begin() + indexDepart, listeCases_.end());
+            for (auto boucle = indexDepart; boucle < listeCases_.size(); ++boucle) {
                 listeCases_[boucle].modifierSigne();
             }
         }
@@ -81,33 +81,62 @@ void Sequence::inverser(const unsigned int index, const unsigned int nombreCases
 /************************************************************************
 ***** Transposer : Deplace une partie de la sequence dans elle-meme *****
 ************************************************************************/
-void Sequence::transposer(const unsigned int index, const unsigned int nombreCases,
-                          const unsigned int indexEmplacement) {
-    printf("coucou");
+void Sequence::transposer(const unsigned int indexDepart, const unsigned int nombreCases,
+                          const unsigned int indexDestination) {
+    if (!listeCases_.empty() && indexDepart < listeCases_.size() && indexDepart != indexDestination && nombreCases !=
+        0) {
+        if ((indexDestination > indexDepart && indexDepart + nombreCases + 1 < listeCases_.size()) ||
+            (indexDestination < indexDepart && indexDepart != 0)) {
+            if (indexDestination > indexDepart) {
+                // Déplacer vers un index supérieur
+                std::rotate(listeCases_.begin() + indexDepart, listeCases_.begin() + indexDepart + nombreCases,
+                            listeCases_.begin() + indexDestination + nombreCases);
+            } else {
+                // Déplacer vers un index inférieur
+                std::rotate(listeCases_.begin() + indexDestination, listeCases_.begin() + indexDepart,
+                            listeCases_.begin() + indexDepart + nombreCases);
+            }
+        }
+    }
 }
 
 /***************************************************************************************************************
 ***** InverserTransposer : Effectue une inversion d'un morceau de la sequence puis deplace ce meme morceau *****
 ***************************************************************************************************************/
-void Sequence::inverserTransposer(const unsigned int index, unsigned int nombreCases,
-                                  unsigned int indexEmplacement) {
+void Sequence::inverserTransposer(const unsigned int indexDepart, const unsigned int nombreCases,
+                                  const unsigned int indexDestination) {
+    inverser(indexDepart, nombreCases);
+    transposer(indexDepart, nombreCases, indexDestination);
 }
 
 /*****************************************************************************************************************
 ***** Dupliquer : Fait une copie d'une partie de la sequence et place cette duplication a cote du bloc copie *****
 *****************************************************************************************************************/
-void Sequence::dupliquer(const unsigned int index, const unsigned int nombreCases) {
+void Sequence::dupliquer(const unsigned int indexDepart, const unsigned int nombreCases) {
+    if (!listeCases_.empty() && indexDepart < listeCases_.size() && nombreCases != 0) {
+        if (indexDepart + nombreCases + 1 < listeCases_.size()) {
+            for (unsigned int boucle = 0; boucle < nombreCases; boucle++) {
+                listeCases_.emplace(listeCases_.begin() + indexDepart + nombreCases,
+                                    listeCases_[indexDepart + nombreCases - 1 - boucle]);
+            }
+        } else {
+            const unsigned int surplus = indexDepart + nombreCases - 1 - listeCases_.size();
+            for (unsigned int boucle = 0; boucle < nombreCases - surplus; boucle++) {
+                listeCases_.emplace_back(listeCases_[indexDepart + boucle - 1]);
+            }
+        }
+    }
 }
 
 /*******************************************************
 ***** Supprimer : Retire une partie de la sequence *****
 *******************************************************/
-void Sequence::supprimer(const unsigned int index, const unsigned int nombreCases) {
-    if (!listeCases_.empty() && index < listeCases_.size()) {
-        if (index + nombreCases < listeCases_.size()) {
-            listeCases_.erase(listeCases_.begin() + index, listeCases_.begin() + index + nombreCases);
+void Sequence::supprimer(const unsigned int indexDepart, const unsigned int nombreCases) {
+    if (!listeCases_.empty() && indexDepart < listeCases_.size() && nombreCases != 0) {
+        if (indexDepart + nombreCases < listeCases_.size()) {
+            listeCases_.erase(listeCases_.begin() + indexDepart, listeCases_.begin() + indexDepart + nombreCases);
         } else {
-            listeCases_.erase(listeCases_.begin() + index, listeCases_.end());
+            listeCases_.erase(listeCases_.begin() + indexDepart, listeCases_.end());
         }
     }
 }

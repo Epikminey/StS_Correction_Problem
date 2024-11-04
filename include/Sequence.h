@@ -65,27 +65,27 @@ public:
     /************************************************************************************************************
     ***** Inverser : Prend et inverse une partie de la sequence, puis change le signe de la partie inversee *****
     ************************************************************************************************************/
-    void inverser(unsigned int index, unsigned int nombreCases);
+    void inverser(unsigned int indexDepart, unsigned int nombreCases);
 
     /************************************************************************
     ***** Transposer : Deplace une partie de la sequence dans elle-meme *****
     ************************************************************************/
-    void transposer(unsigned int index, unsigned int nombreCases, unsigned int indexEmplacement);
+    void transposer(unsigned int indexDepart, unsigned int nombreCases, unsigned int indexDestination);
 
     /***************************************************************************************************************
     ***** InverserTransposer : Effectue une inversion d'un morceau de la sequence puis deplace ce meme morceau *****
     ***************************************************************************************************************/
-    void inverserTransposer(unsigned int index, unsigned int nombreCases, unsigned int indexEmplacement);
+    void inverserTransposer(unsigned int indexDepart, unsigned int nombreCases, unsigned int indexDestination);
 
     /*****************************************************************************************************************
     ***** Dupliquer : Fait une copie d'une partie de la sequence et place cette duplication a cote du bloc copie *****
     *****************************************************************************************************************/
-    void dupliquer(unsigned int index, unsigned int nombreCases);
+    void dupliquer(unsigned int indexDepart, unsigned int nombreCases);
 
     /*******************************************************
     ***** Supprimer : Retire une partie de la sequence *****
     *******************************************************/
-    void supprimer(unsigned int index, unsigned int nombreCases);
+    void supprimer(unsigned int indexDepart, unsigned int nombreCases);
 
     /**********************************************************
     ***** ModifierCase : Remplace un element par un autre *****
