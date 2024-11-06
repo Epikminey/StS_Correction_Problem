@@ -5,8 +5,8 @@
 
 struct Mouvement {
     string nomMouvement;
-    int num1;
-    int num2;
+    int indexDepart;
+    int nombreCases;
     int num3;
     string str2;
 };

@@ -1,8 +1,9 @@
 # Prerequisites
 *.d
 
-*.log
-*.json
+.idea\discord.xml
+cmake-build-debug\*.json
+cmake-build-debug\*.ninja
 
 # Compiled Object files
 *.slo
