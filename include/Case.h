@@ -40,6 +40,16 @@ public:
     *****************************************************************************/
     Case &operator=(const Case &param) = default;
 
+    /*****************************************************************************
+    ***** Operator== : Pour comparer si deux objets Case sont égaux          *****
+    *****************************************************************************/
+    bool operator==(const Case &param) const;
+
+    /*****************************************************************************
+    ***** Operator!= : Pour comparer si deux objets Case sont différents     *****
+    *****************************************************************************/
+    bool operator!=(const Case &param) const;
+
     /***************************************************************
     ***** LireLettre : Accesseur direct de lecture sur lettre_ *****
     ***************************************************************/
@@ -69,6 +79,10 @@ public:
     ***** ModifierCase : Accesseur direct en ecriture sur lettre_ et signe_ *****
     ****************************************************************************/
     void modifierCase(char signe, char lettre);
+
+
+    // FAIRE UNE SURCHARGE de != et ==
+
 };
 
 #endif //CASE_H

@@ -72,3 +72,18 @@ void Case::modifierCase(const char signe, const char lettre) {
         throw runtime_error("Il faut donner un signe '+' ou '-'.");
     }
 }
+
+
+/*****************************************************************************
+***** Operator== : Pour comparer si deux objets Case sont égaux          *****
+*****************************************************************************/
+bool Case::operator==(const Case &param) const {
+    return (lettre_ == param.lettre_ && signe_ == param.signe_);
+}
+
+/*****************************************************************************
+***** Operator!= : Pour comparer si deux objets Case sont différents     *****
+*****************************************************************************/
+bool Case::operator!=(const Case &param) const {
+    return (lettre_ != param.lettre_ || signe_ != param.signe_);
+}

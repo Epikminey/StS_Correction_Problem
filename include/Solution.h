@@ -3,13 +3,30 @@
 
 #include "sequence.h"
 
+#include <iostream>
+
+using namespace std;
+
 struct Mouvement {
     string nomMouvement;
     int indexDepart;
     int nombreCases;
-    int num3;
+    int idMouvement;
     string str2;
 };
+
+//!!!!! Ca peut optimiser l'algo d'utiliser une enum plutôt que des chaines pour les noms des mouvements
+/*
+enum Mouvements {
+    INVERSION = 1,
+    TRANSPOSITION = 2,
+    INVERSION_TRANSPOSEE = 3,
+    DUPLICATION = 4,
+    PERTE = 5,
+    SUBSTITUTION = 6,
+    AJOUT = 7
+};*/
+
 
 
 
@@ -49,6 +66,22 @@ public:
     ***** Operator= : Pour recopier un objet Case sur un objet deja existant *****
     *****************************************************************************/
     Solution &operator=(const Solution &param) = default;
+
+
+    /********************************************************************************
+    ***** AfficherSolution : Affiche la solution avec l'ensemble des mouvements *****
+    *****                    de cette solution.                                 *****
+    ********************************************************************************/
+    void afficherSolution() const;
+
+
+private:
+    /********************************************************************************
+    ***** AfficherSolution : Fonction utile à afficherSolution                  *****
+    *****                    permet d'améliorer la lisibilité du code           *****
+    ********************************************************************************/
+    void afficherSolution_afficherMouvement(const Mouvement & mouvement,
+        char delimiteur, char symbole, unsigned int longueurSequence) const;
 };
 
 #endif //SOLUTION_H
