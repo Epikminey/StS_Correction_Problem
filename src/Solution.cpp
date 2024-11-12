@@ -274,37 +274,42 @@ void Solution::afficherMouvement(const Mouvement &mouvement,
     const string finMouvement(posFinMouvement, ' ');
     cout << finMouvement << " -> ";
 
-
-    // Plus rapide en temps d'exécution avec un switch case, mais impossible si on a que "nomMouvement" en attribut de mouvement
-    /*
-    switch(mouvement.idMouvement) {
-        case INVERSION:
+    switch(mouvement.nomMouvement) {
+        case "inversion": {
             cout << "INVERSION" << endl;
-        break;
-        case TRANSPOSITION:
+            break;
+        }
+        case "transposition": {
             cout << "TRANSPOSITION" << endl;
-        break;
-        case INVERSION_TRANSPOSEE:
+            break;
+        }
+        case "inversion_transposee": {
             cout << "INVERSION TRANSPOSEE" << endl;
-        break;
-        case DUPLICATION:
+            break;
+        }
+        case "duplication": {
             cout << "DUPLICATION" << endl;
-        break;
-        case PERTE:
+            break;
+        }
+        case "suppression": {
             cout << "PERTE" << endl;
-        break;
-        case SUBSTITUTION:
+            break;
+        }
+        case "substitution": {
             cout << "SUBSTITUTION" << endl;
-        break;
-        case AJOUT:
+            break;
+        }
+        case "ajout": {
             cout << "AJOUT" << endl;
-        break;
-        default:
+            break;
+        }
+        default: {
             cout << "MOUVEMENT INCONNU !!!" << endl;
+            break;
+        }
     }
-    */
 
-    // Affichage du nom du mouvement
+    /*// Affichage du nom du mouvement
     if (mouvement.nomMouvement == "inversion")
         cout << "INVERSION" << endl;
     else if (mouvement.nomMouvement == "transposition")
@@ -322,5 +327,5 @@ void Solution::afficherMouvement(const Mouvement &mouvement,
     else
         //!!!!! N'est pas censé se produire si le code est bien fait
         // Est ce qu'on lève quand même une exception si ça arrive ?
-        cout << "Mouvement inconnu." << endl;
+        cout << "Mouvement inconnu." << endl;*/
 }
