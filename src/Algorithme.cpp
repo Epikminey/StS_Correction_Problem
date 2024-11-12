@@ -1,4 +1,4 @@
 #include "Algorithme.h"
 
-Algorithme::Algorithme(const Instance &instance) {
-}
+//Algorithme::Algorithme(const Instance &instance) {
+//}

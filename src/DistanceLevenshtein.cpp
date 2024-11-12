@@ -1,12 +1,11 @@
 #include "DistanceLevenshtein.h"
 
-int DistanceLevenshtein::calculerDistanceLevenshtein(const Sequence& sequence1, const Sequence& sequence2) {
+unsigned int DistanceLevenshtein::calculerDistanceLevenshtein(const Sequence& sequence1, const Sequence& sequence2) {
     const unsigned int tailleSequence1 = sequence1.obtenirTailleSequence();
     const unsigned int tailleSequence2 = sequence2.obtenirTailleSequence();
     // D est un tableau de longueurChaine1+1 rangées et longueurChaine2+1 colonnes
     // D est indexé à partir de 0, les chaînes à partir de 1
     vector D(tailleSequence1 + 1, std::vector<int>(tailleSequence2 + 1));
-
     // Initialisation de la première ligne et de la première colonne du tableau D
     for (int i = 0; i <= tailleSequence1; i++) {
         D[i][0] = i;
@@ -14,7 +13,6 @@ int DistanceLevenshtein::calculerDistanceLevenshtein(const Sequence& sequence1, 
     for (int j = 0; j <= tailleSequence2; j++) {
         D[0][j] = j;
     }
-
     // Calcul des autres valeurs de la matrice D
     for (int ligne = 1; ligne <= tailleSequence1; ligne++) {
         for (int colonne = 1; colonne <= tailleSequence2; colonne++) {
@@ -30,7 +28,6 @@ int DistanceLevenshtein::calculerDistanceLevenshtein(const Sequence& sequence1, 
                            );
         }
     }
-
     // On retourne la distance de Levenshtein qui se trouve à la dernière ligne/colonne de la matrice D
     return D[tailleSequence1][tailleSequence2];
 }

@@ -1,18 +1,15 @@
 #ifndef SOLUTION_H
 #define SOLUTION_H
 
+#include "Instance.h"
 #include "sequence.h"
-
-#include <iostream>
-
-using namespace std;
 
 struct Mouvement {
     string nomMouvement;
-    int indexDepart;
-    int nombreCases;
-    int idMouvement;
-    string str2;
+    unsigned int indexDepart;
+    unsigned int nombreCases;
+    unsigned int indexDestination;
+    string nomCase;
 };
 
 //!!!!! Ca peut optimiser l'algo d'utiliser une enum plutôt que des chaines pour les noms des mouvements
@@ -28,8 +25,6 @@ enum Mouvements {
 };*/
 
 
-
-
 // Contient les chemins d'évolution d'une sequence
 class Solution {
 private:
@@ -40,15 +35,18 @@ private:
 public:
     //***Constructeurs et destructeurs***//
 
-    /************************************************
-    ***** Solution : Le constructeur par defaut *****
-    ************************************************/
-    Solution();
+    // On supprime le constructeur par defaut
+    Solution() = delete;
 
-    /************************************************
-    ***** Solution : Le constructeur de confort *****
-    ************************************************/
-    explicit Solution(const vector<Mouvement>& mouvements);
+    /***************************************************************************
+    ***** Solution : Le constructeur de confort avec mouvements aleatoires *****
+    ***************************************************************************/
+    Solution(const Instance &instance, unsigned int nombreMutations);
+
+    /***********************************************************************************************
+    ***** Solution : Le constructeur de confort via une liste de mouvements (apres croisement) *****
+    ***********************************************************************************************/
+    explicit Solution(const vector<Mouvement> &mouvements);
 
     /*************************************************************
     ***** Solution : Le constructeur de recopie (par defaut) *****
@@ -67,21 +65,36 @@ public:
     *****************************************************************************/
     Solution &operator=(const Solution &param) = default;
 
+    /********************************************************************
+    ***** Mutation : Pour modifier un des mouvements de la Solution *****
+    ********************************************************************/
+    void Mutation(unsigned int index, const Mouvement &mouvement);
 
-    /********************************************************************************
-    ***** AfficherSolution : Affiche la solution avec l'ensemble des mouvements *****
-    *****                    de cette solution.                                 *****
-    ********************************************************************************/
+    /**********************************************************************************************
+    ***** ObtenirDerniereSequence : Pour copier et manipuler la derniere sequence de la liste *****
+    **********************************************************************************************/
+    [[nodiscard]] Sequence obtenirDerniereSequence() const;
+
+    /****************************************************************************
+    ***** ObtenirListeSequences : Pour avoir la suite de sequences modifies *****
+    ****************************************************************************/
+    [[nodiscard]] vector<Sequence> obtenirListeSequences() const;
+
+    /**********************************************************************************************
+    ***** ObtenirListeMouvements : Pour avoir tous les mouvements effectues sur la sequence S *****
+    **********************************************************************************************/
+    [[nodiscard]] vector<Mouvement> obtenirListeMouvements() const;
+
+    /***************************************************************************************************
+    ***** AfficherSolution : Affiche la solution avec l'ensemble des mouvements de cette solution. *****
+    ***************************************************************************************************/
     void afficherSolution() const;
 
-
-private:
-    /********************************************************************************
-    ***** AfficherSolution : Fonction utile à afficherSolution                  *****
-    *****                    permet d'améliorer la lisibilité du code           *****
-    ********************************************************************************/
-    void afficherSolution_afficherMouvement(const Mouvement & mouvement,
-        char delimiteur, char symbole, unsigned int longueurSequence) const;
+    /**********************************************************************************************************
+    ***** afficherMouvement : Fonction utile à afficherSolution, permet d'améliorer la lisibilité du code *****
+    **********************************************************************************************************/
+    static void afficherMouvement(const Mouvement &mouvement, char delimiteur, char symbole,
+                                  unsigned int longueurSequence);
 };
 
 #endif //SOLUTION_H

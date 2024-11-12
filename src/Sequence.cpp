@@ -89,7 +89,7 @@ void Sequence::transposer(const unsigned int indexDepart, const unsigned int nom
             (indexDestination < indexDepart && indexDepart != 0)) {
             if (indexDestination > indexDepart) {
                 // Déplacer vers un index supérieur
-                std::rotate(listeCases_.begin() + indexDepart, listeCases_.begin() + indexDepart + nombreCases,
+                std::rotate(listeCases_.begin() + indexDepart - 1, listeCases_.begin() + indexDepart + nombreCases,
                             listeCases_.begin() + indexDestination + nombreCases);
             } else {
                 // Déplacer vers un index inférieur

@@ -19,7 +19,7 @@ public:
     /************************************************
     ***** Solution : Le constructeur de confort *****
     ************************************************/
-    explicit Algorithme(const Instance& instance);
+    //explicit Algorithme(const Instance& instance);
 
     // On supprime le constructeur de recopie
     Algorithme(const Algorithme &param) = delete;
@@ -34,13 +34,13 @@ public:
     // On supprime l'operateur =
     Algorithme &operator=(const Algorithme &param) = delete;
 
-    void croisement(const Sequence &sequence1, const Sequence &sequence2);
+    //void croisement(const Sequence &sequence1, const Sequence &sequence2);
 
 
 
-    void afficherNombreMouvements() const;
+    //void afficherNombreMouvements() const;
 
-    void afficherMeilleureSolution() const;
+    //void afficherMeilleureSolution() const;
 };
 
 #endif //ALGORITHME_H

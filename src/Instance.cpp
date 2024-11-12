@@ -4,12 +4,10 @@
 /************************************************
 ***** Instance : Le constructeur de confort *****
 ************************************************/
-Instance::Instance(const Sequence& source, const Sequence& terminale) {
+Instance::Instance(const Sequence &source, const Sequence &terminale) {
     source_ = source;
     terminale_ = terminale;
-
-    //auto distance = DistanceLevenshtein(source, terminale);
-    //distance_ = distance.calculerDistance();
+    distance_ = DistanceLevenshtein::calculerDistanceLevenshtein(source, terminale);
 }
 
 /***************************************************************************************************
@@ -17,4 +15,12 @@ Instance::Instance(const Sequence& source, const Sequence& terminale) {
 ***************************************************************************************************/
 unsigned int Instance::obtenirDistanceLevenshtein() const {
     return distance_;
+}
+
+const Sequence & Instance::obtenirSource() const {
+    return source_;
+}
+
+const Sequence & Instance::obtenirTerminale() const {
+    return terminale_;
 }

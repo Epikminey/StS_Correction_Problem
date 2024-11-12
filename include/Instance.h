@@ -34,6 +34,10 @@ public:
     ***** ObtenirDistanceLevenshtein : Renvoie le resultat du calcul de la distance de Levenshtein *****
     ***************************************************************************************************/
     [[nodiscard]] unsigned int obtenirDistanceLevenshtein() const;
+
+    [[nodiscard]] const Sequence &obtenirSource() const;
+
+    [[nodiscard]] const Sequence &obtenirTerminale() const;
 };
 
 #endif //INSTANCE_H
