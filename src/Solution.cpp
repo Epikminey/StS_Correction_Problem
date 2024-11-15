@@ -37,7 +37,7 @@ Solution::Solution(const Instance &instance, const unsigned int nombreMutations)
                 sequence.inverser(indexDepartInverse, nombreCasesInverse);
                 listeSequences_.push_back(sequence);
 
-                mouvement = Mouvement("inversion", indexDepartInverse, nombreCasesInverse, 0, "");
+                mouvement = Mouvement(INVERSION, indexDepartInverse, nombreCasesInverse, 0, "");
                 listeMouvements_.push_back(mouvement);
 
                 break;
@@ -55,7 +55,7 @@ Solution::Solution(const Instance &instance, const unsigned int nombreMutations)
                 sequence.transposer(indexDepartTranspose, nombreCasesTranspose, indexDestinationTranspose);
                 listeSequences_.push_back(sequence);
 
-                mouvement = Mouvement("transposition", indexDepartTranspose, nombreCasesTranspose,
+                mouvement = Mouvement(TRANSPOSITION, indexDepartTranspose, nombreCasesTranspose,
                                       indexDestinationTranspose, "");
                 listeMouvements_.push_back(mouvement);
 
@@ -76,7 +76,7 @@ Solution::Solution(const Instance &instance, const unsigned int nombreMutations)
                                             indexDestinationInverseTranspose);
                 listeSequences_.push_back(sequence);
 
-                mouvement = Mouvement("inversion_transposee", indexDepartInverseTranspose, nombreCasesInverseTranspose,
+                mouvement = Mouvement(INVERSION_TRANSPOSEE, indexDepartInverseTranspose, nombreCasesInverseTranspose,
                                       indexDestinationInverseTranspose, "");
                 listeMouvements_.push_back(mouvement);
 
@@ -93,7 +93,7 @@ Solution::Solution(const Instance &instance, const unsigned int nombreMutations)
                 sequence.dupliquer(indexDepartDuplique, nombreCasesDuplique);
                 listeSequences_.push_back(sequence);
 
-                mouvement = Mouvement("duplication", indexDepartDuplique, nombreCasesDuplique,
+                mouvement = Mouvement(DUPLICATION, indexDepartDuplique, nombreCasesDuplique,
                                       0, "");
                 listeMouvements_.push_back(mouvement);
 
@@ -111,7 +111,7 @@ Solution::Solution(const Instance &instance, const unsigned int nombreMutations)
                 sequence.supprimer(indexDepartSupprime, nombreCasesSupprime);
                 listeSequences_.push_back(sequence);
 
-                mouvement = Mouvement("suppression", indexDepartSupprime, nombreCasesSupprime,
+                mouvement = Mouvement(SUPPRESSION, indexDepartSupprime, nombreCasesSupprime,
                                       0, "");
                 listeMouvements_.push_back(mouvement);
 
@@ -143,7 +143,7 @@ Solution::Solution(const Instance &instance, const unsigned int nombreMutations)
                 sequence.modifierCase(indexModifie, signeLettreModifie);
                 listeSequences_.push_back(sequence);
 
-                mouvement = Mouvement("substitution", indexModifie, 0,
+                mouvement = Mouvement(SUBSTITUTION, indexModifie, 1,
                                       0, signeLettreModifie);
                 listeMouvements_.push_back(mouvement);
 
@@ -175,7 +175,8 @@ Solution::Solution(const Instance &instance, const unsigned int nombreMutations)
                 sequence.ajouterCase(indexAjoute, signeLettreAjoute);
                 listeSequences_.push_back(sequence);
 
-                mouvement = Mouvement("ajout", indexAjoute, 0,
+                //!!!!! Nb case doit être = à 0 ou à 1 ?
+                mouvement = Mouvement(AJOUT, indexAjoute, 1,
                                       0, signeLettreAjoute);
                 listeMouvements_.push_back(mouvement);
 
@@ -257,75 +258,61 @@ void Solution::afficherSolution() const {
 **********************************************************************************************************/
 void Solution::afficherMouvement(const Mouvement &mouvement,
                                  const char delimiteur, const char symbole, const unsigned int longueurSequence) {
+
+    //Utile au débogage
+    //cout << "Id : " << mouvement.idMouvement << " début : " << mouvement.indexDepart << " longeur : " << mouvement.nombreCases << " destination : " << mouvement.indexDestination << "\n";
+
     // L'affichage varie selon si on a qu'un seul caractère affecté par le mouvement ou plusieurs
     if (mouvement.nombreCases == 1) {
-        const string debutMouvement(mouvement.indexDepart * 2 - 1, ' ');
+        const string debutMouvement(mouvement.indexDepart * 2, ' ');
         cout << debutMouvement << delimiteur;
     } else {
-        const string debutMouvement(mouvement.indexDepart * 2 - 2, ' ');
+        const string debutMouvement(mouvement.indexDepart * 2, ' ');
         const string milieuMouvement(mouvement.nombreCases * 2 - 2, symbole);
 
         cout << debutMouvement << delimiteur << milieuMouvement << delimiteur;
     }
 
     // Calcul de l'espace à rajouter pour aligner l'affichage des noms des mouvements
-    int posFinMouvement = ((int) longueurSequence - mouvement.indexDepart - mouvement.nombreCases + 1) * 2;
+    unsigned int posAligmentNom = (longueurSequence - mouvement.indexDepart - mouvement.nombreCases) * 2;
 
-    const string finMouvement(posFinMouvement, ' ');
+    const string finMouvement(posAligmentNom, ' ');
     cout << finMouvement << " -> ";
 
-    switch(mouvement.nomMouvement) {
-        case "inversion": {
-            cout << "INVERSION" << endl;
+    switch(mouvement.idMouvement) {
+        case INVERSION:
+            cout << "Inversion de " << mouvement.nombreCases <<
+                " caractères à la position " << mouvement.indexDepart;
             break;
-        }
-        case "transposition": {
-            cout << "TRANSPOSITION" << endl;
+        case TRANSPOSITION:
+            cout << "Transposition de " << mouvement.nombreCases <<
+                    " caractères à la position " << mouvement.indexDepart <<
+                    " vers la position " << mouvement.indexDestination;
             break;
-        }
-        case "inversion_transposee": {
-            cout << "INVERSION TRANSPOSEE" << endl;
+        case INVERSION_TRANSPOSEE:
+            cout << "Transposition et inversion de " << mouvement.nombreCases <<
+                    " caractères à la position " << mouvement.indexDepart <<
+                    " vers la position " << mouvement.indexDestination;
             break;
-        }
-        case "duplication": {
-            cout << "DUPLICATION" << endl;
+        case DUPLICATION:
+            cout << "Duplication de " << mouvement.nombreCases <<
+                    " caractères à la position " << mouvement.indexDepart;
             break;
-        }
-        case "suppression": {
-            cout << "PERTE" << endl;
+        case SUPPRESSION:
+            cout << "Suppresion de " << mouvement.nombreCases <<
+                    " caractères à la position " << mouvement.indexDepart;
             break;
-        }
-        case "substitution": {
-            cout << "SUBSTITUTION" << endl;
+        case SUBSTITUTION:
+            cout << "Subsitution de " << mouvement.nombreCases <<
+                    " caractères à la position " << mouvement.indexDepart;
             break;
-        }
-        case "ajout": {
-            cout << "AJOUT" << endl;
+        case AJOUT:
+            cout << "Ajout de " << mouvement.nombreCases <<
+                    " caractères à la position " << mouvement.indexDepart;
             break;
-        }
-        default: {
-            cout << "MOUVEMENT INCONNU !!!" << endl;
-            break;
-        }
+        default:
+            cout << "MOUVEMENT INCONNU !!!";
     }
 
-    /*// Affichage du nom du mouvement
-    if (mouvement.nomMouvement == "inversion")
-        cout << "INVERSION" << endl;
-    else if (mouvement.nomMouvement == "transposition")
-        cout << "TRANSPOSITION" << endl;
-    else if (mouvement.nomMouvement == "inversion_transposee")
-        cout << "INVERSION TRANSPOSEE" << endl;
-    else if (mouvement.nomMouvement == "duplication")
-        cout << "DUPLICATION" << endl;
-    else if (mouvement.nomMouvement == "suppression")
-        cout << "PERTE" << endl;
-    else if (mouvement.nomMouvement == "substitution")
-        cout << "SUBSTITUTION" << endl;
-    else if (mouvement.nomMouvement == "ajout")
-        cout << "AJOUT" << endl;
-    else
-        //!!!!! N'est pas censé se produire si le code est bien fait
-        // Est ce qu'on lève quand même une exception si ça arrive ?
-        cout << "Mouvement inconnu." << endl;*/
+    cout << "\n";
 }

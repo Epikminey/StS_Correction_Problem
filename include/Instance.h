@@ -23,12 +23,14 @@ public:
     Instance(const Sequence& source, const Sequence& terminale);
 
     // On supprime le constructeur de recopie
-    Instance(const Instance &Param) = delete;
+    // Rip le constructeur de recopie
+    // Le pauvre...
+    //Instance(const Instance &Param) = delete;
 
     //***Methodes***//
 
     // On supprime l'operateur ='
-    Instance &operator=(const Instance &Param) = delete;
+    //Instance &operator=(const Instance &Param) = delete;
 
     /***************************************************************************************************
     ***** ObtenirDistanceLevenshtein : Renvoie le resultat du calcul de la distance de Levenshtein *****

@@ -5,24 +5,22 @@
 #include "sequence.h"
 
 struct Mouvement {
-    string nomMouvement;
+    unsigned int idMouvement;
     unsigned int indexDepart;
     unsigned int nombreCases;
     unsigned int indexDestination;
     string nomCase;
 };
 
-//!!!!! Ca peut optimiser l'algo d'utiliser une enum plutôt que des chaines pour les noms des mouvements
-/*
 enum Mouvements {
     INVERSION = 1,
     TRANSPOSITION = 2,
     INVERSION_TRANSPOSEE = 3,
     DUPLICATION = 4,
-    PERTE = 5,
+    SUPPRESSION = 5,
     SUBSTITUTION = 6,
     AJOUT = 7
-};*/
+};
 
 
 // Contient les chemins d'évolution d'une sequence
@@ -37,6 +35,7 @@ public:
 
     // On supprime le constructeur par defaut
     Solution() = delete;
+
 
     /***************************************************************************
     ***** Solution : Le constructeur de confort avec mouvements aleatoires *****
