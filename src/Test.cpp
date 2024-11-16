@@ -5,11 +5,25 @@
 bool Test::testAntoine() {
 
     // Exemple de transformations sur `sequence1`
-    /*
-    sequence1.inverser(3, 4);
-    sequence1.transposer(3, 4, 3);
-    sequence1.afficherSequence();
-    */
+    const string ADN1 = "+A-B+C-D+E-F+G-H+I";
+    const string ADN2 = "+A-B+C-D+E-F+G-C+I";
+    const string ADN3 = "+A-B+C-D+E-F-C+I";
+    const string ADN4 = "+I-C-F+E-D+C-B+A";
+    const string ADN5 = "+I-C+G-F+E-D+C-B+A";
+    const string ADN6 = "+I-H+G-F+E-D+C-B+A";
+    const string ADN7 = "+I-D+C-B-H+G-F+E+A";
+
+    const auto sequence1 = Sequence(ADN1);
+    auto sequence2 = Sequence(ADN2);
+    auto sequence3 = Sequence(ADN3);
+    auto sequence4 = Sequence(ADN4);
+    auto sequence5 = Sequence(ADN5);
+    auto sequence6 = Sequence(ADN6);
+    auto sequence7 = Sequence(ADN7);
+
+    auto instance = Instance(sequence1, sequence2);
+
+    auto solution1 = Solution(instance, 7);
 
     return true;
 }

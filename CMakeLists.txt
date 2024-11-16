@@ -17,5 +17,6 @@ add_executable(StS_Correction_Problem
         src/Case.cpp
         include/Test.h
         src/Test.cpp
+        src/Test.cpp
 )
 

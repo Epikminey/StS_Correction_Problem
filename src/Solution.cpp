@@ -186,7 +186,66 @@ Solution::Solution(const Instance &instance, const unsigned int nombreMutations)
 /***********************************************************************************************
 ***** Solution : Le constructeur de confort via une liste de mouvements (apres croisement) *****
 ***********************************************************************************************/
-Solution::Solution(const vector<Mouvement> &mouvements) {
+Solution::Solution(const Instance &instance, const vector<Mouvement> &mouvements) {
+    // On ajoute la premiere sequence, la sequence Source.
+    listeSequences_.push_back(instance.obtenirSource());
+
+    for (unsigned int boucle = 0; boucle < mouvements.size(); ++boucle) {
+
+        // Switch case pour les differentes valeurs de idMouvement
+        switch (const auto &[idMouvement, indexDepart, nombreCases, indexDestination, nomCase] = mouvements[boucle]; idMouvement) {
+            case INVERSION: {
+                // On inverse une partie de la sequence
+                auto sequence = listeSequences_.back();
+                sequence.inverser(indexDepart, nombreCases);
+                listeSequences_.push_back(sequence);
+                break;
+            }
+            case TRANSPOSITION: {
+                // On transpose une partie de la sequence
+                auto sequence = listeSequences_.back();
+                sequence.transposer(indexDepart, nombreCases, indexDestination);
+                listeSequences_.push_back(sequence);
+                break;
+            }
+            case INVERSION_TRANSPOSEE: {
+                // On inverse et transpose une partie de la sequence
+                auto sequence = listeSequences_.back();
+                sequence.inverserTransposer(indexDepart, nombreCases, indexDestination);
+                listeSequences_.push_back(sequence);
+                break;
+            }
+            case DUPLICATION: {
+                // On duplique une partie de la sequence
+                auto sequence = listeSequences_.back();
+                sequence.dupliquer(indexDepart, nombreCases);
+                listeSequences_.push_back(sequence);
+                break;
+            }
+            case SUPPRESSION: {
+                // On supprime une partie de la sequence
+                auto sequence = listeSequences_.back();
+                sequence.supprimer(indexDepart, nombreCases);
+                listeSequences_.push_back(sequence);
+                break;
+            }
+            case SUBSTITUTION: {
+                // On modifie une case de la sequence
+                auto sequence = listeSequences_.back();
+                sequence.modifierCase(indexDepart, nomCase);
+                listeSequences_.push_back(sequence);
+                break;
+            }
+            case AJOUT: {
+                // On ajoute une case a la sequence
+                auto sequence = listeSequences_.back();
+                sequence.ajouterCase(indexDepart, nomCase);
+                listeSequences_.push_back(sequence);
+                break;
+            }
+            default: { break; }
+        }
+    }
 }
 
 /********************************************************************
@@ -268,7 +327,7 @@ void Solution::afficherMouvement(const Mouvement &mouvement, const char delimite
     }
 
     // Calcul de l'espace à rajouter pour aligner l'affichage des noms des mouvements
-    unsigned int posAligmentNom = (longueurSequence - mouvement.indexDepart - mouvement.nombreCases) * 2;
+    const unsigned int posAligmentNom = (longueurSequence - mouvement.indexDepart - mouvement.nombreCases) * 2;
 
     const string finMouvement(posAligmentNom, ' ');
     cout << finMouvement << " -> ";

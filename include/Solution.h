@@ -44,7 +44,7 @@ public:
     /***********************************************************************************************
     ***** Solution : Le constructeur de confort via une liste de mouvements (apres croisement) *****
     ***********************************************************************************************/
-    explicit Solution(const vector<Mouvement> &mouvements);
+    explicit Solution(const Instance &instance, const vector<Mouvement> &mouvements);
 
     /*************************************************************
     ***** Solution : Le constructeur de recopie (par defaut) *****
