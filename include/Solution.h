@@ -36,7 +36,6 @@ public:
     // On supprime le constructeur par defaut
     Solution() = delete;
 
-
     /***************************************************************************
     ***** Solution : Le constructeur de confort avec mouvements aleatoires *****
     ***************************************************************************/

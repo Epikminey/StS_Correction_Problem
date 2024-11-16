@@ -89,12 +89,24 @@ void Sequence::transposer(const unsigned int indexDepart, const unsigned int nom
             (indexDestination < indexDepart && indexDepart != 0)) {
             if (indexDestination > indexDepart) {
                 // Déplacer vers un index supérieur
-                std::rotate(listeCases_.begin() + indexDepart - 1, listeCases_.begin() + indexDepart + nombreCases,
-                            listeCases_.begin() + indexDestination + nombreCases);
+                const auto debut = listeCases_.begin() + indexDepart;
+                const auto nombre = debut + nombreCases;
+                auto fin = listeCases_.begin() + indexDestination + nombreCases;
+                if (const unsigned int taille = listeCases_.size(); indexDestination + nombreCases > taille) {
+                    fin = listeCases_.begin() + taille;
+                }
+
+                std::rotate(debut, nombre, fin);
             } else {
                 // Déplacer vers un index inférieur
-                std::rotate(listeCases_.begin() + indexDestination, listeCases_.begin() + indexDepart,
-                            listeCases_.begin() + indexDepart + nombreCases);
+                const auto debut = listeCases_.begin() + indexDepart;
+                auto nombre = debut + nombreCases;
+                const auto fin = listeCases_.begin() + indexDestination;
+                if (const unsigned int taille = listeCases_.size(); indexDepart + nombreCases > taille) {
+                    nombre = listeCases_.begin() + taille;
+                }
+
+                std::rotate(fin, debut, nombre);
             }
         }
     }

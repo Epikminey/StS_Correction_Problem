@@ -93,8 +93,7 @@ Solution::Solution(const Instance &instance, const unsigned int nombreMutations)
                 sequence.dupliquer(indexDepartDuplique, nombreCasesDuplique);
                 listeSequences_.push_back(sequence);
 
-                mouvement = Mouvement(DUPLICATION, indexDepartDuplique, nombreCasesDuplique,
-                                      0, "");
+                mouvement = Mouvement(DUPLICATION, indexDepartDuplique, nombreCasesDuplique, 0, "");
                 listeMouvements_.push_back(mouvement);
 
                 break;
@@ -111,8 +110,7 @@ Solution::Solution(const Instance &instance, const unsigned int nombreMutations)
                 sequence.supprimer(indexDepartSupprime, nombreCasesSupprime);
                 listeSequences_.push_back(sequence);
 
-                mouvement = Mouvement(SUPPRESSION, indexDepartSupprime, nombreCasesSupprime,
-                                      0, "");
+                mouvement = Mouvement(SUPPRESSION, indexDepartSupprime, nombreCasesSupprime, 0, "");
                 listeMouvements_.push_back(mouvement);
 
                 break;
@@ -143,8 +141,7 @@ Solution::Solution(const Instance &instance, const unsigned int nombreMutations)
                 sequence.modifierCase(indexModifie, signeLettreModifie);
                 listeSequences_.push_back(sequence);
 
-                mouvement = Mouvement(SUBSTITUTION, indexModifie, 1,
-                                      0, signeLettreModifie);
+                mouvement = Mouvement(SUBSTITUTION, indexModifie, 1, 0, signeLettreModifie);
                 listeMouvements_.push_back(mouvement);
 
                 break;
@@ -175,9 +172,7 @@ Solution::Solution(const Instance &instance, const unsigned int nombreMutations)
                 sequence.ajouterCase(indexAjoute, signeLettreAjoute);
                 listeSequences_.push_back(sequence);
 
-                //!!!!! Nb case doit être = à 0 ou à 1 ?
-                mouvement = Mouvement(AJOUT, indexAjoute, 1,
-                                      0, signeLettreAjoute);
+                mouvement = Mouvement(AJOUT, indexAjoute, 1, 0, signeLettreAjoute);
                 listeMouvements_.push_back(mouvement);
 
                 break;
@@ -256,9 +251,8 @@ void Solution::afficherSolution() const {
 /**********************************************************************************************************
 ***** afficherMouvement : Fonction utile à afficherSolution, permet d'améliorer la lisibilité du code *****
 **********************************************************************************************************/
-void Solution::afficherMouvement(const Mouvement &mouvement,
-                                 const char delimiteur, const char symbole, const unsigned int longueurSequence) {
-
+void Solution::afficherMouvement(const Mouvement &mouvement, const char delimiteur, const char symbole,
+                                 const unsigned int longueurSequence) {
     //Utile au débogage
     //cout << "Id : " << mouvement.idMouvement << " début : " << mouvement.indexDepart << " longeur : " << mouvement.nombreCases << " destination : " << mouvement.indexDestination << "\n";
 
@@ -279,40 +273,47 @@ void Solution::afficherMouvement(const Mouvement &mouvement,
     const string finMouvement(posAligmentNom, ' ');
     cout << finMouvement << " -> ";
 
-    switch(mouvement.idMouvement) {
-        case INVERSION:
+    switch (mouvement.idMouvement) {
+        case INVERSION: {
             cout << "Inversion de " << mouvement.nombreCases <<
-                " caractères à la position " << mouvement.indexDepart;
+                    " caractères à la position " << mouvement.indexDepart << endl;
             break;
-        case TRANSPOSITION:
+        }
+        case TRANSPOSITION: {
             cout << "Transposition de " << mouvement.nombreCases <<
                     " caractères à la position " << mouvement.indexDepart <<
-                    " vers la position " << mouvement.indexDestination;
+                    " vers la position " << mouvement.indexDestination << endl;
             break;
-        case INVERSION_TRANSPOSEE:
+        }
+        case INVERSION_TRANSPOSEE: {
             cout << "Transposition et inversion de " << mouvement.nombreCases <<
                     " caractères à la position " << mouvement.indexDepart <<
-                    " vers la position " << mouvement.indexDestination;
+                    " vers la position " << mouvement.indexDestination << endl;
             break;
-        case DUPLICATION:
+        }
+        case DUPLICATION: {
             cout << "Duplication de " << mouvement.nombreCases <<
-                    " caractères à la position " << mouvement.indexDepart;
+                    " caractères à la position " << mouvement.indexDepart << endl;
             break;
-        case SUPPRESSION:
+        }
+        case SUPPRESSION: {
             cout << "Suppresion de " << mouvement.nombreCases <<
-                    " caractères à la position " << mouvement.indexDepart;
+                    " caractères à la position " << mouvement.indexDepart << endl;
             break;
-        case SUBSTITUTION:
+        }
+        case SUBSTITUTION: {
             cout << "Subsitution de " << mouvement.nombreCases <<
-                    " caractères à la position " << mouvement.indexDepart;
+                    " caractères à la position " << mouvement.indexDepart << endl;
             break;
-        case AJOUT:
+        }
+        case AJOUT: {
             cout << "Ajout de " << mouvement.nombreCases <<
-                    " caractères à la position " << mouvement.indexDepart;
+                    " caractères à la position " << mouvement.indexDepart << endl;
             break;
-        default:
-            cout << "MOUVEMENT INCONNU !!!";
+        }
+        default: {
+            cout << "MOUVEMENT INCONNU !!!" << endl;
+            break;
+        }
     }
-
-    cout << "\n";
 }
