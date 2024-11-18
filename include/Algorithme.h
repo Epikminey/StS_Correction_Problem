@@ -1,8 +1,12 @@
 #ifndef ALGORITHME_H
 #define ALGORITHME_H
 
+#include <iostream>
+
 #include "Instance.h"
 #include "Solution.h"
+
+using namespace std;
 
 class Algorithme {
 private:
@@ -19,7 +23,7 @@ public:
     /************************************************
     ***** Solution : Le constructeur de confort *****
     ************************************************/
-    //explicit Algorithme(const Instance& instance);
+    explicit Algorithme(const Instance& instance, unsigned int nombreMutations);
 
     // On supprime le constructeur de recopie
     Algorithme(const Algorithme &param) = delete;
@@ -34,13 +38,17 @@ public:
     // On supprime l'operateur =
     Algorithme &operator=(const Algorithme &param) = delete;
 
-    //void croisement(const Sequence &sequence1, const Sequence &sequence2);
+    void afficherNombreMouvements() const;
 
+    void afficherMeilleureSolution() const;
 
-
-    //void afficherNombreMouvements() const;
-
-    //void afficherMeilleureSolution() const;
+    /*****************************************************************************************************
+    ***** rechercheSolution : Exécute l'algorithme de recherche de la solution optimale au problème. *****
+    *****************************************************************************************************/
+    bool rechercheSolution();
+    // Param : nb génération, taux de mutation, nb mutation par génération, nb solutions par génération (12/16/20)
+    // On supprime la moitié, et on fait se reproduire le reste -> sélection par tournoi
+    // Aléatoire qui décider où couper pour le croisement
 };
 
 #endif //ALGORITHME_H

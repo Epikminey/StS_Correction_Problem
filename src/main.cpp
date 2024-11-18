@@ -11,7 +11,7 @@ int main() {
     SetConsoleOutputCP(CP_UTF8);
 
     //Test de l'affichage d'une solution
-    Test::testAffichage();
+    Test::testSolutionOptimale();
 
     return 0;
 }

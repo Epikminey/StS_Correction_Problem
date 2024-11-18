@@ -21,6 +21,7 @@ public:
     static bool testAntoine();
     static bool testEnzo();
     static bool testAffichage();
+    static bool testSolutionOptimale();
 };
 
 #endif

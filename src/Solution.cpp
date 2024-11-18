@@ -252,6 +252,54 @@ Solution::Solution(const Instance &instance, const vector<Mouvement> &mouvements
 ***** Mutation : Pour modifier un des mouvements de la Solution *****
 ********************************************************************/
 void Solution::Mutation(unsigned int index, const Mouvement &mouvement) {
+
+    try {
+        // Exception si le mouvement n'est pas possible
+        listeMouvements_.push_back(mouvement);
+
+        // Une nouvelle séquence est générée à partir de la dernière séquence enregistrée
+        Sequence nouvelle_sequence = Sequence(listeSequences_.back());
+
+
+        switch (mouvement.idMouvement) {
+            case INVERSION: {
+                nouvelle_sequence.inverser(mouvement.indexDepart, mouvement.nombreCases);
+                break;
+            }
+            case TRANSPOSITION: {
+                nouvelle_sequence.transposer(mouvement.indexDepart, mouvement.nombreCases, mouvement.indexDestination);
+                break;
+            }
+            case INVERSION_TRANSPOSEE: {
+                nouvelle_sequence.inverserTransposer(mouvement.indexDepart, mouvement.nombreCases, mouvement.indexDestination);
+                break;
+            }
+            case DUPLICATION: {
+                nouvelle_sequence.dupliquer(mouvement.indexDepart, mouvement.nombreCases);
+                break;
+            }
+            case SUPPRESSION: {
+                nouvelle_sequence.supprimer(mouvement.indexDepart, mouvement.nombreCases);
+                break;
+            }
+            case SUBSTITUTION: {
+                nouvelle_sequence.modifierCase(mouvement.indexDepart, mouvement.nomCase);
+                break;
+            }
+            case AJOUT: {
+                nouvelle_sequence.ajouterCase(mouvement.indexDepart, mouvement.nomCase);
+                break;
+            }
+            default: {
+                throw invalid_argument("Mouvement impossible !");
+            }
+        }
+    }
+    catch (...) {
+        throw invalid_argument("Erreur : Mouvement impossible pour cette solution.");
+    }
+
+
 }
 
 /**********************************************************************************************

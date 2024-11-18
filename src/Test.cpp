@@ -1,5 +1,6 @@
 #include "Test.h"
 
+#include <Algorithme.h>
 
 
 bool Test::testAntoine() {
@@ -122,6 +123,47 @@ bool Test::testAffichage() {
     //solution1.obtenirListeMouvements() = listeMouvements_; // Potentielle erreur de pointeurs
 
     solution.afficherSolution();
+
+    return true;
+}
+
+bool Test::testSolutionOptimale() {
+
+    const string ADN1 = "+A-B+C-D+E-F+G-H+I";
+    const string ADN2 = "+A-B+C-D+E-F+G-C+I";
+    const string ADN3 = "+A-B+C-D+E-F-C+I";
+    const string ADN4 = "+I-C-F+E-D+C-B+A";
+    const string ADN5 = "+I-C+G-F+E-D+C-B+A";
+    const string ADN6 = "+I-H+G-F+E-D+C-B+A";
+    const string ADN7 = "+I-D+C-B-H+G-F+E+A";
+
+    vector<string> listeSequencesBrutes = {ADN1, ADN2, ADN3, ADN4, ADN5, ADN6, ADN7};
+
+    auto sequence1 = Sequence(ADN1);
+    auto sequence2 = Sequence(ADN2);
+    auto sequence3 = Sequence(ADN3);
+    auto sequence4 = Sequence(ADN4);
+    auto sequence5 = Sequence(ADN5);
+    auto sequence6 = Sequence(ADN6);
+    auto sequence7 = Sequence(ADN7);
+
+    vector<Sequence> listeSequences = {sequence1, sequence2, sequence3, sequence4, sequence5, sequence6};
+
+    Mouvement mouvement1 = {SUBSTITUTION, 8, 1, 8, "str"};
+    Mouvement mouvement2 = {SUPPRESSION, 7, 1, 7, "str"};
+    Mouvement mouvement3 = {INVERSION, 1, 8, 1, "str"};
+    Mouvement mouvement4 = {AJOUT, 3, 1, 3, "str"};
+    Mouvement mouvement5 = {SUBSTITUTION, 2, 1, 8, "str"};
+    Mouvement mouvement6 = {TRANSPOSITION, 2, 4, 5, "str"};
+
+    vector<Mouvement> listeMouvements = {mouvement1, mouvement2, mouvement3, mouvement4, mouvement5};
+
+    Instance instance = Instance(sequence1, sequence2);
+
+
+    Algorithme algo(instance, 6);
+
+    algo.rechercheSolution();
 
     return true;
 }
