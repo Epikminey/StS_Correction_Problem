@@ -1,10 +1,17 @@
 #ifndef ALGORITHME_H
 #define ALGORITHME_H
 
-#include <iostream>
 
 #include "Instance.h"
 #include "Solution.h"
+#include "Algorithme.h"
+#include "DistanceLevenshtein.h"
+
+#include <bits/ranges_algo.h>
+#include <random>
+#include <iostream>
+
+
 
 using namespace std;
 
@@ -45,7 +52,7 @@ public:
     /*****************************************************************************************************
     ***** rechercheSolution : Exécute l'algorithme de recherche de la solution optimale au problème. *****
     *****************************************************************************************************/
-    bool rechercheSolution();
+    bool rechercheSolution(unsigned int nbGenerationMax, float tauxMutation, unsigned int nbMutationParGen, unsigned int nbSolutionParGen);
     // Param : nb génération, taux de mutation, nb mutation par génération, nb solutions par génération (12/16/20)
     // On supprime la moitié, et on fait se reproduire le reste -> sélection par tournoi
     // Aléatoire qui décider où couper pour le croisement
