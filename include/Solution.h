@@ -94,6 +94,7 @@ public:
     static void afficherMouvement(const Mouvement &mouvement, char delimiteur, char symbole,
                                   unsigned int longueurSequence);
 
+    void afficherSolutionSimplifiee() const;
 
 };
 

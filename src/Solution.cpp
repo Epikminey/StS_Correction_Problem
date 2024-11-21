@@ -188,6 +188,7 @@ Solution::Solution(const Instance &instance, const unsigned int nombreMutations)
 ***********************************************************************************************/
 Solution::Solution(const Instance &instance, const vector<Mouvement> &mouvements) {
     // On ajoute la premiere sequence, la sequence Source.
+    listeMouvements_ = mouvements;
     listeSequences_.push_back(instance.obtenirSource());
 
     for (unsigned int boucle = 0; boucle < mouvements.size(); ++boucle) {
@@ -423,4 +424,11 @@ void Solution::afficherMouvement(const Mouvement &mouvement, const char delimite
             break;
         }
     }
+}
+
+void Solution::afficherSolutionSimplifiee() const {
+    for(const Mouvement& mouvement : listeMouvements_) {
+        cout << mouvement.idMouvement << " + ";
+    }
+    cout << endl;
 }

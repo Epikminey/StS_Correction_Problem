@@ -7,7 +7,6 @@
 #include "Algorithme.h"
 #include "DistanceLevenshtein.h"
 
-#include <bits/ranges_algo.h>
 #include <random>
 #include <iostream>
 
@@ -18,6 +17,7 @@ using namespace std;
 class Algorithme {
 private:
     /*** Attributs ***/
+    Instance instance_; // L'instance du problème que l'on souhaite résoudre
     Solution meilleureSolution_; // Le chemin de sequences
     unsigned int nombreMouvements_; // Les mouvements pour faire le chemin de sequences
 
