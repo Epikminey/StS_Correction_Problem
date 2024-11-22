@@ -22,23 +22,31 @@ public:
     ************************************************/
     Instance(const Sequence& source, const Sequence& terminale);
 
-    // On supprime le constructeur de recopie
-    // Rip le constructeur de recopie
-    // Le pauvre...
-    //Instance(const Instance &Param) = delete;
+    /*************************************************************
+    ***** Instance : Le constructeur de recopie (par defaut) *****
+    *************************************************************/
+    Instance(const Instance &Param) = default;
 
     //***Methodes***//
 
-    // On supprime l'operateur ='
-    //Instance &operator=(const Instance &Param) = delete;
+    /*********************************************************************************
+    ***** Operator= : Pour recopier un objet Instance sur un objet deja existant *****
+    *********************************************************************************/
+    Instance &operator=(const Instance &Param) = default;
 
     /***************************************************************************************************
     ***** ObtenirDistanceLevenshtein : Renvoie le resultat du calcul de la distance de Levenshtein *****
     ***************************************************************************************************/
     [[nodiscard]] unsigned int obtenirDistanceLevenshtein() const;
 
+    /********************************************************
+    ***** ObtenirSource : Renvoie la sequence d'origine *****
+    ********************************************************/
     [[nodiscard]] const Sequence &obtenirSource() const;
 
+    /*************************************************************
+    ***** ObtenirTerminale : Renvoie la sequence a atteindre *****
+    *************************************************************/
     [[nodiscard]] const Sequence &obtenirTerminale() const;
 };
 

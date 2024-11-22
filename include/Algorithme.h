@@ -11,15 +11,15 @@
 #include <iostream>
 
 
-
 using namespace std;
 
 class Algorithme {
 private:
     /*** Attributs ***/
     Instance instance_; // L'instance du problème que l'on souhaite résoudre
-    Solution meilleureSolution_; // Le chemin de sequences
-    unsigned int nombreMouvements_; // Les mouvements pour faire le chemin de sequences
+    Solution meilleureSolution_; // Le chemin de sequences optimal
+    vector<Solution> listeSolutions_; // La population de solutions
+    unsigned int nombreMouvements_; // Les mouvements pour faire le chemin de sequences optimal
 
 public:
     //***Constructeurs et destructeurs***//
@@ -27,10 +27,10 @@ public:
     // On supprime le constructeur par defaut
     Algorithme() = delete;
 
-    /************************************************
-    ***** Solution : Le constructeur de confort *****
-    ************************************************/
-    explicit Algorithme(const Instance& instance, unsigned int nombreMutations);
+    /**************************************************
+    ***** Algorithme : Le constructeur de confort *****
+    **************************************************/
+    explicit Algorithme(const Instance &instance);
 
     // On supprime le constructeur de recopie
     Algorithme(const Algorithme &param) = delete;
@@ -49,13 +49,16 @@ public:
 
     void afficherMeilleureSolution() const;
 
+    static pair<vector<Mouvement>, vector<Mouvement> > croisement(const vector<Mouvement> &mouvementsParent1,
+                                                                  const vector<Mouvement> &mouvementsParent2);
+
+    static vector<Solution> selectionParTournoi(const vector<Solution> &generationCourante, unsigned int nbSolutionParGen);
+
     /*****************************************************************************************************
     ***** rechercheSolution : Exécute l'algorithme de recherche de la solution optimale au problème. *****
     *****************************************************************************************************/
-    bool rechercheSolution(unsigned int nbGenerationMax, float tauxMutation, unsigned int nbMutationParGen, unsigned int nbSolutionParGen);
-    // Param : nb génération, taux de mutation, nb mutation par génération, nb solutions par génération (12/16/20)
-    // On supprime la moitié, et on fait se reproduire le reste -> sélection par tournoi
-    // Aléatoire qui décider où couper pour le croisement
+    bool rechercheSolution(unsigned int nbGenerationMax, float tauxMutation, unsigned int nbMutationParGen,
+                           unsigned int nbSolutionParGen, bool affichageDetaille);
 };
 
 #endif //ALGORITHME_H

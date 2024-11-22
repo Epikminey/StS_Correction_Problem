@@ -3,10 +3,13 @@
 #include <algorithm>
 #include <random>
 #include <vector>
-#include <ranges>
 
-Algorithme::Algorithme(const Instance &instance, unsigned int nombreMutations): meilleureSolution_(instance, nombreMutations),
-    instance_(instance) {
+/**************************************************
+***** Algorithme : Le constructeur de confort *****
+**************************************************/
+Algorithme::Algorithme(const Instance &instance): instance_(instance.obtenirSource(), instance.obtenirTerminale()),
+                                                  meilleureSolution_(instance, instance.obtenirDistanceLevenshtein()) {
+    listeSolutions_ = vector<Solution>();
     nombreMouvements_ = instance.obtenirDistanceLevenshtein();
 }
 
@@ -19,221 +22,184 @@ void Algorithme::afficherMeilleureSolution() const {
     meilleureSolution_.afficherSolution();
 }
 
+pair<vector<Mouvement>, vector<Mouvement> > Algorithme::croisement(const vector<Mouvement> &mouvementsParent1,
+                                                                   const vector<Mouvement> &mouvementsParent2) {
+    vector<Mouvement> mouvementsEnfant1;
+    vector<Mouvement> mouvementsEnfant2;
+
+    const int min = static_cast<int>(0.3 * static_cast<double>(mouvementsParent1.size()));
+    const int max = static_cast<int>(0.7 * static_cast<double>(mouvementsParent1.size()));
+    std::uniform_int_distribution<int> dis(min, max);
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+    const unsigned int separation = dis(gen);
+
+    for (unsigned int pos = 0; pos < separation; pos++) {
+        mouvementsEnfant1.emplace_back(mouvementsParent1[pos]);
+        mouvementsEnfant2.emplace_back(mouvementsParent2[pos]);
+    }
+    for (unsigned int pos = separation; pos < mouvementsParent1.size(); pos++) {
+        mouvementsEnfant1.emplace_back(mouvementsParent2[pos]);
+        mouvementsEnfant2.emplace_back(mouvementsParent1[pos]);
+    }
+    return make_pair(mouvementsEnfant1, mouvementsEnfant2);
+}
+
+vector<Solution> Algorithme::selectionParTournoi(const vector<Solution> &generationCourante,
+                                                 const unsigned int nbSolutionParGen) {
+    // On crée une liste pour que chaque individus ne fasse qu'une seule fois partie du tournoi
+    vector<unsigned int> listeCroisement(nbSolutionParGen);
+    iota(listeCroisement.begin(), listeCroisement.end(), 0);
+    // Mélange de la liste
+    std::random_device random_liste;
+    std::mt19937 generation_liste(random_liste());
+    ranges::shuffle(listeCroisement, generation_liste);
+
+    auto generationSuivante = vector<Solution>();
+
+    for (unsigned int i = 0; i < listeCroisement.size(); i += 2) {
+        const unsigned int indexSolution1 = listeCroisement[i];
+        const unsigned int indexSolution2 = listeCroisement[i + 1];
+
+        const unsigned int evaluation1 = generationCourante[indexSolution1].obtenirEvaluation();
+        const unsigned int evaluation2 = generationCourante[indexSolution2].obtenirEvaluation();
+
+        if (evaluation1 < evaluation2) {
+            generationSuivante.emplace_back(generationCourante[indexSolution1]);
+        } else {
+            generationSuivante.emplace_back(generationCourante[indexSolution2]);
+        }
+    }
+
+    return generationSuivante;
+}
+
+
 /*****************************************************************************************************
 ***** rechercheSolution : Exécute l'algorithme de recherche de la solution optimale au problème. *****
 *****************************************************************************************************/
-bool Algorithme::rechercheSolution(
-    unsigned int nbGenerationMax,
-    float tauxMutation, //!!!!!Demander des détails dessus
-    unsigned int nbMutationParGen,
-    unsigned int nbSolutionParGen) {
-
-    // Param : nb génération, taux de mutation, nb mutation par génération, nb solutions par génération (12/16/20)
-    // On supprime la moitié, et on fait se reproduire le reste -> sélection par tournoi
-    // Aléatoire qui décider où couper pour le croisement
-
-    // Définition des constantes utiles à la recherche de solution
-
-    // Graine pour la sélection de Solution aléatoire lors de la sélection par tournoi
-    random_device rd;
-    mt19937 gen(rd());
-
-    // L'instance initiale qui contient S : la séquence de départ, et T : la séquence d'arrivée
-    // instance_;
-
+bool Algorithme::rechercheSolution(const unsigned int nbGenerationMax, const float tauxMutation,
+                                   const unsigned int nbMutationParGen, const unsigned int nbSolutionParGen,
+                                   const bool affichageDetaille) {
     // Définitions des variables utiles à la recherche de solution
     bool solutionOptimaleTrouvee = false;
     unsigned int numGeneration = 0;
-    vector <Solution> generationCourante;
-    //nbMutationParGen : mis à jour au cours de la recherche
 
     cout << "Début de la recherche de solution." << endl;
-    cout << "Séquence départ : " << endl;
+    cout << "Séquence de départ S : " << endl;
     instance_.obtenirSource().afficherSequence();
-    cout << "Séquence arrivée : " << endl;
+    cout << "Séquence d'arrivée T : " << endl;
     instance_.obtenirTerminale().afficherSequence();
 
     cout << "Distance levenshtein (valeur optimale à atteindre: " << nombreMouvements_ << endl;
 
-    cout << "Appuyez sur entrée pour continuer. (1 pour désactiver l'affichage, 2 pour désactiver les points d'arrêt)" << endl;
-    string saisie;
-    getline(cin, saisie);
-
     // Algorithme de recherche de solution
-    while(numGeneration < nbGenerationMax) {
-
-        if(saisie != "1") {
+    while (numGeneration < nbGenerationMax) {
+        if (affichageDetaille) {
             cout << "Génération n°" << numGeneration << endl;
-            if(saisie != "2") {
-                cout << "Appuyez sur entrée pour continuer. (1 pour désactiver l'affichage, 2 pour désactiver les points d'arrêt)" << endl;
-                getline(cin, saisie);
-            }
         }
 
-        if(numGeneration == 0) {
-            // Génération de P solutions composées de M mouvements aléatoires
-            // ranges::generate(generationCourante, [&]() {
-            //     return Solution(instance_, nbMutationParGen);
-            // });
-
-            for(unsigned int i = 0; i < nbSolutionParGen; i++) {
-                generationCourante.emplace_back(instance_, nbMutationParGen);
+        if (numGeneration == 0) {
+            // Initialisation de la premiere generation de solutions avec nbSolutionParGen solutions aléatoires
+            for (unsigned int i = 0; i < nbSolutionParGen; i++) {
+                listeSolutions_.emplace_back(instance_, nombreMouvements_);
             }
 
+            // On evalue chaque nouvel individu
+            for (Solution &solution: listeSolutions_) {
+                solution.calculerEvaluation(instance_.obtenirTerminale());
+                if (const unsigned int evaluation = solution.obtenirEvaluation();
+                    evaluation == 0) {
+                    meilleureSolution_ = solution;
+                    nombreMouvements_--;
+                    solutionOptimaleTrouvee = true;
+                    break;
+                }
+            }
+        } else {
+            // On rajoute la partie de la population manquante (après sélection par tournoi)
 
-        }
-        else {
-            // Croisement des solutions de la génération courante pour créer une nouvelle génération
-            for(int i = 0; i < nbSolutionParGen; i += 2) {
+            // On crée une liste pour croiser les individus gagnants du tournoi aléatoirement entre eux
+            vector<unsigned int> listeCroisement(nbSolutionParGen / 2);
+            iota(listeCroisement.begin(), listeCroisement.end(), 0);
+            // Mélange de la liste
+            std::random_device random_liste;
+            std::mt19937 generation_liste(random_liste());
+            ranges::shuffle(listeCroisement, generation_liste);
 
-                Solution &premierParent = generationCourante[i];
-                Solution &deuxiemeParent = generationCourante[i+1];
+            // Croisement des solutions gagnantes du tournoi pour reproduire des enfants et retrouver le nombre de solutions initial
+            for (unsigned int i = 0; i < listeCroisement.size(); i += 2) {
+                auto [mouvementsEnfant1, mouvementsEnfant2] = croisement(
+                    listeSolutions_[listeCroisement[i]].obtenirListeMouvements(),
+                    listeSolutions_[listeCroisement[i + 1]].obtenirListeMouvements());
 
-                if(saisie != "1") {
-                    cout << "Croisement de la solution n°" << i << " avec " << i+1 << ":" << endl;
+                if (affichageDetaille) {
+                    cout << "Croisement de la solution n°" << listeCroisement[i] << " avec " << listeCroisement[i + 1]
+                            << ":" << endl;
                     cout << "Parent 1 : ";
-                    premierParent.afficherSolutionSimplifiee();
+                    listeSolutions_[listeCroisement[i]].afficherSolutionSimplifiee();
 
                     cout << "Parent 2 :";
-                    deuxiemeParent.afficherSolutionSimplifiee();
+                    listeSolutions_[listeCroisement[i + 1]].afficherSolutionSimplifiee();
                 }
 
-                // Génération d'un nombre aléatoire pour déterminer à quel
-                // endroit on souhaite "couper" pour le croisement
-                int min = static_cast<int>(0.3 * nbMutationParGen);
-                int max = static_cast<int>(0.7 * nbMutationParGen);
-                uniform_int_distribution<int> dis(min, max); // Distribution uniforme entre min et max
+                listeSolutions_.emplace_back(instance_, mouvementsEnfant1);
+                listeSolutions_.emplace_back(instance_, mouvementsEnfant2);
 
-                const unsigned int separation = dis(gen);
-
-                // Initialisation de la liste pré-remplie avec les premiers mouvements du premier parent
-                vector<Mouvement> mvmtsPremierEnfant;
-                for(unsigned int pos = 0; pos < separation; pos++) {
-                    mvmtsPremierEnfant.emplace_back(premierParent.obtenirListeMouvements()[pos]);
-                }
-                for(unsigned int pos = separation; pos < nbMutationParGen; pos++) {
-                    mvmtsPremierEnfant.emplace_back(deuxiemeParent.obtenirListeMouvements()[pos]);
-                }
-
-                vector<Mouvement> mvmtsDeuxiemeEnfant;
-                for(unsigned int pos = 0; pos < separation; pos++) {
-                    mvmtsDeuxiemeEnfant.emplace_back(deuxiemeParent.obtenirListeMouvements()[pos]);
-                }
-                for(unsigned int pos = separation; pos < nbMutationParGen; pos++) {
-                    mvmtsDeuxiemeEnfant.emplace_back(premierParent.obtenirListeMouvements()[pos]);
-                }
-
-                /*mvmtsPremierEnfant.insert(mvmtsPremierEnfant.end(),
-                    premierParent.obtenirListeMouvements().begin(),
-                    premierParent.obtenirListeMouvements().begin() + separation);
-
-                cout << "OK1" << endl;
-
-
-                // Ajout des derniers mouvements du deuxième parent à la liste
-                mvmtsPremierEnfant.insert(mvmtsPremierEnfant.end(),
-                    deuxiemeParent.obtenirListeMouvements().begin() + separation,
-                    deuxiemeParent.obtenirListeMouvements().end());
-
-                cout << "OK2" << endl;
-
-                // Création de la liste des mouvements du deuxième enfant
-
-                // Initialisation de la liste pré-remplie avec les premiers mouvements du deuxième parent
-                vector<Mouvement> mvmtsDeuxiemeEnfant(
-                    deuxiemeParent.obtenirListeMouvements().begin(),
-                    deuxiemeParent.obtenirListeMouvements().begin() + separation);
-                cout << "OK3" << endl;
-
-                // Ajout des derniers mouvements du premier parent à la liste
-                mvmtsDeuxiemeEnfant.insert(mvmtsDeuxiemeEnfant.end(),
-                    premierParent.obtenirListeMouvements().begin() + separation,
-                    premierParent.obtenirListeMouvements().end());
-                cout << "OK4" << endl;*/
-
-                Solution premierEnfant(instance_, mvmtsPremierEnfant);
-                Solution deuxiemeEnfant(instance_, mvmtsDeuxiemeEnfant);
-
-                generationCourante.push_back(premierEnfant);
-                generationCourante.push_back(deuxiemeEnfant);
-
-                if(saisie != "1") {
+                if (affichageDetaille) {
                     cout << "Enfant 1 : ";
-                    premierEnfant.afficherSolutionSimplifiee();
+                    listeSolutions_[listeCroisement[listeCroisement.size() + i]].afficherSolutionSimplifiee();
 
                     cout << "Enfant 2 :";
-                    deuxiemeEnfant.afficherSolutionSimplifiee();
+                    listeSolutions_[listeCroisement[listeCroisement.size() + i + 1]].afficherSolutionSimplifiee();
                 }
             }
-        }
+
+            // Mutation des solutions venant d'être créées
+            /*for (Solution &solution: listeSolutions_) {
+                for (unsigned int i = 0; i < nbMutationParGen; i++) {
+                    const unsigned int indexSolution = rand() % listeSolutions_.size();
+                    listeSolutions_[indexSolution].mutation(tauxMutation);
+                }
+            }*/
 
 
-        // Calcul des evaluations des solutions (on les stocke pour la suite de l'algo)
+            // On evalue les nouveaux individus uniquement
+            const auto numSolution = listeSolutions_.size() / 2;
+            for (unsigned int i = numSolution; i < listeSolutions_.size(); i++) {
+                Solution &solution = listeSolutions_[i];
+                solution.calculerEvaluation(instance_.obtenirTerminale());
+                const unsigned int evaluation = solution.obtenirEvaluation();
+                if (evaluation == 0) {
+                    meilleureSolution_ = solution;
+                    nombreMouvements_--;
+                    solutionOptimaleTrouvee = true;
+                    break;
+                }
 
-
-        if(saisie != "1") {
-            cout << "Évaluation des solutions." << endl;
-        }
-        int numSolution = 0;
-
-        vector<unsigned int> evaluations;
-
-        for(const Solution& solution : generationCourante) {
-            // Pour évaluer une solution on calcule la distance de levenshtein
-            // (cad le nb de mouvements restant à faire au minimum)
-            // Entre la séquence finale d'une solution et séquence finale de l'instance du problème
-
-            evaluations.push_back(DistanceLevenshtein::calculerDistanceLevenshtein(
-                solution.obtenirListeSequences().back(), instance_.obtenirTerminale()));
-
-            numSolution++;
-            if(saisie != "1") {
-                cout << "Solution n°" << numSolution << " : " << evaluations.back() << endl;
-            }
-
-            // Si on a trouvé une solution allant de S à T
-            // Cette solution devient la meilleure solution
-            if(evaluations.back() == 0) {
-                nbMutationParGen --;
-                numGeneration = 0;
-
-                meilleureSolution_ = solution;
-
-                if(saisie != "1") {
-                    cout << "Meilleure solution trouvée !" << endl;
+                if (affichageDetaille) {
+                    cout << "Solution n°" << i + 1 << " : " << evaluation << endl;
                 }
             }
         }
 
         // Sélection des meilleures solutions pour la génération future
-
-        //Coder la sélection par tournoi (actuellement on prend les Solutions côte à côte)
-
-        if(saisie != "1") {
+        if (affichageDetaille) {
             cout << "Sélection par tournoi des meilleures solutions." << endl;
         }
 
-        vector<Solution> nouvelleGeneration;
+        listeSolutions_ = selectionParTournoi(listeSolutions_, nbSolutionParGen);
 
-        ranges::shuffle(generationCourante, gen);
-
-        for(int i = 0; i < nbSolutionParGen; i += 2) {
-
-            Solution &solutionGagnante = (evaluations[i] < evaluations[i + 1]) ?
-                                          generationCourante[i] :
-                                          generationCourante[i + 1];
-
-            nouvelleGeneration.push_back(solutionGagnante);
-        }
-
-        if(saisie != "1") {
+        if (affichageDetaille) {
             cout << endl << "Fin de l'itération pour la génération n°" << numGeneration << endl;
         }
-        // La génération courante est remplacée par la nouvelle génération
-        // pour la prochaine itération de l'algorithme
-        generationCourante = nouvelleGeneration;
-        numGeneration++;
-    }
 
+        numGeneration++;
+
+        if (solutionOptimaleTrouvee) {
+            numGeneration = 0;
+        }
+    }
     return solutionOptimaleTrouvee;
 }

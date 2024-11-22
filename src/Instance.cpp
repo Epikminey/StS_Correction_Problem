@@ -17,10 +17,16 @@ unsigned int Instance::obtenirDistanceLevenshtein() const {
     return distance_;
 }
 
+/********************************************************
+***** ObtenirSource : Renvoie la sequence d'origine *****
+********************************************************/
 const Sequence & Instance::obtenirSource() const {
     return source_;
 }
 
+/*************************************************************
+***** ObtenirTerminale : Renvoie la sequence a atteindre *****
+*************************************************************/
 const Sequence & Instance::obtenirTerminale() const {
     return terminale_;
 }

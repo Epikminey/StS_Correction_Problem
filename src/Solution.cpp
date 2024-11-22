@@ -1,5 +1,6 @@
 #include "Solution.h"
 
+#include <DistanceLevenshtein.h>
 #include <random>
 #include <bits/random.h>
 #include <iostream>
@@ -191,10 +192,9 @@ Solution::Solution(const Instance &instance, const vector<Mouvement> &mouvements
     listeMouvements_ = mouvements;
     listeSequences_.push_back(instance.obtenirSource());
 
-    for (unsigned int boucle = 0; boucle < mouvements.size(); ++boucle) {
-
+    for (const auto &[idMouvement, indexDepart, nombreCases, indexDestination, nomCase]: mouvements) {
         // Switch case pour les differentes valeurs de idMouvement
-        switch (const auto &[idMouvement, indexDepart, nombreCases, indexDestination, nomCase] = mouvements[boucle]; idMouvement) {
+        switch (idMouvement) {
             case INVERSION: {
                 // On inverse une partie de la sequence
                 auto sequence = listeSequences_.back();
@@ -253,13 +253,12 @@ Solution::Solution(const Instance &instance, const vector<Mouvement> &mouvements
 ***** Mutation : Pour modifier un des mouvements de la Solution *****
 ********************************************************************/
 void Solution::Mutation(unsigned int index, const Mouvement &mouvement) {
-
     try {
         // Exception si le mouvement n'est pas possible
         listeMouvements_.push_back(mouvement);
 
         // Une nouvelle séquence est générée à partir de la dernière séquence enregistrée
-        Sequence nouvelle_sequence = Sequence(listeSequences_.back());
+        auto nouvelle_sequence = Sequence(listeSequences_.back());
 
 
         switch (mouvement.idMouvement) {
@@ -272,7 +271,8 @@ void Solution::Mutation(unsigned int index, const Mouvement &mouvement) {
                 break;
             }
             case INVERSION_TRANSPOSEE: {
-                nouvelle_sequence.inverserTransposer(mouvement.indexDepart, mouvement.nombreCases, mouvement.indexDestination);
+                nouvelle_sequence.inverserTransposer(mouvement.indexDepart, mouvement.nombreCases,
+                                                     mouvement.indexDestination);
                 break;
             }
             case DUPLICATION: {
@@ -295,12 +295,17 @@ void Solution::Mutation(unsigned int index, const Mouvement &mouvement) {
                 throw invalid_argument("Mouvement impossible !");
             }
         }
-    }
-    catch (...) {
+    } catch (...) {
         throw invalid_argument("Erreur : Mouvement impossible pour cette solution.");
     }
+}
 
+void Solution::calculerEvaluation(const Sequence &sequenceTerminale) {
+    evaluation_ = DistanceLevenshtein::calculerDistanceLevenshtein(listeSequences_.back(), sequenceTerminale);
+}
 
+unsigned int Solution::obtenirEvaluation() const {
+    return evaluation_;
 }
 
 /**********************************************************************************************
@@ -329,10 +334,9 @@ vector<Mouvement> Solution::obtenirListeMouvements() const {
 ***************************************************************************************************/
 void Solution::afficherSolution() const {
     const unsigned int nbSequences = listeSequences_.size();
-    const unsigned int nbMouvements = listeMouvements_.size();
 
     //!!!!! Faire une gestion d'expression plus propre
-    if (nbMouvements + 1 != nbSequences) {
+    if (const unsigned int nbMouvements = listeMouvements_.size(); nbMouvements + 1 != nbSequences) {
         //!!!!! Faire une gestion d'exception plus propre
         cout << "Solution incohérente : Nombre de séquences incohérent par rapport au nombre de mouvements." << endl;
     } else {
@@ -427,8 +431,8 @@ void Solution::afficherMouvement(const Mouvement &mouvement, const char delimite
 }
 
 void Solution::afficherSolutionSimplifiee() const {
-    for(const Mouvement& mouvement : listeMouvements_) {
-        cout << mouvement.idMouvement << " + ";
+    for (const auto &[idMouvement, indexDepart, nombreCases, indexDestination, nomCase]: listeMouvements_) {
+        cout << idMouvement << " + ";
     }
     cout << endl;
 }

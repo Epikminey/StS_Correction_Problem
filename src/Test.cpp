@@ -115,7 +115,7 @@ bool Test::testAffichage() {
 
     vector<Mouvement> listeMouvements = {mouvement1, mouvement2, mouvement3, mouvement4, mouvement5};
 
-    Instance instance = Instance(sequence1, sequence2);
+    auto instance = Instance(sequence1, sequence2);
     vector<Instance> listeInstances = {instance};
 
     // Exemple d'initialisation d'une solution et d'affichage
@@ -131,29 +131,30 @@ bool Test::testSolutionOptimale() {
 
     const string ADN1 = "+A-B+C-D+E-F+G-H+I";
     const string ADN2 = "+A-B+C-D+E-F+G-C+I";
+    const string ADN6 = "+I-H+G-F+E-D+C-B+A";
     //const string ADN7 = "+I-D+C-B-H+G-F+E+A";
 
     vector<string> listeSequencesBrutes = {ADN1,  ADN2};
 
-    auto sequence1 = Sequence(ADN1);
-    auto sequence2 = Sequence(ADN2);
+    const auto sequence1 = Sequence(ADN1);
+    const auto sequence2 = Sequence(ADN6);
 
 
-    Instance instance = Instance(sequence1, sequence2);
+    const auto instance = Instance(sequence1, sequence2);
 
 
-    Algorithme algo(instance, 6);
+    Algorithme algo(instance);
 
     cout << "Test : ";
     instance.obtenirTerminale().afficherSequence();
 
-    unsigned int nbGenerationMax = 20;
-    float tauxMutation = 0.5;
-    unsigned int nbMutationParGen = 10;
-    unsigned int nbSolutionParGen = 16;
+    const unsigned int nbGenerationMax = 1000;
+    const float tauxMutation = 0.5;
+    const unsigned int nbMutationParGen = 10;
+    const unsigned int nbSolutionParGen = 16;
 
 
-    algo.rechercheSolution(nbGenerationMax, tauxMutation, nbMutationParGen, nbSolutionParGen);
+    algo.rechercheSolution(nbGenerationMax, tauxMutation, nbMutationParGen, nbSolutionParGen, false);
 
     return true;
 }

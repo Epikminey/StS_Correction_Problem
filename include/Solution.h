@@ -29,6 +29,7 @@ private:
     /*** Attributs ***/
     vector<Sequence> listeSequences_; // Le chemin de sequences
     vector<Mouvement> listeMouvements_; // Les mouvements pour faire le chemin de sequences
+    unsigned int evaluation_; // L'évaluation de la solution
 
 public:
     //***Constructeurs et destructeurs***//
@@ -67,6 +68,10 @@ public:
     ***** Mutation : Pour modifier un des mouvements de la Solution *****
     ********************************************************************/
     void Mutation(unsigned int index, const Mouvement &mouvement);
+
+    void calculerEvaluation(const Sequence &sequenceTerminale);
+
+    [[nodiscard]] unsigned int obtenirEvaluation() const;
 
     /**********************************************************************************************
     ***** ObtenirDerniereSequence : Pour copier et manipuler la derniere sequence de la liste *****
