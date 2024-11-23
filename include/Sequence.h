@@ -10,7 +10,7 @@
 class Sequence {
 private:
     /*** Attributs ***/
-    vector<Case> listeCases_; //La sequence composee d'objets Case
+    std::vector<Case> listeCases_; //La sequence composee d'objets Case
 
 public:
     //***Constructeurs et destructeurs***//
@@ -23,7 +23,7 @@ public:
     /************************************************
     ***** Sequence : Le constructeur de confort *****
     ************************************************/
-    explicit Sequence(string sequence);
+    explicit Sequence(std::string sequence);
 
     /*************************************************************
     ***** Sequence : Le constructeur de recopie (par defaut) *****
@@ -55,7 +55,7 @@ public:
     /********************************************************************************
     ***** ObtenirCase : Pour obtenir la valeur de la case choisie dans la liste *****
     ********************************************************************************/
-    [[nodiscard]] const Case &obtenirCase(unsigned int index) const;
+    [[nodiscard]] Case obtenirCase(unsigned int index) const;
 
     /***************************************************************************
     ***** AfficherSequence : Affiche la composition de la sequence entiere *****
@@ -90,12 +90,17 @@ public:
     /**********************************************************
     ***** ModifierCase : Remplace un element par un autre *****
     **********************************************************/
-    void modifierCase(unsigned int index, const string &signeLettre);
+    void modifierCase(unsigned int index, const std::string &signeLettre);
 
     /**********************************************************************************
     ***** AjouterCase : Ajoute un nouvel element dans la liste a l'endroit choisi *****
     **********************************************************************************/
-    void ajouterCase(unsigned int index, const string &signeLettre);
+    void ajouterCase(unsigned int index, const std::string &signeLettre);
 };
+
+/************************************************************************************************
+***** CalculerDistanceLevenshtein : Calcule la distance de Levenshtein entre deux séquences *****
+************************************************************************************************/
+unsigned int calculerDistanceLevenshtein(const Sequence &sequence1, const Sequence &sequence2);
 
 #endif //SEQUENCE_H

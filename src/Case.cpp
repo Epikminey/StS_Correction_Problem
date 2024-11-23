@@ -9,13 +9,20 @@ Case::Case(const char signe, const char lettre) {
     if (lettre >= 'A' && lettre <= 'Z') {
         lettre_ = lettre;
     } else {
-        throw runtime_error("Le caractere n'est pas une lettre majuscule.");
+        throw std::runtime_error("Le caractere n'est pas une lettre majuscule.");
     }
     if (signe == '+' || signe == '-') {
         signe_ = signe;
     } else {
-        throw runtime_error("Il faut donner un signe '+' ou '-'.");
+        throw std::runtime_error("Il faut donner un signe '+' ou '-'.");
     }
+}
+
+/*************************************************************************
+***** Operator!= : Pour comparer si deux objets Case sont différents *****
+*************************************************************************/
+bool Case::operator!=(const Case &param) const {
+    return (lettre_ != param.lettre_ || signe_ != param.signe_);
 }
 
 /***************************************************************
@@ -35,7 +42,7 @@ char Case::lireSigne() const {
 /***********************************************************************
 ***** LireCase : Accesseur direct de lecture sur lettre_ et signe_ *****
 ***********************************************************************/
-tuple<char, char> Case::lireCase() const {
+std::tuple<char, char> Case::lireCase() const {
     return {signe_, lettre_};
 }
 
@@ -43,7 +50,7 @@ tuple<char, char> Case::lireCase() const {
 ***** AfficherCase : Affiche la valeur de la case *****
 ******************************************************/
 void Case::afficherCase() const {
-    cout << signe_ << lettre_;
+    std::cout << signe_ << lettre_;
 }
 
 /******************************************************************
@@ -64,26 +71,11 @@ void Case::modifierCase(const char signe, const char lettre) {
     if (lettre >= 'A' && lettre <= 'Z') {
         lettre_ = lettre;
     } else {
-        throw runtime_error("Le caractere n'est pas une lettre majuscule.");
+        throw std::runtime_error("Le caractere n'est pas une lettre majuscule.");
     }
     if (signe == '+' || signe == '-') {
         signe_ = signe;
     } else {
-        throw runtime_error("Il faut donner un signe '+' ou '-'.");
+        throw std::runtime_error("Il faut donner un signe '+' ou '-'.");
     }
-}
-
-
-/*****************************************************************************
-***** Operator== : Pour comparer si deux objets Case sont égaux          *****
-*****************************************************************************/
-bool Case::operator==(const Case &param) const {
-    return (lettre_ == param.lettre_ && signe_ == param.signe_);
-}
-
-/*****************************************************************************
-***** Operator!= : Pour comparer si deux objets Case sont différents     *****
-*****************************************************************************/
-bool Case::operator!=(const Case &param) const {
-    return (lettre_ != param.lettre_ || signe_ != param.signe_);
 }

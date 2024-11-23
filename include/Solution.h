@@ -2,14 +2,13 @@
 #define SOLUTION_H
 
 #include "Instance.h"
-#include "sequence.h"
 
 struct Mouvement {
     unsigned int idMouvement;
     unsigned int indexDepart;
     unsigned int nombreCases;
     unsigned int indexDestination;
-    string nomCase;
+    std::string nomCase;
 };
 
 enum Mouvements {
@@ -27,8 +26,8 @@ enum Mouvements {
 class Solution {
 private:
     /*** Attributs ***/
-    vector<Sequence> listeSequences_; // Le chemin de sequences
-    vector<Mouvement> listeMouvements_; // Les mouvements pour faire le chemin de sequences
+    std::vector<Sequence> listeSequences_; // Le chemin de sequences
+    std::vector<Mouvement> listeMouvements_; // Les mouvements pour faire le chemin de sequences
     unsigned int evaluation_; // L'évaluation de la solution
 
 public:
@@ -45,7 +44,7 @@ public:
     /***********************************************************************************************
     ***** Solution : Le constructeur de confort via une liste de mouvements (apres croisement) *****
     ***********************************************************************************************/
-    explicit Solution(const Instance &instance, const vector<Mouvement> &mouvements);
+    explicit Solution(const Instance &instance, const std::vector<Mouvement> &mouvements);
 
     /*************************************************************
     ***** Solution : Le constructeur de recopie (par defaut) *****
@@ -67,10 +66,16 @@ public:
     /********************************************************************
     ***** Mutation : Pour modifier un des mouvements de la Solution *****
     ********************************************************************/
-    void Mutation(unsigned int index, const Mouvement &mouvement);
+    void Mutation(float tauxMutation, unsigned int nombreMutations);
 
+    /***********************************************************************************************************************************
+    ***** CalculerEvaluation : Pour calculer la distance de Levenshtein entre la dernière séquence de la Solution et la séquence T *****
+    ***********************************************************************************************************************************/
     void calculerEvaluation(const Sequence &sequenceTerminale);
 
+    /*********************************************************************************************************************************
+    ***** ObtenirEvaluation : Pour obtenir la distance de Levenshtein entre la dernière séquence de la Solution et la séquence T *****
+    *********************************************************************************************************************************/
     [[nodiscard]] unsigned int obtenirEvaluation() const;
 
     /**********************************************************************************************
@@ -81,12 +86,12 @@ public:
     /****************************************************************************
     ***** ObtenirListeSequences : Pour avoir la suite de sequences modifies *****
     ****************************************************************************/
-    [[nodiscard]] vector<Sequence> obtenirListeSequences() const;
+    [[nodiscard]] std::vector<Sequence> obtenirListeSequences() const;
 
     /**********************************************************************************************
     ***** ObtenirListeMouvements : Pour avoir tous les mouvements effectues sur la sequence S *****
     **********************************************************************************************/
-    [[nodiscard]] vector<Mouvement> obtenirListeMouvements() const;
+    [[nodiscard]] std::vector<Mouvement> obtenirListeMouvements() const;
 
     /***************************************************************************************************
     ***** AfficherSolution : Affiche la solution avec l'ensemble des mouvements de cette solution. *****

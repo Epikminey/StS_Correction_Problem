@@ -3,8 +3,6 @@
 
 #include <tuple>
 
-using namespace std;
-
 // Contient la structure d'une case de la sequence.
 class Case {
 private:
@@ -40,14 +38,9 @@ public:
     *****************************************************************************/
     Case &operator=(const Case &param) = default;
 
-    /*****************************************************************************
-    ***** Operator== : Pour comparer si deux objets Case sont égaux          *****
-    *****************************************************************************/
-    bool operator==(const Case &param) const;
-
-    /*****************************************************************************
-    ***** Operator!= : Pour comparer si deux objets Case sont différents     *****
-    *****************************************************************************/
+    /*************************************************************************
+    ***** Operator!= : Pour comparer si deux objets Case sont différents *****
+    *************************************************************************/
     bool operator!=(const Case &param) const;
 
     /***************************************************************
@@ -63,7 +56,7 @@ public:
     /***********************************************************************
     ***** LireCase : Accesseur direct de lecture sur lettre_ et signe_ *****
     ***********************************************************************/
-    [[nodiscard]] tuple<char, char> lireCase() const;
+    [[nodiscard]] std::tuple<char, char> lireCase() const;
 
     /******************************************************
     ***** AfficherCase : Affiche la valeur de la case *****
@@ -79,10 +72,6 @@ public:
     ***** ModifierCase : Accesseur direct en ecriture sur lettre_ et signe_ *****
     ****************************************************************************/
     void modifierCase(char signe, char lettre);
-
-
-    // FAIRE UNE SURCHARGE de != et ==
-
 };
 
 #endif //CASE_H

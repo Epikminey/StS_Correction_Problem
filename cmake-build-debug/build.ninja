@@ -49,15 +49,15 @@ cmake_ninja_workdir = C$:/Users/beuna/Desktop/StS_Correction_Problem/cmake-build
 
 build cmake_object_order_depends_target_StS_Correction_Problem: phony || .
 
-build CMakeFiles/StS_Correction_Problem.dir/src/Exception.cpp.obj: CXX_COMPILER__StS_Correction_Problem_unscanned_Debug C$:/Users/beuna/Desktop/StS_Correction_Problem/src/Exception.cpp || cmake_object_order_depends_target_StS_Correction_Problem
-  DEP_FILE = CMakeFiles\StS_Correction_Problem.dir\src\Exception.cpp.obj.d
+build CMakeFiles/StS_Correction_Problem.dir/src/Case.cpp.obj: CXX_COMPILER__StS_Correction_Problem_unscanned_Debug C$:/Users/beuna/Desktop/StS_Correction_Problem/src/Case.cpp || cmake_object_order_depends_target_StS_Correction_Problem
+  DEP_FILE = CMakeFiles\StS_Correction_Problem.dir\src\Case.cpp.obj.d
   FLAGS = -g -std=gnu++23 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/beuna/Desktop/StS_Correction_Problem/include
   OBJECT_DIR = CMakeFiles\StS_Correction_Problem.dir
   OBJECT_FILE_DIR = CMakeFiles\StS_Correction_Problem.dir\src
 
-build CMakeFiles/StS_Correction_Problem.dir/src/DistanceLevenshtein.cpp.obj: CXX_COMPILER__StS_Correction_Problem_unscanned_Debug C$:/Users/beuna/Desktop/StS_Correction_Problem/src/DistanceLevenshtein.cpp || cmake_object_order_depends_target_StS_Correction_Problem
-  DEP_FILE = CMakeFiles\StS_Correction_Problem.dir\src\DistanceLevenshtein.cpp.obj.d
+build CMakeFiles/StS_Correction_Problem.dir/src/Sequence.cpp.obj: CXX_COMPILER__StS_Correction_Problem_unscanned_Debug C$:/Users/beuna/Desktop/StS_Correction_Problem/src/Sequence.cpp || cmake_object_order_depends_target_StS_Correction_Problem
+  DEP_FILE = CMakeFiles\StS_Correction_Problem.dir\src\Sequence.cpp.obj.d
   FLAGS = -g -std=gnu++23 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/beuna/Desktop/StS_Correction_Problem/include
   OBJECT_DIR = CMakeFiles\StS_Correction_Problem.dir
@@ -91,15 +91,8 @@ build CMakeFiles/StS_Correction_Problem.dir/src/main.cpp.obj: CXX_COMPILER__StS_
   OBJECT_DIR = CMakeFiles\StS_Correction_Problem.dir
   OBJECT_FILE_DIR = CMakeFiles\StS_Correction_Problem.dir\src
 
-build CMakeFiles/StS_Correction_Problem.dir/src/Sequence.cpp.obj: CXX_COMPILER__StS_Correction_Problem_unscanned_Debug C$:/Users/beuna/Desktop/StS_Correction_Problem/src/Sequence.cpp || cmake_object_order_depends_target_StS_Correction_Problem
-  DEP_FILE = CMakeFiles\StS_Correction_Problem.dir\src\Sequence.cpp.obj.d
-  FLAGS = -g -std=gnu++23 -fdiagnostics-color=always
-  INCLUDES = -IC:/Users/beuna/Desktop/StS_Correction_Problem/include
-  OBJECT_DIR = CMakeFiles\StS_Correction_Problem.dir
-  OBJECT_FILE_DIR = CMakeFiles\StS_Correction_Problem.dir\src
-
-build CMakeFiles/StS_Correction_Problem.dir/src/Case.cpp.obj: CXX_COMPILER__StS_Correction_Problem_unscanned_Debug C$:/Users/beuna/Desktop/StS_Correction_Problem/src/Case.cpp || cmake_object_order_depends_target_StS_Correction_Problem
-  DEP_FILE = CMakeFiles\StS_Correction_Problem.dir\src\Case.cpp.obj.d
+build CMakeFiles/StS_Correction_Problem.dir/src/Test.cpp.obj: CXX_COMPILER__StS_Correction_Problem_unscanned_Debug C$:/Users/beuna/Desktop/StS_Correction_Problem/src/Test.cpp || cmake_object_order_depends_target_StS_Correction_Problem
+  DEP_FILE = CMakeFiles\StS_Correction_Problem.dir\src\Test.cpp.obj.d
   FLAGS = -g -std=gnu++23 -fdiagnostics-color=always
   INCLUDES = -IC:/Users/beuna/Desktop/StS_Correction_Problem/include
   OBJECT_DIR = CMakeFiles\StS_Correction_Problem.dir
@@ -113,7 +106,7 @@ build CMakeFiles/StS_Correction_Problem.dir/src/Case.cpp.obj: CXX_COMPILER__StS_
 #############################################
 # Link the executable StS_Correction_Problem.exe
 
-build StS_Correction_Problem.exe: CXX_EXECUTABLE_LINKER__StS_Correction_Problem_Debug CMakeFiles/StS_Correction_Problem.dir/src/Exception.cpp.obj CMakeFiles/StS_Correction_Problem.dir/src/DistanceLevenshtein.cpp.obj CMakeFiles/StS_Correction_Problem.dir/src/Instance.cpp.obj CMakeFiles/StS_Correction_Problem.dir/src/Solution.cpp.obj CMakeFiles/StS_Correction_Problem.dir/src/Algorithme.cpp.obj CMakeFiles/StS_Correction_Problem.dir/src/main.cpp.obj CMakeFiles/StS_Correction_Problem.dir/src/Sequence.cpp.obj CMakeFiles/StS_Correction_Problem.dir/src/Case.cpp.obj
+build StS_Correction_Problem.exe: CXX_EXECUTABLE_LINKER__StS_Correction_Problem_Debug CMakeFiles/StS_Correction_Problem.dir/src/Case.cpp.obj CMakeFiles/StS_Correction_Problem.dir/src/Sequence.cpp.obj CMakeFiles/StS_Correction_Problem.dir/src/Instance.cpp.obj CMakeFiles/StS_Correction_Problem.dir/src/Solution.cpp.obj CMakeFiles/StS_Correction_Problem.dir/src/Algorithme.cpp.obj CMakeFiles/StS_Correction_Problem.dir/src/main.cpp.obj CMakeFiles/StS_Correction_Problem.dir/src/Test.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\StS_Correction_Problem.dir

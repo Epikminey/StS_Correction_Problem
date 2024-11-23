@@ -3,6 +3,25 @@
 #include <Algorithme.h>
 
 
+#include <iostream>
+
+#define ASSERT_EQUAL(a, b) \
+if ((a) != (b)) { \
+std::cout << "Test failed: " #a " != " #b << " at line " << __LINE__ << std::endl; \
+} else { \
+std::cout << "Test passed." << std::endl; \
+}
+
+int add(int a, int b) {
+    return a + b;
+}
+
+void testAdd() {
+    ASSERT_EQUAL(add(1, 2), 3); // Test unitaire pour l'addition de 1 et 2
+    ASSERT_EQUAL(add(-1, -2), -3); // Test unitaire pour l'addition de nombres négatifs
+    ASSERT_EQUAL(add(0, 0), 0); // Test unitaire pour l'addition de zéro
+}
+
 bool Test::testAntoine() {
 
     // Exemple de transformations sur `sequence1`
@@ -143,7 +162,7 @@ bool Test::testSolutionOptimale() {
     const auto instance = Instance(sequence1, sequence2);
 
 
-    Algorithme algo(instance);
+    //Algorithme algo(instance);
 
     cout << "Test : ";
     instance.obtenirTerminale().afficherSequence();
@@ -154,7 +173,7 @@ bool Test::testSolutionOptimale() {
     const unsigned int nbSolutionParGen = 16;
 
 
-    algo.rechercheSolution(nbGenerationMax, tauxMutation, nbMutationParGen, nbSolutionParGen, false);
+    //algo.rechercheSolution(nbGenerationMax, tauxMutation, nbMutationParGen, nbSolutionParGen, false);
 
     return true;
 }

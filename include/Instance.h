@@ -42,12 +42,12 @@ public:
     /********************************************************
     ***** ObtenirSource : Renvoie la sequence d'origine *****
     ********************************************************/
-    [[nodiscard]] const Sequence &obtenirSource() const;
+    [[nodiscard]] Sequence obtenirSource() const;
 
     /*************************************************************
     ***** ObtenirTerminale : Renvoie la sequence a atteindre *****
     *************************************************************/
-    [[nodiscard]] const Sequence &obtenirTerminale() const;
+    [[nodiscard]] Sequence obtenirTerminale() const;
 };
 
 #endif //INSTANCE_H

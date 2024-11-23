@@ -6,17 +6,18 @@ set(CMAKE_CXX_STANDARD 26)
 include_directories(include)
 
 add_executable(StS_Correction_Problem
-        src/DistanceLevenshtein.cpp
+        src/Case.cpp
+        src/Sequence.cpp
         src/Instance.cpp
         src/Solution.cpp
         src/Algorithme.cpp
         src/main.cpp
-        include/Sequence.h
-        src/Sequence.cpp
         include/Case.h
-        src/Case.cpp
+        include/Sequence.h
+        include/Instance.h
+        include/Solution.h
+        include/Algorithme.h
         include/Test.h
-        src/Test.cpp
         src/Test.cpp
 )
 

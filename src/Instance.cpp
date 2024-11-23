@@ -1,5 +1,4 @@
 #include "Instance.h"
-#include "DistanceLevenshtein.h"
 
 /************************************************
 ***** Instance : Le constructeur de confort *****
@@ -7,7 +6,7 @@
 Instance::Instance(const Sequence &source, const Sequence &terminale) {
     source_ = source;
     terminale_ = terminale;
-    distance_ = DistanceLevenshtein::calculerDistanceLevenshtein(source, terminale);
+    distance_ = calculerDistanceLevenshtein(source, terminale);
 }
 
 /***************************************************************************************************
@@ -20,13 +19,13 @@ unsigned int Instance::obtenirDistanceLevenshtein() const {
 /********************************************************
 ***** ObtenirSource : Renvoie la sequence d'origine *****
 ********************************************************/
-const Sequence & Instance::obtenirSource() const {
+Sequence Instance::obtenirSource() const {
     return source_;
 }
 
 /*************************************************************
 ***** ObtenirTerminale : Renvoie la sequence a atteindre *****
 *************************************************************/
-const Sequence & Instance::obtenirTerminale() const {
+Sequence Instance::obtenirTerminale() const {
     return terminale_;
 }

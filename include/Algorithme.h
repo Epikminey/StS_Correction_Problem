@@ -1,24 +1,14 @@
 #ifndef ALGORITHME_H
 #define ALGORITHME_H
 
-
-#include "Instance.h"
 #include "Solution.h"
-#include "Algorithme.h"
-#include "DistanceLevenshtein.h"
-
-#include <random>
-#include <iostream>
-
-
-using namespace std;
 
 class Algorithme {
 private:
     /*** Attributs ***/
     Instance instance_; // L'instance du problème que l'on souhaite résoudre
     Solution meilleureSolution_; // Le chemin de sequences optimal
-    vector<Solution> listeSolutions_; // La population de solutions
+    std::vector<Solution> listeSolutions_; // La population de solutions
     unsigned int nombreMouvements_; // Les mouvements pour faire le chemin de sequences optimal
 
 public:
@@ -49,10 +39,11 @@ public:
 
     void afficherMeilleureSolution() const;
 
-    static pair<vector<Mouvement>, vector<Mouvement> > croisement(const vector<Mouvement> &mouvementsParent1,
-                                                                  const vector<Mouvement> &mouvementsParent2);
+    static std::pair<std::vector<Mouvement>, std::vector<Mouvement> > croisement(
+        const std::vector<Mouvement> &mouvementsParent1, const std::vector<Mouvement> &mouvementsParent2);
 
-    static vector<Solution> selectionParTournoi(const vector<Solution> &generationCourante, unsigned int nbSolutionParGen);
+    static std::vector<Solution> selectionParTournoi(const std::vector<Solution> &generationCourante,
+                                                     unsigned int nbSolutionParGen);
 
     /*****************************************************************************************************
     ***** rechercheSolution : Exécute l'algorithme de recherche de la solution optimale au problème. *****

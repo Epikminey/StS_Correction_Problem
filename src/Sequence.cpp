@@ -7,19 +7,19 @@
 ***** Sequence : Le constructeur par defaut *****
 ************************************************/
 Sequence::Sequence() {
-    listeCases_ = vector<Case>();
+    listeCases_ = std::vector<Case>();
 }
 
 /************************************************
 ***** Sequence : Le constructeur de confort *****
 ************************************************/
-Sequence::Sequence(string sequence) {
+Sequence::Sequence(std::string sequence) {
     for (unsigned int boucle = 0; boucle < sequence.size(); boucle++) {
         if (boucle % 2 == 0) {
             try {
                 listeCases_.emplace_back(sequence[boucle], sequence[boucle + 1]);
-            } catch (const runtime_error &erreur) {
-                cout << "Erreur capturée : " << erreur.what() << std::endl;
+            } catch (const std::runtime_error &erreur) {
+                std::cout << "Erreur capturée : " << erreur.what() << std::endl;
             }
         }
     }
@@ -42,9 +42,9 @@ void Sequence::afficherCase(const unsigned int index) const {
 /********************************************************************************
 ***** ObtenirCase : Pour obtenir la valeur de la case choisie dans la liste *****
 ********************************************************************************/
-const Case &Sequence::obtenirCase(const unsigned int index) const {
+Case Sequence::obtenirCase(const unsigned int index) const {
     if (index >= listeCases_.size()) {
-        throw out_of_range("Index hors limites");
+        throw std::out_of_range("Index hors limites");
     }
     return listeCases_[index];
 }
@@ -56,7 +56,7 @@ void Sequence::afficherSequence() const {
     for (unsigned int boucle = 0; boucle < listeCases_.size(); boucle++) {
         afficherCase(boucle);
     }
-    cout << endl;
+    std::cout << std::endl;
 }
 
 /************************************************************************************************************
@@ -156,7 +156,7 @@ void Sequence::supprimer(const unsigned int indexDepart, const unsigned int nomb
 /**********************************************************
 ***** ModifierCase : Remplace un element par un autre *****
 **********************************************************/
-void Sequence::modifierCase(const unsigned int index, const string &signeLettre) {
+void Sequence::modifierCase(const unsigned int index, const std::string &signeLettre) {
     if (index < listeCases_.size()) {
         if (signeLettre.size() == 2) {
             listeCases_[index].modifierCase(signeLettre[0], signeLettre[1]);
@@ -171,7 +171,7 @@ void Sequence::modifierCase(const unsigned int index, const string &signeLettre)
 /**********************************************************************************
 ***** AjouterCase : Ajoute un nouvel element dans la liste a l'endroit choisi *****
 **********************************************************************************/
-void Sequence::ajouterCase(const unsigned int index, const string &signeLettre) {
+void Sequence::ajouterCase(const unsigned int index, const std::string &signeLettre) {
     if (index < listeCases_.size()) {
         if (signeLettre.size() == 2) {
             listeCases_.emplace(listeCases_.begin() + index, signeLettre[0], signeLettre[1]);
@@ -181,4 +181,41 @@ void Sequence::ajouterCase(const unsigned int index, const string &signeLettre) 
             listeCases_.emplace(listeCases_.end(), signeLettre[0], signeLettre[1]);
         }
     }
+}
+
+/************************************************************************************************
+***** CalculerDistanceLevenshtein : Calcule la distance de Levenshtein entre deux séquences *****
+************************************************************************************************/
+unsigned int calculerDistanceLevenshtein(const Sequence &sequence1, const Sequence &sequence2) {
+    const unsigned int tailleSequence1 = sequence1.obtenirTailleSequence();
+    const unsigned int tailleSequence2 = sequence2.obtenirTailleSequence();
+
+    // MatriceDistances est un tableau de longueurChaine1+1 rangées et longueurChaine2+1 colonnes
+    // MatriceDistances est indexé à partir de 0, les chaînes à partir de 1
+    std::vector MatriceDistances(tailleSequence1 + 1, std::vector<int>(tailleSequence2 + 1));
+    // Initialisation de la première ligne et de la première colonne du tableau D
+    for (int i = 0; i <= tailleSequence1; i++) {
+        MatriceDistances[i][0] = i;
+    }
+    for (int j = 0; j <= tailleSequence2; j++) {
+        MatriceDistances[0][j] = j;
+    }
+
+    // Calcul des autres valeurs de la matrice MatriceDistances
+    for (int ligne = 1; ligne <= tailleSequence1; ligne++) {
+        for (int colonne = 1; colonne <= tailleSequence2; colonne++) {
+            // On compare 2 cases. Si différentes, alors on ajoute 1 au cout de substitution
+            int coutSubstitution = 0;
+            const char lettre1 = sequence1.obtenirCase(ligne - 1).lireLettre();
+            if (const char lettre2 = sequence2.obtenirCase(colonne - 1).lireLettre(); lettre1 != lettre2) {
+                coutSubstitution = 1;
+            }
+            MatriceDistances[ligne][colonne] =  std::min(MatriceDistances[ligne - 1][colonne] + 1, // effacement du nouveau caractère de séquence1
+                                                std::min(MatriceDistances[ligne][colonne - 1] + 1, // insertion dans séquence2 du nouveau caractère de séquence1
+                                                MatriceDistances[ligne - 1][colonne - 1] + coutSubstitution) // substitution
+            );
+        }
+    }
+    // On retourne la distance de Levenshtein qui se trouve à la dernière ligne/colonne de la matrice D
+    return MatriceDistances[tailleSequence1][tailleSequence2];
 }
