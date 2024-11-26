@@ -103,7 +103,7 @@ bool Algorithme::rechercheSolution(const unsigned int nbGenerationMax, const flo
         if (numGeneration == 0) {
             // Initialisation de la premiere generation de solutions avec nbSolutionParGen solutions aléatoires
             for (unsigned int i = 0; i < nbSolutionParGen; i++) {
-                listeSolutions_.emplace_back(instance_, nombreMouvements_);
+                listeSolutions_.emplace_back(Solution(instance_, nombreMouvements_));
             }
 
             // On evalue chaque nouvel individu

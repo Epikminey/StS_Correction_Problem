@@ -20,14 +20,21 @@ int main() {
     const std::string ADN1 = "+A-B+C-D+E-F+G-H+I";
     const std::string ADN6 = "+I-H+G-F+E-D+C-B+A";
 
+    std::cout << "OK1";
     const auto sequence1 = Sequence(ADN1);
     const auto sequence2 = Sequence(ADN6);
 
+    std::cout << "OK2";
+
     const auto instance = Instance(sequence1, sequence2);
+
+    std::cout << "OK3";
 
     auto algo = Algorithme(instance);
 
-    //algo.rechercheSolution(nbGenerationMax, tauxMutation, nbMutationParGen, nbSolutionParGen, affichageDetaille);
+    std::cout << "OK4";
+
+    algo.rechercheSolution(nbGenerationMax, tauxMutation, nbMutationParGen, nbSolutionParGen, affichageDetaille);
 
     return 0;
 }
