@@ -3,6 +3,7 @@
 
 #include "Solution.h"
 
+using namespace std;
 class Algorithme {
 private:
     /*** Attributs ***/

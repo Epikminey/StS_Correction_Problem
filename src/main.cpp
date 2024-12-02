@@ -1,16 +1,19 @@
-#include "Algorithme.h"
+#include "Test.h"
 
 #include <iostream>
-#include <windows.h>
+//#include <windows.h>
+
+using namespace  std;
 
 int main() {
 
     // Pour s'assurer que l'affichage de la console soit en UTF8
-    SetConsoleOutputCP(CP_UTF8);
+    //SetConsoleOutputCP(CP_UTF8);
 
     //Test de l'affichage d'une solution
-    //Test::testSolutionOptimale();
+    Test::testSolutionOptimale();
 
+    /*
     const unsigned int nbGenerationMax = 2;
     const float tauxMutation = 0.5;
     const unsigned int nbMutationParGen = 10;
@@ -35,6 +38,7 @@ int main() {
     std::cout << "OK4";
 
     algo.rechercheSolution(nbGenerationMax, tauxMutation, nbMutationParGen, nbSolutionParGen, affichageDetaille);
+    */
 
     return 0;
 }

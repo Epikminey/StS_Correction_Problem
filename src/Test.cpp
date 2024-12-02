@@ -1,26 +1,5 @@
 #include "Test.h"
 
-#include <Algorithme.h>
-
-
-#include <iostream>
-
-#define ASSERT_EQUAL(a, b) \
-if ((a) != (b)) { \
-std::cout << "Test failed: " #a " != " #b << " at line " << __LINE__ << std::endl; \
-} else { \
-std::cout << "Test passed." << std::endl; \
-}
-
-int add(int a, int b) {
-    return a + b;
-}
-
-void testAdd() {
-    ASSERT_EQUAL(add(1, 2), 3); // Test unitaire pour l'addition de 1 et 2
-    ASSERT_EQUAL(add(-1, -2), -3); // Test unitaire pour l'addition de nombres négatifs
-    ASSERT_EQUAL(add(0, 0), 0); // Test unitaire pour l'addition de zéro
-}
 
 bool Test::testAntoine() {
 
@@ -148,32 +127,31 @@ bool Test::testAffichage() {
 
 bool Test::testSolutionOptimale() {
 
+
     const string ADN1 = "+A-B+C-D+E-F+G-H+I";
     const string ADN2 = "+A-B+C-D+E-F+G-C+I";
-    const string ADN6 = "+I-H+G-F+E-D+C-B+A";
     //const string ADN7 = "+I-D+C-B-H+G-F+E+A";
 
     vector<string> listeSequencesBrutes = {ADN1,  ADN2};
 
-    const auto sequence1 = Sequence(ADN1);
-    const auto sequence2 = Sequence(ADN6);
+    auto sequence1 = Sequence(ADN1);
+    auto sequence2 = Sequence(ADN2);
 
 
-    const auto instance = Instance(sequence1, sequence2);
+    Instance instance = Instance(sequence1, sequence2);
 
 
-    //Algorithme algo(instance);
+    Algorithme algo(instance);
 
     cout << "Test : ";
     instance.obtenirTerminale().afficherSequence();
 
-    const unsigned int nbGenerationMax = 1000;
-    const float tauxMutation = 0.5;
-    const unsigned int nbMutationParGen = 10;
-    const unsigned int nbSolutionParGen = 16;
+    unsigned int nbGenerationMax = 10;
+    float tauxMutation = 0.2;
+    unsigned int nbMutationParGen = 10;
+    unsigned int nbSolutionParGen = 16;
 
-
-    //algo.rechercheSolution(nbGenerationMax, tauxMutation, nbMutationParGen, nbSolutionParGen, false);
+    algo.rechercheSolution(nbGenerationMax, tauxMutation, nbMutationParGen, nbSolutionParGen, true);
 
     return true;
 }

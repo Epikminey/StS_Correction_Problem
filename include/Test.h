@@ -4,13 +4,12 @@
 #include <vector>
 #include <string>
 #include <iostream>
-#include <vector>
-#include <string>
 #include <random>
 
 #include "Sequence.h"
 #include "Instance.h"
-#include <Solution.h>
+#include "Algorithme.h"
+
 
 using namespace std;
 
