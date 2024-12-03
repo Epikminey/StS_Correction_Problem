@@ -63,10 +63,26 @@ public:
     *****************************************************************************/
     Solution &operator=(const Solution &param) = default;
 
-    /********************************************************************
-    ***** Mutation : Pour modifier un des mouvements de la Solution *****
-    ********************************************************************/
-    void Mutation(unsigned int index, const Mouvement &mouvement);
+    /**********************************************************************************
+    ***** Mutation : Créée un mouvement aléatoire selon le taux de mutation donné *****
+    **********************************************************************************/
+    void Mutation(float tauxMutation, unsigned int nombreMutations);
+
+    /****************************************************************************************
+    ***** ModifierMouvement : Modifie un mouvement de la solution à une position donnée *****
+    ****************************************************************************************/
+    void ModifierMouvement(const Mouvement & mouvement, unsigned int numMouvement);
+
+    /*****************************************************************************************
+    ***** GenererMouvementAleatoire : Créée et renvoie un mouvement généré aléatoirement *****
+    *****                             se base sur la séquence à la position donnée       *****
+    *****************************************************************************************/
+    Mouvement GenererMouvementAleatoire(Sequence &sequence);
+
+    /*******************************************************************************************
+    ***** AppliquerMouvement :Applique un mouvement sur la dernière séquence de la solution *****
+    *******************************************************************************************/
+    void AppliquerMouvement(const Mouvement & mouvement);
 
     /***********************************************************************************************************************************
     ***** CalculerEvaluation : Pour calculer la distance de Levenshtein entre la dernière séquence de la Solution et la séquence T *****

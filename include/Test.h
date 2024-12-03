@@ -19,7 +19,7 @@ public:
 
     static bool testAntoine();
     static bool testEnzo();
-    static bool testAffichage();
+    static bool testAffichage(bool aleatoire);
     static bool testSolutionOptimale();
 };
 

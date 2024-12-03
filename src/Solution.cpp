@@ -11,175 +11,13 @@ Solution::Solution(const Instance &instance, const unsigned int nombreMutations)
     listeSequences_.push_back(instance.obtenirSource());
     evaluation_ = instance.obtenirTerminale().obtenirTailleSequence();
 
-    // On initialise le generateur de nombre aleatoire
-    std::random_device graine;
-    std::mt19937 generation(graine());
-
     for (unsigned int boucle = 0; boucle < nombreMutations; ++boucle) {
-        std::uniform_int_distribution<> distrOperation1(0, 6);
-        const unsigned int chiffreAleatoire = distrOperation1(generation);
 
-        // Pour obtenir la taille de la sequence precedente
-        const unsigned int tailleSequence = listeSequences_.back().obtenirTailleSequence();
+        // Génération d'un mouvement aléatoire
+        Mouvement mouvement = GenererMouvementAleatoire(listeSequences_.back());
 
-        Mouvement mouvement;
-
-        // Switch case pour les differentes valeurs de randomNumber
-        switch (chiffreAleatoire) {
-            case 0: {
-                std::uniform_int_distribution<> distrInverse1(0, static_cast<int>(tailleSequence) - 1);
-                const unsigned int indexDepartInverse = distrInverse1(generation);
-                std::uniform_int_distribution<> distrInverse2(1, static_cast<int>(tailleSequence - indexDepartInverse));
-                const unsigned int nombreCasesInverse = distrInverse2(generation);
-
-                // On inverse une partie de la sequence
-                auto sequence = listeSequences_.back();
-                sequence.inverser(indexDepartInverse, nombreCasesInverse);
-                listeSequences_.push_back(sequence);
-
-                mouvement = Mouvement(INVERSION, indexDepartInverse, nombreCasesInverse, 0, "");
-                listeMouvements_.push_back(mouvement);
-
-                break;
-            }
-            case 1: {
-                std::uniform_int_distribution<> distrTranspose1(0, static_cast<int>(tailleSequence) - 1);
-                const unsigned int indexDepartTranspose = distrTranspose1(generation);
-                std::uniform_int_distribution<> distrTranspose2(1, static_cast<int>(tailleSequence - indexDepartTranspose));
-                const unsigned int nombreCasesTranspose = distrTranspose2(generation);
-                std::uniform_int_distribution<> distrTranspose3(0, static_cast<int>(tailleSequence) - 1);
-                const unsigned int indexDestinationTranspose = distrTranspose3(generation);
-
-                // On transpose une partie de la sequence
-                auto sequence = listeSequences_.back();
-                sequence.transposer(indexDepartTranspose, nombreCasesTranspose, indexDestinationTranspose);
-                listeSequences_.push_back(sequence);
-
-                mouvement = Mouvement(TRANSPOSITION, indexDepartTranspose, nombreCasesTranspose,
-                                      indexDestinationTranspose, "");
-                listeMouvements_.push_back(mouvement);
-
-                break;
-            }
-            case 2: {
-                std::uniform_int_distribution<> distrInverseTranspose1(0, static_cast<int>(tailleSequence) - 1);
-                const unsigned int indexDepartInverseTranspose = distrInverseTranspose1(generation);
-                std::uniform_int_distribution<> distrInverseTranspose2(
-                    1, static_cast<int>(tailleSequence - indexDepartInverseTranspose));
-                const unsigned int nombreCasesInverseTranspose = distrInverseTranspose2(generation);
-                std::uniform_int_distribution<> distrInverseTranspose3(0, static_cast<int>(tailleSequence) - 1);
-                const unsigned int indexDestinationInverseTranspose = distrInverseTranspose3(generation);
-
-                // On inverse et transpose une partie de la sequence
-                auto sequence = listeSequences_.back();
-                sequence.inverserTransposer(indexDepartInverseTranspose, nombreCasesInverseTranspose,
-                                            indexDestinationInverseTranspose);
-                listeSequences_.push_back(sequence);
-
-                mouvement = Mouvement(INVERSION_TRANSPOSEE, indexDepartInverseTranspose, nombreCasesInverseTranspose,
-                                      indexDestinationInverseTranspose, "");
-                listeMouvements_.push_back(mouvement);
-
-                break;
-            }
-            case 3: {
-                std::uniform_int_distribution<> distrDuplique1(0, static_cast<int>(tailleSequence) - 1);
-                const unsigned int indexDepartDuplique = distrDuplique1(generation);
-                std::uniform_int_distribution<> distrDuplique2(1, static_cast<int>(tailleSequence - indexDepartDuplique));
-                const unsigned int nombreCasesDuplique = distrDuplique2(generation);
-
-                // On duplique une partie de la sequence
-                auto sequence = listeSequences_.back();
-                sequence.dupliquer(indexDepartDuplique, nombreCasesDuplique);
-                listeSequences_.push_back(sequence);
-
-                mouvement = Mouvement(DUPLICATION, indexDepartDuplique, nombreCasesDuplique, 0, "");
-                listeMouvements_.push_back(mouvement);
-
-                break;
-            }
-
-            case 4: {
-                std::uniform_int_distribution<> distrSupprime1(0, static_cast<int>(tailleSequence) - 1);
-                const unsigned int indexDepartSupprime = distrSupprime1(generation);
-                std::uniform_int_distribution<> distrSupprime2(1, static_cast<int>(tailleSequence - indexDepartSupprime));
-                const unsigned int nombreCasesSupprime = distrSupprime2(generation);
-
-                // On supprimer une partie de la sequence
-                auto sequence = listeSequences_.back();
-                sequence.supprimer(indexDepartSupprime, nombreCasesSupprime);
-                listeSequences_.push_back(sequence);
-
-                mouvement = Mouvement(SUPPRESSION, indexDepartSupprime, nombreCasesSupprime, 0, "");
-                listeMouvements_.push_back(mouvement);
-
-                break;
-            }
-
-            case 5: {
-                std::uniform_int_distribution<> distrModifie1(0, static_cast<int>(tailleSequence) - 1);
-                const unsigned int indexModifie = distrModifie1(generation);
-                std::uniform_int_distribution<> distrLettreModifie1(0, 25);
-                const int lettreModifie = distrLettreModifie1(generation);
-                std::uniform_int_distribution<> distrSigneModifie1(0, 1);
-                const unsigned int signeModifie = distrSigneModifie1(generation);
-
-                std::string signeLettreModifie;
-                if (signeModifie == 0) {
-                    signeLettreModifie += "+";
-                } else {
-                    signeLettreModifie += "-";
-                }
-
-                char lettre;
-                lettre = static_cast<char>('A' + lettreModifie);
-                auto lettrerenvoi = std::string(1, lettre);
-                signeLettreModifie += lettrerenvoi;
-
-                // On modifie une case de la sequence
-                auto sequence = listeSequences_.back();
-                sequence.modifierCase(indexModifie, signeLettreModifie);
-                listeSequences_.push_back(sequence);
-
-                mouvement = Mouvement(SUBSTITUTION, indexModifie, 1, 0, signeLettreModifie);
-                listeMouvements_.push_back(mouvement);
-
-                break;
-            }
-
-            case 6: {
-                std::uniform_int_distribution<> distrAjoute1(0, static_cast<int>(tailleSequence) - 1);
-                const unsigned int indexAjoute = distrAjoute1(generation);
-                std::uniform_int_distribution<> distrLettreAjoute1(0, 25);
-                const unsigned int lettreAjoute = distrLettreAjoute1(generation);
-                std::uniform_int_distribution<> distrSigneAjoute1(0, 1);
-                const unsigned int signeAjoute = distrSigneAjoute1(generation);
-
-                std::string signeLettreAjoute;
-                if (signeAjoute == 0) {
-                    signeLettreAjoute += "+";
-                } else {
-                    signeLettreAjoute += "-";
-                }
-
-                char lettre;
-                lettre = static_cast<char>('A' + lettreAjoute);
-                auto lettrerenvoi = std::string(1, lettre);
-                signeLettreAjoute += lettrerenvoi;
-
-                // On ajoute une case a la sequence
-                auto sequence = listeSequences_.back();
-                sequence.ajouterCase(indexAjoute, signeLettreAjoute);
-                listeSequences_.push_back(sequence);
-
-                mouvement = Mouvement(AJOUT, indexAjoute, 1, 0, signeLettreAjoute);
-                listeMouvements_.push_back(mouvement);
-
-                break;
-            }
-
-            default: { break; }
-        }
+        // Application du mouvement généré
+        AppliquerMouvement(mouvement);
     }
 }
 
@@ -191,113 +29,271 @@ Solution::Solution(const Instance &instance, const std::vector<Mouvement> &mouve
     listeMouvements_ = mouvements;
     listeSequences_.push_back(instance.obtenirSource());
 
-    for (const auto &[idMouvement, indexDepart, nombreCases, indexDestination, nomCase]: mouvements) {
-        // Switch case pour les differentes valeurs de idMouvement
-        switch (idMouvement) {
-            case INVERSION: {
-                // On inverse une partie de la sequence
-                auto sequence = listeSequences_.back();
-                sequence.inverser(indexDepart, nombreCases);
-                listeSequences_.push_back(sequence);
-                break;
-            }
-            case TRANSPOSITION: {
-                // On transpose une partie de la sequence
-                auto sequence = listeSequences_.back();
-                sequence.transposer(indexDepart, nombreCases, indexDestination);
-                listeSequences_.push_back(sequence);
-                break;
-            }
-            case INVERSION_TRANSPOSEE: {
-                // On inverse et transpose une partie de la sequence
-                auto sequence = listeSequences_.back();
-                sequence.inverserTransposer(indexDepart, nombreCases, indexDestination);
-                listeSequences_.push_back(sequence);
-                break;
-            }
-            case DUPLICATION: {
-                // On duplique une partie de la sequence
-                auto sequence = listeSequences_.back();
-                sequence.dupliquer(indexDepart, nombreCases);
-                listeSequences_.push_back(sequence);
-                break;
-            }
-            case SUPPRESSION: {
-                // On supprime une partie de la sequence
-                auto sequence = listeSequences_.back();
-                sequence.supprimer(indexDepart, nombreCases);
-                listeSequences_.push_back(sequence);
-                break;
-            }
-            case SUBSTITUTION: {
-                // On modifie une case de la sequence
-                auto sequence = listeSequences_.back();
-                sequence.modifierCase(indexDepart, nomCase);
-                listeSequences_.push_back(sequence);
-                break;
-            }
-            case AJOUT: {
-                // On ajoute une case a la sequence
-                auto sequence = listeSequences_.back();
-                sequence.ajouterCase(indexDepart, nomCase);
-                listeSequences_.push_back(sequence);
-                break;
-            }
-            default: { break; }
+    for (const auto &mouvement: mouvements) {
+        AppliquerMouvement(mouvement);
+    }
+}
+
+/**********************************************************************************
+***** Mutation : Créée un mouvement aléatoire selon le taux de mutation donné *****
+**********************************************************************************/
+void Solution::Mutation(const float tauxMutation, const unsigned int nombreMutations) {
+
+    // Détermine le nombre de mouvements à réaliser selon le taux de mutation.
+    std::random_device rd;
+    std::mt19937 generation(rd());
+    std::bernoulli_distribution distribMutation(tauxMutation);
+
+    // Initialisation du compteur
+    unsigned int nbMutationsFinal = 0;
+    for (unsigned int i = 0; i < nombreMutations; ++i) {
+        if (distribMutation(generation)) {
+            nbMutationsFinal += 1; // On ajoute une mutation en se basant sur le taux de mutation
+        }
+    }
+
+    if(nbMutationsFinal > 0) {
+
+
+        for (unsigned int boucle = 0; boucle < nombreMutations; ++boucle) {
+
+
+            // Génère un mouvement aléatoire à appliquer sur la dernière séquence de listeSequences
+            Mouvement mouvement = GenererMouvementAleatoire(listeSequences_[0]);
+
+            // Applique le mouvement généré
+            AppliquerMouvement(mouvement);
         }
     }
 }
 
-/********************************************************************
-***** Mutation : Pour modifier un des mouvements de la Solution *****
-********************************************************************/
-void Solution::Mutation(unsigned int index, const Mouvement &mouvement) {
-    try {
-        // Exception si le mouvement n'est pas possible
-        listeMouvements_.push_back(mouvement);
 
-        // Une nouvelle séquence est générée à partir de la dernière séquence enregistrée
-        auto nouvelle_sequence = Sequence(listeSequences_.back());
+/****************************************************************************************
+***** ModifierMouvement : Modifie un mouvement de la solution à une position donnée *****
+****************************************************************************************/
+void Solution::ModifierMouvement(const Mouvement &mouvement, const unsigned int numMouvement) {
 
+    // Modification du mouvement dans la liste
+    listeMouvements_[numMouvement] = mouvement;
 
-        switch (mouvement.idMouvement) {
-            case INVERSION: {
-                nouvelle_sequence.inverser(mouvement.indexDepart, mouvement.nombreCases);
-                break;
-            }
-            case TRANSPOSITION: {
-                nouvelle_sequence.transposer(mouvement.indexDepart, mouvement.nombreCases, mouvement.indexDestination);
-                break;
-            }
-            case INVERSION_TRANSPOSEE: {
-                nouvelle_sequence.inverserTransposer(mouvement.indexDepart, mouvement.nombreCases,
-                                                     mouvement.indexDestination);
-                break;
-            }
-            case DUPLICATION: {
-                nouvelle_sequence.dupliquer(mouvement.indexDepart, mouvement.nombreCases);
-                break;
-            }
-            case SUPPRESSION: {
-                nouvelle_sequence.supprimer(mouvement.indexDepart, mouvement.nombreCases);
-                break;
-            }
-            case SUBSTITUTION: {
-                nouvelle_sequence.modifierCase(mouvement.indexDepart, mouvement.nomCase);
-                break;
-            }
-            case AJOUT: {
-                nouvelle_sequence.ajouterCase(mouvement.indexDepart, mouvement.nomCase);
-                break;
-            }
-            default: {
-                throw std::invalid_argument("Mouvement impossible !");
-            }
-        }
-    } catch (...) {
-        throw std::invalid_argument("Erreur : Mouvement impossible pour cette solution.");
+    // Suppression des séquences "obsolètes"
+    listeSequences_.erase(listeSequences_.begin() + numMouvement, listeSequences_.end());
+
+    // Recalcul des séquences en conséquent
+    for(unsigned int numSequence = numMouvement; numSequence < listeSequences_.size(); numSequence++) {
+        AppliquerMouvement(listeMouvements_[numMouvement]);
     }
 }
+
+
+/*******************************************************************************************
+***** AppliquerMouvement :Applique un mouvement sur la dernière séquence de la solution *****
+*******************************************************************************************/
+void Solution::AppliquerMouvement(const Mouvement &mouvement) {
+
+    // Ajout du mouvement dans la liste de mouvements
+    listeMouvements_.push_back(mouvement);
+
+    // Switch case pour les differentes valeurs de idMouvement
+    switch (mouvement.idMouvement) {
+        case INVERSION: {
+            // On inverse une partie de la sequence
+            auto sequence = listeSequences_.back();
+            sequence.inverser(mouvement.indexDepart, mouvement.nombreCases);
+            listeSequences_.push_back(sequence);
+            break;
+        }
+        case TRANSPOSITION: {
+            // On transpose une partie de la sequence
+            auto sequence = listeSequences_.back();
+            sequence.transposer(mouvement.indexDepart, mouvement.nombreCases, mouvement.indexDestination);
+            listeSequences_.push_back(sequence);
+            break;
+        }
+        case INVERSION_TRANSPOSEE: {
+            // On inverse et transpose une partie de la sequence
+            auto sequence = listeSequences_.back();
+            sequence.inverserTransposer(mouvement.indexDepart, mouvement.nombreCases, mouvement.indexDestination);
+            listeSequences_.push_back(sequence);
+            break;
+        }
+        case DUPLICATION: {
+            // On duplique une partie de la sequence
+            auto sequence = listeSequences_.back();
+            sequence.dupliquer(mouvement.indexDepart, mouvement.nombreCases);
+            listeSequences_.push_back(sequence);
+            break;
+        }
+        case SUPPRESSION: {
+            // On supprime une partie de la sequence
+            auto sequence = listeSequences_.back();
+            sequence.supprimer(mouvement.indexDepart, mouvement.nombreCases);
+            listeSequences_.push_back(sequence);
+            break;
+        }
+        case SUBSTITUTION: {
+            // On modifie une case de la sequence
+            auto sequence = listeSequences_.back();
+            sequence.modifierCase(mouvement.indexDepart, mouvement.nomCase);
+            listeSequences_.push_back(sequence);
+            break;
+        }
+        case AJOUT: {
+            // On ajoute une case a la sequence
+            auto sequence = listeSequences_.back();
+            sequence.ajouterCase(mouvement.indexDepart, mouvement.nomCase);
+            listeSequences_.push_back(sequence);
+            break;
+        }
+        default: { break; }
+    }
+}
+
+/*****************************************************************************************
+***** GenererMouvementAleatoire : Créée et renvoie un mouvement généré aléatoirement *****
+*****                             se base sur la dernière séquence de listeSequences *****
+*****************************************************************************************/
+Mouvement Solution::GenererMouvementAleatoire(Sequence &sequence) {
+
+    // Mouvement aléatoire
+    Mouvement mouvement;
+
+    // On initialise le generateur de nombre aleatoire
+    std::random_device graine;
+    std::mt19937 generation(graine());
+
+    std::uniform_int_distribution<> distrOperation1(0, 6);
+    const unsigned int chiffreAleatoire = distrOperation1(generation);
+
+    // Pour obtenir la taille de la sequence precedente
+    const unsigned int tailleSequence = sequence.obtenirTailleSequence();
+
+    // Switch case pour les differentes valeurs de randomNumber
+    switch (chiffreAleatoire) {
+        case 0: {
+            std::uniform_int_distribution<> distrInverse1(0, static_cast<int>(tailleSequence) - 1);
+            const unsigned int indexDepartInverse = distrInverse1(generation);
+            std::uniform_int_distribution<> distrInverse2(1, static_cast<int>(tailleSequence - indexDepartInverse));
+            const unsigned int nombreCasesInverse = distrInverse2(generation);
+
+            // On inverse une partie de la sequence
+            mouvement = Mouvement(INVERSION, indexDepartInverse, nombreCasesInverse, 0, "");
+
+            break;
+        }
+        case 1: {
+            std::uniform_int_distribution<> distrTranspose1(0, static_cast<int>(tailleSequence) - 1);
+            const unsigned int indexDepartTranspose = distrTranspose1(generation);
+            std::uniform_int_distribution<> distrTranspose2(1, static_cast<int>(tailleSequence - indexDepartTranspose));
+            const unsigned int nombreCasesTranspose = distrTranspose2(generation);
+            std::uniform_int_distribution<> distrTranspose3(0, static_cast<int>(tailleSequence) - 1);
+            const unsigned int indexDestinationTranspose = distrTranspose3(generation);
+
+            // On transpose une partie de la sequence
+            mouvement = Mouvement(TRANSPOSITION, indexDepartTranspose, nombreCasesTranspose,
+                                  indexDestinationTranspose, "");
+
+            break;
+        }
+        case 2: {
+            std::uniform_int_distribution<> distrInverseTranspose1(0, static_cast<int>(tailleSequence) - 1);
+            const unsigned int indexDepartInverseTranspose = distrInverseTranspose1(generation);
+            std::uniform_int_distribution<> distrInverseTranspose2(
+                1, static_cast<int>(tailleSequence - indexDepartInverseTranspose));
+            const unsigned int nombreCasesInverseTranspose = distrInverseTranspose2(generation);
+            std::uniform_int_distribution<> distrInverseTranspose3(0, static_cast<int>(tailleSequence) - 1);
+            const unsigned int indexDestinationInverseTranspose = distrInverseTranspose3(generation);
+
+            // On inverse et transpose une partie de la sequence
+            mouvement = Mouvement(INVERSION_TRANSPOSEE, indexDepartInverseTranspose, nombreCasesInverseTranspose,
+                                  indexDestinationInverseTranspose, "");
+
+            break;
+        }
+        case 3: {
+            std::uniform_int_distribution<> distrDuplique1(0, static_cast<int>(tailleSequence) - 1);
+            const unsigned int indexDepartDuplique = distrDuplique1(generation);
+            std::uniform_int_distribution<> distrDuplique2(1, static_cast<int>(tailleSequence - indexDepartDuplique));
+            const unsigned int nombreCasesDuplique = distrDuplique2(generation);
+
+            const unsigned int destinationDuplication = indexDepartDuplique + nombreCasesDuplique;
+
+            // On duplique une partie de la sequence
+            mouvement = Mouvement(DUPLICATION, indexDepartDuplique, nombreCasesDuplique, destinationDuplication, "");
+
+            break;
+        }
+
+        case 4: {
+            std::uniform_int_distribution<> distrSupprime1(0, static_cast<int>(tailleSequence) - 1);
+            const unsigned int indexDepartSupprime = distrSupprime1(generation);
+            std::uniform_int_distribution<> distrSupprime2(1, static_cast<int>(tailleSequence - indexDepartSupprime));
+            const unsigned int nombreCasesSupprime = distrSupprime2(generation);
+
+            // On supprimer une partie de la sequence
+            mouvement = Mouvement(SUPPRESSION, indexDepartSupprime, nombreCasesSupprime, 0, "");
+
+            break;
+        }
+
+        case 5: {
+            std::uniform_int_distribution<> distrModifie1(0, static_cast<int>(tailleSequence) - 1);
+            const unsigned int indexModifie = distrModifie1(generation);
+            std::uniform_int_distribution<> distrLettreModifie1(0, 25);
+            const int lettreModifie = distrLettreModifie1(generation);
+            std::uniform_int_distribution<> distrSigneModifie1(0, 1);
+            const unsigned int signeModifie = distrSigneModifie1(generation);
+
+            std::string signeLettreModifie;
+            if (signeModifie == 0) {
+                signeLettreModifie += "+";
+            } else {
+                signeLettreModifie += "-";
+            }
+
+            char lettre;
+            lettre = static_cast<char>('A' + lettreModifie);
+            auto lettrerenvoi = std::string(1, lettre);
+            signeLettreModifie += lettrerenvoi;
+
+            // On modifie une case de la sequence
+            mouvement = Mouvement(SUBSTITUTION, indexModifie, 1, 0, signeLettreModifie);
+
+            break;
+        }
+
+        case 6: {
+            std::uniform_int_distribution<> distrAjoute1(0, static_cast<int>(tailleSequence) - 1);
+            const unsigned int indexAjoute = distrAjoute1(generation);
+            std::uniform_int_distribution<> distrLettreAjoute1(0, 25);
+            const unsigned int lettreAjoute = distrLettreAjoute1(generation);
+            std::uniform_int_distribution<> distrSigneAjoute1(0, 1);
+            const unsigned int signeAjoute = distrSigneAjoute1(generation);
+
+            std::string signeLettreAjoute;
+            if (signeAjoute == 0) {
+                signeLettreAjoute += "+";
+            } else {
+                signeLettreAjoute += "-";
+            }
+
+            char lettre;
+            lettre = static_cast<char>('A' + lettreAjoute);
+            auto lettrerenvoi = std::string(1, lettre);
+            signeLettreAjoute += lettrerenvoi;
+
+            // On ajoute une case a la sequence
+            mouvement = Mouvement(AJOUT, indexAjoute, 1, 0, signeLettreAjoute);
+
+            break;
+        }
+
+        default: { break; }
+    }
+
+    return mouvement;
+}
+
 
 /***********************************************************************************************************************************
 ***** CalculerEvaluation : Pour calculer la distance de Levenshtein entre la dernière séquence de la Solution et la séquence T *****
@@ -410,7 +406,8 @@ void Solution::afficherMouvement(const Mouvement &mouvement, const char delimite
         }
         case DUPLICATION: {
             std::cout << "Duplication de " << mouvement.nombreCases <<
-                    " caractères à la position " << mouvement.indexDepart << std::endl;
+                    " caractères à la position " << mouvement.indexDepart <<
+                    " vers la position " << mouvement.indexDestination << std::endl;
             break;
         }
         case SUPPRESSION: {

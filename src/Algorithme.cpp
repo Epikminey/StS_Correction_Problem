@@ -106,6 +106,7 @@ bool Algorithme::rechercheSolution(const unsigned int nbGenerationMax, const flo
                 listeSolutions_.emplace_back(Solution(instance_, nombreMouvements_));
             }
 
+
             // On evalue chaque nouvel individu
             for (Solution &solution: listeSolutions_) {
                 solution.calculerEvaluation(instance_.obtenirTerminale());
@@ -117,6 +118,7 @@ bool Algorithme::rechercheSolution(const unsigned int nbGenerationMax, const flo
                     break;
                 }
             }
+
         } else {
             // On rajoute la partie de la population manquante (après sélection par tournoi)
 
@@ -124,8 +126,8 @@ bool Algorithme::rechercheSolution(const unsigned int nbGenerationMax, const flo
             vector<unsigned int> listeCroisement(nbSolutionParGen / 2);
             iota(listeCroisement.begin(), listeCroisement.end(), 0);
             // Mélange de la liste
-            random_device random_liste;
-            mt19937 generation_liste(random_liste());
+            random_device random;
+            mt19937 generation_liste(random());
             ranges::shuffle(listeCroisement, generation_liste);
 
             // Croisement des solutions gagnantes du tournoi pour reproduire des enfants et retrouver le nombre de solutions initial
@@ -145,8 +147,13 @@ bool Algorithme::rechercheSolution(const unsigned int nbGenerationMax, const flo
             // Mutation des solutions venant d'être créées
             for (Solution &solution: listeSolutions_) {
                 for (unsigned int i = 0; i < nbMutationParGen; i++) {
-                    const unsigned int indexSolution = rand() % listeSolutions_.size();
-                    listeSolutions_[indexSolution].mutation(tauxMutation);
+                    mt19937 gen(random());
+                    const int max_index = static_cast<int>(listeSolutions_.size()) - 1;
+                    uniform_int_distribution<> dis(0, max_index);
+                    const unsigned int indexSolution = dis(gen);
+
+                    // On applique toujours une seule mutation par solution
+                    listeSolutions_[indexSolution].Mutation(tauxMutation, 1);
                 }
             }
 
@@ -184,6 +191,7 @@ bool Algorithme::rechercheSolution(const unsigned int nbGenerationMax, const flo
         numGeneration++;
 
         if (solutionOptimaleTrouvee) {
+            cout << "Meilleure solution trouvée !" << endl;
             numGeneration = 0;
         }
     }
