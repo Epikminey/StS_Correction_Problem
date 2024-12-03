@@ -1,9 +1,17 @@
 #include "Algorithme.h"
+#include "Test.h"
 
 #include <iostream>
 #include <windows.h>
 
 int main() {
+
+    Test::testInverse();
+    Test::testTransposee();
+    Test::testSuppression();
+    Test::testDuplication();
+    Test::testModification();
+    Test::testAjout();
 
     // Pour s'assurer que l'affichage de la console soit en UTF8
     SetConsoleOutputCP(CP_UTF8);
@@ -20,19 +28,18 @@ int main() {
     const std::string ADN1 = "+A-B+C-D+E-F+G-H+I";
     const std::string ADN6 = "+I-H+G-F+E-D+C-B+A";
 
-    std::cout << "OK1";
     const auto sequence1 = Sequence(ADN1);
     const auto sequence2 = Sequence(ADN6);
 
-    std::cout << "OK2";
-
     const auto instance = Instance(sequence1, sequence2);
 
-    std::cout << "OK3";
+    auto sequence3 = Sequence(ADN1);
 
     auto algo = Algorithme(instance);
 
-    std::cout << "OK4";
+    std::cout << "coucou";
+
+    std::vector<Solution> listeSoluce;
 
     algo.rechercheSolution(nbGenerationMax, tauxMutation, nbMutationParGen, nbSolutionParGen, affichageDetaille);
 

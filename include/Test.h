@@ -1,27 +1,21 @@
 #ifndef TEST_H
 #define TEST_H
 
-#include <vector>
-#include <string>
-#include <iostream>
-#include <vector>
-#include <string>
-#include <random>
-
-#include "Sequence.h"
-#include "Instance.h"
-#include <Solution.h>
-
-using namespace std;
+#include "Algorithme.h"
 
 class Test {
 
 public:
+    static void testInverse();
+    static void testTransposee();
+    static void testSuppression();
+    static void testDuplication();
+    static void testModification();
+    static void testAjout();
 
-    static bool testAntoine();
-    static bool testEnzo();
+    /*static bool testEnzo();
     static bool testAffichage();
-    static bool testSolutionOptimale();
+    static bool testSolutionOptimale();*/
 };
 
 #endif

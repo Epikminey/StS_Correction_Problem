@@ -66,7 +66,7 @@ public:
     /********************************************************************
     ***** Mutation : Pour modifier un des mouvements de la Solution *****
     ********************************************************************/
-    void Mutation(unsigned int index, const Mouvement &mouvement);
+    //void Mutation(unsigned int index, const Mouvement &mouvement);
 
     /***********************************************************************************************************************************
     ***** CalculerEvaluation : Pour calculer la distance de Levenshtein entre la dernière séquence de la Solution et la séquence T *****

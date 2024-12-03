@@ -248,10 +248,8 @@ Solution::Solution(const Instance &instance, const std::vector<Mouvement> &mouve
     }
 }
 
-/********************************************************************
-***** Mutation : Pour modifier un des mouvements de la Solution *****
-********************************************************************/
-void Solution::Mutation(unsigned int index, const Mouvement &mouvement) {
+
+/*void Solution::Mutation(unsigned int index, const Mouvement &mouvement) {
     try {
         // Exception si le mouvement n'est pas possible
         listeMouvements_.push_back(mouvement);
@@ -297,7 +295,13 @@ void Solution::Mutation(unsigned int index, const Mouvement &mouvement) {
     } catch (...) {
         throw std::invalid_argument("Erreur : Mouvement impossible pour cette solution.");
     }
-}
+}*/
+
+/********************************************************************
+***** Mutation : Pour modifier un des mouvements de la Solution *****
+********************************************************************/
+//void Solution::Mutation(float tauxMutation, unsigned int nombreMutations) {
+//}
 
 /***********************************************************************************************************************************
 ***** CalculerEvaluation : Pour calculer la distance de Levenshtein entre la dernière séquence de la Solution et la séquence T *****

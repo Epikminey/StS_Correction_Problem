@@ -1,55 +1,159 @@
 #include "Test.h"
 
-#include <Algorithme.h>
-
-
 #include <iostream>
 
-#define ASSERT_EQUAL(a, b) \
-if ((a) != (b)) { \
+/**********************************************************************************************/
+#define ASSERT_INVERSE(a, b) \
+if (!((a) == (b))) { \
 std::cout << "Test failed: " #a " != " #b << " at line " << __LINE__ << std::endl; \
 } else { \
 std::cout << "Test passed." << std::endl; \
 }
 
-int add(int a, int b) {
-    return a + b;
+void Test::testInverse() {
+    const std::string ADN = "+A-B+C-D+E-F+G-H+I";
+    auto sequence = Sequence(ADN);
+    const std::string ADNvide;
+    auto sequenceVide = Sequence(ADNvide);
+
+    std::string ADNtest = "-A-B+C-D+E-F+G-H+I";
+    auto sequenceTest = Sequence(ADNtest);
+    sequence.inverser(0,1);
+    ASSERT_INVERSE(sequence , sequenceTest);
+
+    ADNtest = "-A-B+C-G+F-E+D-H+I";
+    sequenceTest = Sequence(ADNtest);
+    sequence.inverser(3,4);
+    ASSERT_INVERSE(sequence , sequenceTest);
+
+    ADNtest = "-A-B+C-G+F-I+H-D+E";
+    sequenceTest = Sequence(ADNtest);
+    sequence.inverser(5,6);
+    ASSERT_INVERSE(sequence , sequenceTest);
+
+    ADNtest = "-A-B+C-G+F-I+H-D+E";
+    sequenceTest = Sequence(ADNtest);
+    sequence.inverser(9,2);
+    ASSERT_INVERSE(sequence , sequenceTest);
+
+    ADNtest = "-A-B+C-G+F-I+H-D+E";
+    sequenceTest = Sequence(ADNtest);
+    sequence.inverser(9,0);
+    ASSERT_INVERSE(sequence , sequenceTest);
+
+    ADNtest = "-A-B+C-G+F-I+H-D+E";
+    sequenceTest = Sequence(ADNtest);
+    sequence.inverser(-1,-1);
+    ASSERT_INVERSE(sequence , sequenceTest);
+
+    ADNtest = "";
+    sequenceTest = Sequence(ADNtest);
+    sequenceVide.inverser(0,1);
+    ASSERT_INVERSE(sequenceVide , sequenceTest);
+}
+/**********************************************************************************************/
+#define ASSERT_TRANSPOSEE(a, b) \
+if (!(a == b)) { \
+std::cout << "Test failed: " #a " != " #b << " at line " << __LINE__ << std::endl; \
+} else { \
+std::cout << "Test passed." << std::endl; \
 }
 
-void testAdd() {
-    ASSERT_EQUAL(add(1, 2), 3); // Test unitaire pour l'addition de 1 et 2
-    ASSERT_EQUAL(add(-1, -2), -3); // Test unitaire pour l'addition de nombres négatifs
-    ASSERT_EQUAL(add(0, 0), 0); // Test unitaire pour l'addition de zéro
+void Test::testTransposee() {
+    const std::string ADN = "-A-B+C-G+F-I+H-D+E";
+    auto sequence = Sequence(ADN);
+    const std::string ADNvide;
+    auto sequenceVide = Sequence(ADNvide);
+
+    std::string ADNtest = "-G-A-B+C+F-I+H-D+E";
+    auto sequenceTest = Sequence(ADNtest);
+    sequence.transposer(0,3,1);
+    ASSERT_TRANSPOSEE(sequence , sequenceTest);
+
+    ADNtest = "-G-A+F-B+C-I+H-D+E";
+    sequenceTest = Sequence(ADNtest);
+    sequence.transposer(4,1,2);
+    ASSERT_TRANSPOSEE(sequence , sequenceTest);
+
+    ADNtest = "-G-A+F-B-D+E+C-I+H";
+    sequenceTest = Sequence(ADNtest);
+    sequence.transposer(4,3,6);
+    ASSERT_TRANSPOSEE(sequence , sequenceTest);
+
+    ADNtest = "-G-A+F-B-I+H-D+E+C";
+    sequenceTest = Sequence(ADNtest);
+    sequence.transposer(4,3,10);
+    ASSERT_TRANSPOSEE(sequence , sequenceTest);
+
+    ADNtest = "-G-A+F-B-I+H-D+E+C";
+    sequenceTest = Sequence(ADNtest);
+    sequence.transposer(6,3,7);
+    ASSERT_TRANSPOSEE(sequence , sequenceTest);
+
+    ADNtest = "-G-A+F-B-I+H-D+E+C";
+    sequenceTest = Sequence(ADNtest);
+    sequence.transposer(6,0,1);
+    ASSERT_TRANSPOSEE(sequence , sequenceTest);
+
+    ADNtest = "-G-A-D+E+C+F-B-I+H";
+    sequenceTest = Sequence(ADNtest);
+    sequence.transposer(6,10,2);
+    ASSERT_TRANSPOSEE(sequence , sequenceTest);
+
+    ADNtest = "-G-A-D+E+C+F-B-I+H";
+    sequenceTest = Sequence(ADNtest);
+    sequence.transposer(9,2,0);
+    ASSERT_TRANSPOSEE(sequence , sequenceTest);
+
+    ADNtest = "";
+    sequenceTest = Sequence(ADNtest);
+    sequenceVide.transposer(0,1, 5);
+    ASSERT_TRANSPOSEE(sequenceVide , sequenceTest);
+}
+/**********************************************************************************************/
+#define ASSERT_SUPPRESSION(a, b) \
+if (!(a == b)) { \
+std::cout << "Test failed: " #a " != " #b << " at line " << __LINE__ << std::endl; \
+} else { \
+std::cout << "Test passed." << std::endl; \
 }
 
-bool Test::testAntoine() {
-
-    // Exemple de transformations sur `sequence1`
-    const string ADN1 = "+A-B+C-D+E-F+G-H+I";
-    const string ADN2 = "+A-B+C-D+E-F+G-C+I";
-    const string ADN3 = "+A-B+C-D+E-F-C+I";
-    const string ADN4 = "+I-C-F+E-D+C-B+A";
-    const string ADN5 = "+I-C+G-F+E-D+C-B+A";
-    const string ADN6 = "+I-H+G-F+E-D+C-B+A";
-    const string ADN7 = "+I-D+C-B-H+G-F+E+A";
-
-    const auto sequence1 = Sequence(ADN1);
-    auto sequence2 = Sequence(ADN2);
-    auto sequence3 = Sequence(ADN3);
-    auto sequence4 = Sequence(ADN4);
-    auto sequence5 = Sequence(ADN5);
-    auto sequence6 = Sequence(ADN6);
-    auto sequence7 = Sequence(ADN7);
-
-    auto instance = Instance(sequence1, sequence2);
-
-    auto solution1 = Solution(instance, 7);
-
-    return true;
+void Test::testSuppression() {
+}
+/**********************************************************************************************/
+#define ASSERT_DUPLICATION(a, b) \
+if (!(a == b)) { \
+std::cout << "Test failed: " #a " != " #b << " at line " << __LINE__ << std::endl; \
+} else { \
+std::cout << "Test passed." << std::endl; \
 }
 
+void Test::testDuplication() {
+}
+/**********************************************************************************************/
+#define ASSERT_MODIFICATION(a, b) \
+if (!(a == b)) { \
+std::cout << "Test failed: " #a " != " #b << " at line " << __LINE__ << std::endl; \
+} else { \
+std::cout << "Test passed." << std::endl; \
+}
 
-string genererChaineAleatoire(const vector<char>& caracteresPossibles, int longeurMax) {
+void Test::testModification() {
+}
+/**********************************************************************************************/
+#define ASSERT_AJOUT(a, b) \
+if (!(a == b)) { \
+std::cout << "Test failed: " #a " != " #b << " at line " << __LINE__ << std::endl; \
+} else { \
+std::cout << "Test passed." << std::endl; \
+}
+
+void Test::testAjout() {
+}
+/**********************************************************************************************/
+
+
+/*string genererChaineAleatoire(const vector<char>& caracteresPossibles, int longeurMax) {
     string chaine;
     random_device rd;
     mt19937 gen(rd());
@@ -176,4 +280,4 @@ bool Test::testSolutionOptimale() {
     //algo.rechercheSolution(nbGenerationMax, tauxMutation, nbMutationParGen, nbSolutionParGen, false);
 
     return true;
-}
+}*/
