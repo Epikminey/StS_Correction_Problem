@@ -9,12 +9,12 @@ Case::Case(const char signe, const char lettre) {
     if (lettre >= 'A' && lettre <= 'Z') {
         lettre_ = lettre;
     } else {
-        throw std::runtime_error("Le caractere n'est pas une lettre majuscule.");
+        throw runtime_error("Le caractere n'est pas une lettre majuscule.");
     }
     if (signe == '+' || signe == '-') {
         signe_ = signe;
     } else {
-        throw std::runtime_error("Il faut donner un signe '+' ou '-'.");
+        throw runtime_error("Il faut donner un signe '+' ou '-'.");
     }
 }
 
@@ -42,7 +42,7 @@ char Case::lireSigne() const {
 /***********************************************************************
 ***** LireCase : Accesseur direct de lecture sur lettre_ et signe_ *****
 ***********************************************************************/
-std::tuple<char, char> Case::lireCase() const {
+tuple<char, char> Case::lireCase() const {
     return {signe_, lettre_};
 }
 
@@ -50,7 +50,7 @@ std::tuple<char, char> Case::lireCase() const {
 ***** AfficherCase : Affiche la valeur de la case *****
 ******************************************************/
 void Case::afficherCase() const {
-    std::cout << signe_ << lettre_;
+    cout << signe_ << lettre_;
 }
 
 /******************************************************************
@@ -71,11 +71,11 @@ void Case::modifierCase(const char signe, const char lettre) {
     if (lettre >= 'A' && lettre <= 'Z') {
         lettre_ = lettre;
     } else {
-        throw std::runtime_error("Le caractere n'est pas une lettre majuscule.");
+        throw runtime_error("Le caractere n'est pas une lettre majuscule.");
     }
     if (signe == '+' || signe == '-') {
         signe_ = signe;
     } else {
-        throw std::runtime_error("Il faut donner un signe '+' ou '-'.");
+        throw runtime_error("Il faut donner un signe '+' ou '-'.");
     }
 }

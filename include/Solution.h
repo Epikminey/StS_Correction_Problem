@@ -3,12 +3,14 @@
 
 #include "Instance.h"
 
+using namespace std;
+
 struct Mouvement {
     unsigned int idMouvement;
     unsigned int indexDepart;
     unsigned int nombreCases;
     unsigned int indexDestination;
-    std::string nomCase;
+    string nomCase;
 };
 
 enum Mouvements {
@@ -26,8 +28,8 @@ enum Mouvements {
 class Solution {
 private:
     /*** Attributs ***/
-    std::vector<Sequence> listeSequences_; // Le chemin de sequences
-    std::vector<Mouvement> listeMouvements_; // Les mouvements pour faire le chemin de sequences
+    vector<Sequence> listeSequences_; // Le chemin de sequences
+    vector<Mouvement> listeMouvements_; // Les mouvements pour faire le chemin de sequences
     unsigned int evaluation_; // L'évaluation de la solution
 
 public:
@@ -44,7 +46,7 @@ public:
     /***********************************************************************************************
     ***** Solution : Le constructeur de confort via une liste de mouvements (apres croisement) *****
     ***********************************************************************************************/
-    explicit Solution(const Instance &instance, const std::vector<Mouvement> &mouvements);
+    explicit Solution(const Instance &instance, const vector<Mouvement> &mouvements);
 
     /*************************************************************
     ***** Solution : Le constructeur de recopie (par defaut) *****
@@ -102,12 +104,12 @@ public:
     /****************************************************************************
     ***** ObtenirListeSequences : Pour avoir la suite de sequences modifies *****
     ****************************************************************************/
-    [[nodiscard]] std::vector<Sequence> obtenirListeSequences() const;
+    [[nodiscard]] vector<Sequence> obtenirListeSequences() const;
 
     /**********************************************************************************************
     ***** ObtenirListeMouvements : Pour avoir tous les mouvements effectues sur la sequence S *****
     **********************************************************************************************/
-    [[nodiscard]] std::vector<Mouvement> obtenirListeMouvements() const;
+    [[nodiscard]] vector<Mouvement> obtenirListeMouvements() const;
 
     /***************************************************************************************************
     ***** AfficherSolution : Affiche la solution avec l'ensemble des mouvements de cette solution. *****

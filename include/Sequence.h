@@ -6,11 +6,14 @@
 #include <string>
 #include <vector>
 
+using namespace std;
+
+
 // Contient tous les mouvements pour modifier une sequence.
 class Sequence {
 private:
     /*** Attributs ***/
-    std::vector<Case> listeCases_; //La sequence composee d'objets Case
+    vector<Case> listeCases_; //La sequence composee d'objets Case
 
 public:
     //***Constructeurs et destructeurs***//
@@ -23,7 +26,7 @@ public:
     /************************************************
     ***** Sequence : Le constructeur de confort *****
     ************************************************/
-    explicit Sequence(std::string sequence);
+    explicit Sequence(string sequence);
 
     /*************************************************************
     ***** Sequence : Le constructeur de recopie (par defaut) *****
@@ -90,12 +93,12 @@ public:
     /**********************************************************
     ***** ModifierCase : Remplace un element par un autre *****
     **********************************************************/
-    void modifierCase(unsigned int index, const std::string &signeLettre);
+    void modifierCase(unsigned int index, const string &signeLettre);
 
     /**********************************************************************************
     ***** AjouterCase : Ajoute un nouvel element dans la liste a l'endroit choisi *****
     **********************************************************************************/
-    void ajouterCase(unsigned int index, const std::string &signeLettre);
+    void ajouterCase(unsigned int index, const string &signeLettre);
 };
 
 /************************************************************************************************

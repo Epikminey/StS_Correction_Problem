@@ -11,10 +11,10 @@ int main() {
     //SetConsoleOutputCP(CP_UTF8);
 
     // Test de la résolution d'une solution
-    //Test::testSolutionOptimale();
+    Test::testSolutionOptimale();
 
     // Test de l'affichage d'une solution
-    Test::testAffichage(true);
+    //Test::testAffichage(true);
 
     return 0;
 }

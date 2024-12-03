@@ -3,6 +3,8 @@
 
 #include "Sequence.h"
 
+using namespace std;
+
 // Contient les informations importantes pour lancer l'algorithme principal.
 class Instance {
 private:

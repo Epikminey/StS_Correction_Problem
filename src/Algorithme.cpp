@@ -43,6 +43,9 @@ pair<vector<Mouvement>, vector<Mouvement> > Algorithme::croisement(
         mouvementsEnfant1.emplace_back(mouvementsParent2[pos]);
         mouvementsEnfant2.emplace_back(mouvementsParent1[pos]);
     }
+
+
+
     return make_pair(mouvementsEnfant1, mouvementsEnfant2);
 }
 
@@ -103,7 +106,7 @@ bool Algorithme::rechercheSolution(const unsigned int nbGenerationMax, const flo
         if (numGeneration == 0) {
             // Initialisation de la premiere generation de solutions avec nbSolutionParGen solutions aléatoires
             for (unsigned int i = 0; i < nbSolutionParGen; i++) {
-                listeSolutions_.emplace_back(Solution(instance_, nombreMouvements_));
+                listeSolutions_.emplace_back(instance_, nombreMouvements_);
             }
 
 
@@ -131,32 +134,25 @@ bool Algorithme::rechercheSolution(const unsigned int nbGenerationMax, const flo
             ranges::shuffle(listeCroisement, generation_liste);
 
             // Croisement des solutions gagnantes du tournoi pour reproduire des enfants et retrouver le nombre de solutions initial
-            int compteur = 0;
             for (unsigned int i = 0; i < listeCroisement.size(); i += 2) {
                 auto [mouvementsEnfant1, mouvementsEnfant2] = croisement(
                     listeSolutions_[listeCroisement[i]].obtenirListeMouvements(),
                     listeSolutions_[listeCroisement[i + 1]].obtenirListeMouvements());
 
-
                 listeSolutions_.emplace_back(instance_, mouvementsEnfant1);
                 listeSolutions_.emplace_back(instance_, mouvementsEnfant2);
-
-                compteur++;
             }
 
             // Mutation des solutions venant d'être créées
-            for (Solution &solution: listeSolutions_) {
-                for (unsigned int i = 0; i < nbMutationParGen; i++) {
-                    mt19937 gen(random());
-                    const int max_index = static_cast<int>(listeSolutions_.size()) - 1;
-                    uniform_int_distribution<> dis(0, max_index);
-                    const unsigned int indexSolution = dis(gen);
+            for (unsigned int i = 0; i < nbMutationParGen; i++) {
+                mt19937 gen(random());
+                const int max_index = static_cast<int>(listeSolutions_.size()) - 1;
+                uniform_int_distribution<> dis(0, max_index);
+                const unsigned int indexSolution = dis(gen);
 
-                    // On applique toujours une seule mutation par solution
-                    listeSolutions_[indexSolution].Mutation(tauxMutation, 1);
-                }
+                // On applique toujours une seule mutation par solution
+                listeSolutions_[indexSolution].Mutation(tauxMutation, 1);
             }
-
 
             // On evalue les nouveaux individus uniquement
             const auto numSolution = listeSolutions_.size() / 2;
@@ -182,7 +178,9 @@ bool Algorithme::rechercheSolution(const unsigned int nbGenerationMax, const flo
             cout << "Sélection par tournoi des meilleures solutions." << endl;
         }
 
+
         listeSolutions_ = selectionParTournoi(listeSolutions_, nbSolutionParGen);
+
 
         //if (affichageDetaille) {
             cout << "Fin de l'itération pour la génération n°" << numGeneration << "; " << listeSolutions_.size() << endl;
@@ -195,5 +193,6 @@ bool Algorithme::rechercheSolution(const unsigned int nbGenerationMax, const flo
             numGeneration = 0;
         }
     }
+
     return solutionOptimaleTrouvee;
 }

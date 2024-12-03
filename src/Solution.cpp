@@ -24,9 +24,8 @@ Solution::Solution(const Instance &instance, const unsigned int nombreMutations)
 /***********************************************************************************************
 ***** Solution : Le constructeur de confort via une liste de mouvements (apres croisement) *****
 ***********************************************************************************************/
-Solution::Solution(const Instance &instance, const std::vector<Mouvement> &mouvements): evaluation_(0) {
+Solution::Solution(const Instance &instance, const vector<Mouvement> &mouvements): evaluation_(0) {
     // On ajoute la premiere sequence, la sequence Source.
-    listeMouvements_ = mouvements;
     listeSequences_.push_back(instance.obtenirSource());
 
     for (const auto &mouvement: mouvements) {
@@ -40,9 +39,9 @@ Solution::Solution(const Instance &instance, const std::vector<Mouvement> &mouve
 void Solution::Mutation(const float tauxMutation, const unsigned int nombreMutations) {
 
     // Détermine le nombre de mouvements à réaliser selon le taux de mutation.
-    std::random_device rd;
-    std::mt19937 generation(rd());
-    std::bernoulli_distribution distribMutation(tauxMutation);
+    random_device rd;
+    mt19937 generation(rd());
+    bernoulli_distribution distribMutation(tauxMutation);
 
     // Initialisation du compteur
     unsigned int nbMutationsFinal = 0;
@@ -53,16 +52,18 @@ void Solution::Mutation(const float tauxMutation, const unsigned int nombreMutat
     }
 
     if(nbMutationsFinal > 0) {
-
-
         for (unsigned int boucle = 0; boucle < nombreMutations; ++boucle) {
 
+            // Détermine quel mouvement sera modifié
+            const unsigned int numMouvementMax = listeMouvements_.size() - 1;
+            uniform_int_distribution<> distrNumMouvement(0, static_cast<int>(numMouvementMax));
+            const unsigned int numMouvement = distrNumMouvement(generation);
 
-            // Génère un mouvement aléatoire à appliquer sur la dernière séquence de listeSequences
-            Mouvement mouvement = GenererMouvementAleatoire(listeSequences_[0]);
+            // Génère un mouvement aléatoire à appliquer sur la séquence précédent le mouvement à modifier
+            Mouvement mouvement = GenererMouvementAleatoire(listeSequences_[numMouvement]);
 
             // Applique le mouvement généré
-            AppliquerMouvement(mouvement);
+            ModifierMouvement(mouvement, numMouvement);
         }
     }
 }
@@ -76,8 +77,9 @@ void Solution::ModifierMouvement(const Mouvement &mouvement, const unsigned int 
     // Modification du mouvement dans la liste
     listeMouvements_[numMouvement] = mouvement;
 
+
     // Suppression des séquences "obsolètes"
-    listeSequences_.erase(listeSequences_.begin() + numMouvement, listeSequences_.end());
+    listeSequences_.erase(listeSequences_.begin() + numMouvement + 1, listeSequences_.end());
 
     // Recalcul des séquences en conséquent
     for(unsigned int numSequence = numMouvement; numSequence < listeSequences_.size(); numSequence++) {
@@ -159,11 +161,14 @@ Mouvement Solution::GenererMouvementAleatoire(Sequence &sequence) {
     Mouvement mouvement;
 
     // On initialise le generateur de nombre aleatoire
-    std::random_device graine;
-    std::mt19937 generation(graine());
+    random_device graine;
+    mt19937 generation(graine());
 
-    std::uniform_int_distribution<> distrOperation1(0, 6);
-    const unsigned int chiffreAleatoire = distrOperation1(generation);
+    uniform_int_distribution<> distrOperation1(0, 6);
+    unsigned int chiffreAleatoire = distrOperation1(generation);
+
+    if(chiffreAleatoire == 3)
+        chiffreAleatoire = 2;
 
     // Pour obtenir la taille de la sequence precedente
     const unsigned int tailleSequence = sequence.obtenirTailleSequence();
@@ -171,9 +176,9 @@ Mouvement Solution::GenererMouvementAleatoire(Sequence &sequence) {
     // Switch case pour les differentes valeurs de randomNumber
     switch (chiffreAleatoire) {
         case 0: {
-            std::uniform_int_distribution<> distrInverse1(0, static_cast<int>(tailleSequence) - 1);
+            uniform_int_distribution<> distrInverse1(0, static_cast<int>(tailleSequence) - 1);
             const unsigned int indexDepartInverse = distrInverse1(generation);
-            std::uniform_int_distribution<> distrInverse2(1, static_cast<int>(tailleSequence - indexDepartInverse));
+            uniform_int_distribution<> distrInverse2(1, static_cast<int>(tailleSequence - indexDepartInverse));
             const unsigned int nombreCasesInverse = distrInverse2(generation);
 
             // On inverse une partie de la sequence
@@ -182,11 +187,11 @@ Mouvement Solution::GenererMouvementAleatoire(Sequence &sequence) {
             break;
         }
         case 1: {
-            std::uniform_int_distribution<> distrTranspose1(0, static_cast<int>(tailleSequence) - 1);
+            uniform_int_distribution<> distrTranspose1(0, static_cast<int>(tailleSequence) - 1);
             const unsigned int indexDepartTranspose = distrTranspose1(generation);
-            std::uniform_int_distribution<> distrTranspose2(1, static_cast<int>(tailleSequence - indexDepartTranspose));
+            uniform_int_distribution<> distrTranspose2(1, static_cast<int>(tailleSequence - indexDepartTranspose));
             const unsigned int nombreCasesTranspose = distrTranspose2(generation);
-            std::uniform_int_distribution<> distrTranspose3(0, static_cast<int>(tailleSequence) - 1);
+            uniform_int_distribution<> distrTranspose3(0, static_cast<int>(tailleSequence) - 1);
             const unsigned int indexDestinationTranspose = distrTranspose3(generation);
 
             // On transpose une partie de la sequence
@@ -196,12 +201,12 @@ Mouvement Solution::GenererMouvementAleatoire(Sequence &sequence) {
             break;
         }
         case 2: {
-            std::uniform_int_distribution<> distrInverseTranspose1(0, static_cast<int>(tailleSequence) - 1);
+            uniform_int_distribution<> distrInverseTranspose1(0, static_cast<int>(tailleSequence) - 1);
             const unsigned int indexDepartInverseTranspose = distrInverseTranspose1(generation);
-            std::uniform_int_distribution<> distrInverseTranspose2(
+            uniform_int_distribution<> distrInverseTranspose2(
                 1, static_cast<int>(tailleSequence - indexDepartInverseTranspose));
             const unsigned int nombreCasesInverseTranspose = distrInverseTranspose2(generation);
-            std::uniform_int_distribution<> distrInverseTranspose3(0, static_cast<int>(tailleSequence) - 1);
+            uniform_int_distribution<> distrInverseTranspose3(0, static_cast<int>(tailleSequence) - 1);
             const unsigned int indexDestinationInverseTranspose = distrInverseTranspose3(generation);
 
             // On inverse et transpose une partie de la sequence
@@ -211,9 +216,9 @@ Mouvement Solution::GenererMouvementAleatoire(Sequence &sequence) {
             break;
         }
         case 3: {
-            std::uniform_int_distribution<> distrDuplique1(0, static_cast<int>(tailleSequence) - 1);
+            uniform_int_distribution<> distrDuplique1(0, static_cast<int>(tailleSequence) - 1);
             const unsigned int indexDepartDuplique = distrDuplique1(generation);
-            std::uniform_int_distribution<> distrDuplique2(1, static_cast<int>(tailleSequence - indexDepartDuplique));
+            uniform_int_distribution<> distrDuplique2(1, static_cast<int>(tailleSequence - indexDepartDuplique));
             const unsigned int nombreCasesDuplique = distrDuplique2(generation);
 
             const unsigned int destinationDuplication = indexDepartDuplique + nombreCasesDuplique;
@@ -225,9 +230,9 @@ Mouvement Solution::GenererMouvementAleatoire(Sequence &sequence) {
         }
 
         case 4: {
-            std::uniform_int_distribution<> distrSupprime1(0, static_cast<int>(tailleSequence) - 1);
+            uniform_int_distribution<> distrSupprime1(0, static_cast<int>(tailleSequence) - 1);
             const unsigned int indexDepartSupprime = distrSupprime1(generation);
-            std::uniform_int_distribution<> distrSupprime2(1, static_cast<int>(tailleSequence - indexDepartSupprime));
+            uniform_int_distribution<> distrSupprime2(1, static_cast<int>(tailleSequence - indexDepartSupprime));
             const unsigned int nombreCasesSupprime = distrSupprime2(generation);
 
             // On supprimer une partie de la sequence
@@ -237,14 +242,14 @@ Mouvement Solution::GenererMouvementAleatoire(Sequence &sequence) {
         }
 
         case 5: {
-            std::uniform_int_distribution<> distrModifie1(0, static_cast<int>(tailleSequence) - 1);
+            uniform_int_distribution<> distrModifie1(0, static_cast<int>(tailleSequence) - 1);
             const unsigned int indexModifie = distrModifie1(generation);
-            std::uniform_int_distribution<> distrLettreModifie1(0, 25);
+            uniform_int_distribution<> distrLettreModifie1(0, 25);
             const int lettreModifie = distrLettreModifie1(generation);
-            std::uniform_int_distribution<> distrSigneModifie1(0, 1);
+            uniform_int_distribution<> distrSigneModifie1(0, 1);
             const unsigned int signeModifie = distrSigneModifie1(generation);
 
-            std::string signeLettreModifie;
+            string signeLettreModifie;
             if (signeModifie == 0) {
                 signeLettreModifie += "+";
             } else {
@@ -253,7 +258,7 @@ Mouvement Solution::GenererMouvementAleatoire(Sequence &sequence) {
 
             char lettre;
             lettre = static_cast<char>('A' + lettreModifie);
-            auto lettrerenvoi = std::string(1, lettre);
+            auto lettrerenvoi = string(1, lettre);
             signeLettreModifie += lettrerenvoi;
 
             // On modifie une case de la sequence
@@ -263,14 +268,14 @@ Mouvement Solution::GenererMouvementAleatoire(Sequence &sequence) {
         }
 
         case 6: {
-            std::uniform_int_distribution<> distrAjoute1(0, static_cast<int>(tailleSequence) - 1);
+            uniform_int_distribution<> distrAjoute1(0, static_cast<int>(tailleSequence) - 1);
             const unsigned int indexAjoute = distrAjoute1(generation);
-            std::uniform_int_distribution<> distrLettreAjoute1(0, 25);
+            uniform_int_distribution<> distrLettreAjoute1(0, 25);
             const unsigned int lettreAjoute = distrLettreAjoute1(generation);
-            std::uniform_int_distribution<> distrSigneAjoute1(0, 1);
+            uniform_int_distribution<> distrSigneAjoute1(0, 1);
             const unsigned int signeAjoute = distrSigneAjoute1(generation);
 
-            std::string signeLettreAjoute;
+            string signeLettreAjoute;
             if (signeAjoute == 0) {
                 signeLettreAjoute += "+";
             } else {
@@ -279,7 +284,7 @@ Mouvement Solution::GenererMouvementAleatoire(Sequence &sequence) {
 
             char lettre;
             lettre = static_cast<char>('A' + lettreAjoute);
-            auto lettrerenvoi = std::string(1, lettre);
+            auto lettrerenvoi = string(1, lettre);
             signeLettreAjoute += lettrerenvoi;
 
             // On ajoute une case a la sequence
@@ -299,6 +304,7 @@ Mouvement Solution::GenererMouvementAleatoire(Sequence &sequence) {
 ***** CalculerEvaluation : Pour calculer la distance de Levenshtein entre la dernière séquence de la Solution et la séquence T *****
 ***********************************************************************************************************************************/
 void Solution::calculerEvaluation(const Sequence &sequenceTerminale) {
+
     evaluation_ = calculerDistanceLevenshtein(listeSequences_.back(), sequenceTerminale);
 }
 
@@ -319,14 +325,14 @@ Sequence Solution::obtenirDerniereSequence() const {
 /****************************************************************************
 ***** ObtenirListeSequences : Pour avoir la suite de sequences modifies *****
 ****************************************************************************/
-std::vector<Sequence> Solution::obtenirListeSequences() const {
+vector<Sequence> Solution::obtenirListeSequences() const {
     return listeSequences_;
 }
 
 /**********************************************************************************************
 ***** ObtenirListeMouvements : Pour avoir tous les mouvements effectues sur la sequence S *****
 **********************************************************************************************/
-std::vector<Mouvement> Solution::obtenirListeMouvements() const {
+vector<Mouvement> Solution::obtenirListeMouvements() const {
     return listeMouvements_;
 }
 
@@ -339,12 +345,12 @@ void Solution::afficherSolution() const {
     //!!!!! Faire une gestion d'expression plus propre
     if (const unsigned int nbMouvements = listeMouvements_.size(); nbMouvements + 1 != nbSequences) {
         //!!!!! Faire une gestion d'exception plus propre
-        std::cout << "Solution incohérente : Nombre de séquences incohérent par rapport au nombre de mouvements." << std::endl;
+        cout << "Solution incohérente : Nombre de séquences incohérent par rapport au nombre de mouvements." << endl;
     } else {
         // Recherche de la longueur max parmis la liste de séquences pour aligner l'affichage des mouvements
         unsigned int taille_sequence_max = 0;
         for (const auto &sequence: listeSequences_) {
-            taille_sequence_max = std::max(taille_sequence_max, sequence.obtenirTailleSequence());
+            taille_sequence_max = max(taille_sequence_max, sequence.obtenirTailleSequence());
         }
 
         // Affichage
@@ -371,62 +377,62 @@ void Solution::afficherMouvement(const Mouvement &mouvement, const char delimite
 
     // L'affichage varie selon si on a qu'un seul caractère affecté par le mouvement ou plusieurs
     if (mouvement.nombreCases == 1) {
-        const std::string debutMouvement(mouvement.indexDepart * 2, ' ');
-        std::cout << debutMouvement << delimiteur;
+        const string debutMouvement(mouvement.indexDepart * 2, ' ');
+        cout << debutMouvement << delimiteur;
     } else {
-        const std::string debutMouvement(mouvement.indexDepart * 2, ' ');
-        const std::string milieuMouvement(mouvement.nombreCases * 2 - 2, symbole);
+        const string debutMouvement(mouvement.indexDepart * 2, ' ');
+        const string milieuMouvement(mouvement.nombreCases * 2 - 2, symbole);
 
-        std::cout << debutMouvement << delimiteur << milieuMouvement << delimiteur;
+        cout << debutMouvement << delimiteur << milieuMouvement << delimiteur;
     }
 
     // Calcul de l'espace à rajouter pour aligner l'affichage des noms des mouvements
     const unsigned int posAligmentNom = (longueurSequence - mouvement.indexDepart - mouvement.nombreCases) * 2;
 
-    const std::string finMouvement(posAligmentNom, ' ');
-    std::cout << finMouvement << " -> ";
+    const string finMouvement(posAligmentNom, ' ');
+    cout << finMouvement << " -> ";
 
     switch (mouvement.idMouvement) {
         case INVERSION: {
-            std::cout << "Inversion de " << mouvement.nombreCases <<
-                    " caractères à la position " << mouvement.indexDepart << std::endl;
+            cout << "Inversion de " << mouvement.nombreCases <<
+                    " caractères à la position " << mouvement.indexDepart << endl;
             break;
         }
         case TRANSPOSITION: {
-            std::cout << "Transposition de " << mouvement.nombreCases <<
+            cout << "Transposition de " << mouvement.nombreCases <<
                     " caractères à la position " << mouvement.indexDepart <<
-                    " vers la position " << mouvement.indexDestination << std::endl;
+                    " vers la position " << mouvement.indexDestination << endl;
             break;
         }
         case INVERSION_TRANSPOSEE: {
-            std::cout << "Transposition et inversion de " << mouvement.nombreCases <<
+            cout << "Transposition et inversion de " << mouvement.nombreCases <<
                     " caractères à la position " << mouvement.indexDepart <<
-                    " vers la position " << mouvement.indexDestination << std::endl;
+                    " vers la position " << mouvement.indexDestination << endl;
             break;
         }
         case DUPLICATION: {
-            std::cout << "Duplication de " << mouvement.nombreCases <<
+            cout << "Duplication de " << mouvement.nombreCases <<
                     " caractères à la position " << mouvement.indexDepart <<
-                    " vers la position " << mouvement.indexDestination << std::endl;
+                    " vers la position " << mouvement.indexDestination << endl;
             break;
         }
         case SUPPRESSION: {
-            std::cout << "Suppresion de " << mouvement.nombreCases <<
-                    " caractères à la position " << mouvement.indexDepart << std::endl;
+            cout << "Suppresion de " << mouvement.nombreCases <<
+                    " caractères à la position " << mouvement.indexDepart << endl;
             break;
         }
         case SUBSTITUTION: {
-            std::cout << "Subsitution de " << mouvement.nombreCases <<
-                    " caractères à la position " << mouvement.indexDepart << std::endl;
+            cout << "Subsitution de " << mouvement.nombreCases <<
+                    " caractères à la position " << mouvement.indexDepart << endl;
             break;
         }
         case AJOUT: {
-            std::cout << "Ajout de " << mouvement.nombreCases <<
-                    " caractères à la position " << mouvement.indexDepart << std::endl;
+            cout << "Ajout de " << mouvement.nombreCases <<
+                    " caractères à la position " << mouvement.indexDepart << endl;
             break;
         }
         default: {
-            std::cout << "MOUVEMENT INCONNU !!!" << std::endl;
+            cout << "MOUVEMENT INCONNU !!!" << endl;
             break;
         }
     }
@@ -434,7 +440,7 @@ void Solution::afficherMouvement(const Mouvement &mouvement, const char delimite
 
 void Solution::afficherSolutionSimplifiee() const {
     for (const auto &[idMouvement, indexDepart, nombreCases, indexDestination, nomCase]: listeMouvements_) {
-        std::cout << idMouvement << " + ";
+        cout << idMouvement << " + ";
     }
-    std::cout << std::endl;
+    cout << endl;
 }
