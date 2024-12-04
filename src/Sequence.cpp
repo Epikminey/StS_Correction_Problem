@@ -159,7 +159,6 @@ void Sequence::dupliquer(const unsigned int indexDepart, const unsigned int nomb
         // Si la partie à dupliquer dépasse la taille de la liste
         else {
             const unsigned int surplus = indexDepart + nombreCases + 1 - listeCases_.size();
-            std::cout << indexDepart + nombreCases + 1 << '\n' << listeCases_.size() << '\n' << surplus << std::endl;
             for (unsigned int boucle = 0; boucle < nombreCases - surplus + 1; boucle++) {
                 listeCases_.emplace_back(listeCases_[indexDepart + boucle]);
             }
