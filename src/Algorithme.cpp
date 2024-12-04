@@ -90,19 +90,18 @@ bool Algorithme::rechercheSolution(const unsigned int nbGenerationMax, const flo
     bool solutionOptimaleTrouvee = false;
     unsigned int numGeneration = 0;
 
-    cout << "Début de la recherche de solution." << endl;
-    cout << "Séquence de départ S : " << endl;
+    cout << "Debut de la recherche de solution." << endl;
+    cout << "Sequence de depart S : " << endl;
     instance_.obtenirSource().afficherSequence();
-    cout << "Séquence d'arrivée T : " << endl;
+    cout << "Sequence d'arrivee T : " << endl;
     instance_.obtenirTerminale().afficherSequence();
 
-    cout << "Distance levenshtein (valeur optimale à atteindre: " << nombreMouvements_ << ")" << endl;
+    cout << "Distance levenshtein (valeur optimale a atteindre: " << nombreMouvements_ << ")" << endl;
 
     // Algorithme de recherche de solution
-    while (numGeneration < nbGenerationMax) {
-        if (affichageDetaille || true) {
-            std::cout << "Génération n°" << numGeneration << std::endl;
-        }
+    while (numGeneration < nbGenerationMax && nombreMouvements_ > 0) {
+
+        cout << "Generation numero " << numGeneration << " avec " << nombreMouvements_ << " mouvements." << endl;
 
         if (numGeneration == 0) {
             // Initialisation de la premiere generation de solutions avec nbSolutionParGen solutions aléatoires
@@ -115,9 +114,11 @@ bool Algorithme::rechercheSolution(const unsigned int nbGenerationMax, const flo
                 solution.calculerEvaluation(instance_.obtenirTerminale());
                 if (const unsigned int evaluation = solution.obtenirEvaluation();
                     evaluation == 0) {
+                    cout << "Meilleure solution trouvee pour " << nombreMouvements_ << " mouvements!" << endl;
                     meilleureSolution_ = solution;
                     nombreMouvements_--;
                     solutionOptimaleTrouvee = true;
+                    listeSolutions_.clear();
                     break;
                 }
             }
@@ -159,8 +160,8 @@ bool Algorithme::rechercheSolution(const unsigned int nbGenerationMax, const flo
             for (unsigned int i = numSolution; i < listeSolutions_.size(); i++) {
                 Solution &solution = listeSolutions_[i];
                 solution.calculerEvaluation(instance_.obtenirTerminale());
-                const unsigned int evaluation = solution.obtenirEvaluation();
-                if (evaluation == 0) {
+                if (const unsigned int evaluation = solution.obtenirEvaluation(); evaluation == 0) {
+                    cout << "Meilleure solution trouvee pour " << nombreMouvements_ << " mouvements!" << endl;
                     meilleureSolution_ = solution;
                     nombreMouvements_--;
                     solutionOptimaleTrouvee = true;
@@ -175,7 +176,7 @@ bool Algorithme::rechercheSolution(const unsigned int nbGenerationMax, const flo
 
         // Sélection des meilleures solutions pour la génération future
         if (affichageDetaille) {
-            cout << "Sélection par tournoi des meilleures solutions." << endl;
+            cout << "Selection par tournoi des meilleures solutions." << endl;
         }
 
 
@@ -183,17 +184,19 @@ bool Algorithme::rechercheSolution(const unsigned int nbGenerationMax, const flo
 
 
         if (affichageDetaille) {
-            cout << "Fin de l'itération pour la génération n°" << numGeneration << endl;
+            cout << "Fin de l'iteration pour la generation numero " << numGeneration << endl;
         }
 
         numGeneration++;
 
         if (solutionOptimaleTrouvee) {
-            cout << "Meilleure solution trouvée !" << endl;
+            cout << "Meilleure solution trouvee !" << endl;
             cout << "Nombre de mouvements : " << meilleureSolution_.obtenirListeMouvements().size() << endl;
             numGeneration = 0;
+            solutionOptimaleTrouvee = false;
+            listeSolutions_.clear();
         }
     }
 
-    return solutionOptimaleTrouvee;
+    return !meilleureSolution_.obtenirListeMouvements().empty();
 }

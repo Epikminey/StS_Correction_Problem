@@ -13,7 +13,7 @@ int main() {
     Test::testModification();
     Test::testAjout();*/
 
-    const unsigned int nbGenerationMax = 300;
+    const unsigned int nbGenerationMax = 10000;
     const float tauxMutation = 0.3;
     const unsigned int nbMutationParGen = 10;
     const unsigned int nbSolutionParGen = 48;
@@ -32,14 +32,14 @@ int main() {
     const bool trouvee = algo.rechercheSolution(nbGenerationMax, tauxMutation, nbMutationParGen, nbSolutionParGen, affichageDetaille);
 
     if(trouvee) {
-        cout << "Solution optimale trouvée !" << endl;
+        cout << "Solution optimale trouvee !" << endl;
     } else {
-        cout << "Solution non optimale trouvée :" << endl;
+        cout << "Solution optimale non trouvee :" << endl;
     }
 
     cout << "score : " << algo.obtenirMeilleureSolution().obtenirEvaluation() << endl;
     //algo.afficherNombreMouvements();
-    //algo.afficherMeilleureSolution();
+    algo.afficherMeilleureSolution();
 
 
     return 0;
