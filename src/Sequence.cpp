@@ -7,19 +7,19 @@
 ***** Sequence : Le constructeur par defaut *****
 ************************************************/
 Sequence::Sequence() {
-    listeCases_ = std::vector<Case>();
+    listeCases_ = vector<Case>();
 }
 
 /************************************************
 ***** Sequence : Le constructeur de confort *****
 ************************************************/
-Sequence::Sequence(std::string sequence) {
+Sequence::Sequence(string sequence) {
     for (unsigned int boucle = 0; boucle < sequence.size(); boucle++) {
         if (boucle % 2 == 0) {
             try {
                 listeCases_.emplace_back(sequence[boucle], sequence[boucle + 1]);
-            } catch (const std::runtime_error &erreur) {
-                std::cout << "Erreur capturée : " << erreur.what() << std::endl;
+            } catch (const runtime_error &erreur) {
+                cout << "Erreur capturée : " << erreur.what() << endl;
             }
         }
     }
@@ -61,7 +61,7 @@ void Sequence::afficherCase(const unsigned int index) const {
 ********************************************************************************/
 Case Sequence::obtenirCase(const unsigned int index) const {
     if (index >= listeCases_.size()) {
-        throw std::out_of_range("Index hors limites");
+        throw out_of_range("Index hors limites");
     }
     return listeCases_[index];
 }
@@ -73,7 +73,7 @@ void Sequence::afficherSequence() const {
     for (unsigned int boucle = 0; boucle < listeCases_.size(); boucle++) {
         afficherCase(boucle);
     }
-    std::cout << std::endl;
+    cout << endl;
 }
 
 /************************************************************************************************************
@@ -117,7 +117,7 @@ void Sequence::transposer(const unsigned int indexDepart, const unsigned int nom
                     fin = listeCases_.begin() + taille;
                 }
 
-                std::rotate(debut, nombre, fin);
+                rotate(debut, nombre, fin);
             }
             // Déplacer vers un index inférieur
             else {
@@ -129,7 +129,7 @@ void Sequence::transposer(const unsigned int indexDepart, const unsigned int nom
                     nombre = listeCases_.begin() + taille;
                 }
 
-                std::rotate(fin, debut, nombre);
+                rotate(fin, debut, nombre);
             }
         }
     }
@@ -183,7 +183,7 @@ void Sequence::supprimer(const unsigned int indexDepart, const unsigned int nomb
 /**********************************************************
 ***** ModifierCase : Remplace un element par un autre *****
 **********************************************************/
-void Sequence::modifierCase(const unsigned int index, const std::string &signeLettre) {
+void Sequence::modifierCase(const unsigned int index, const string &signeLettre) {
     if(!listeCases_.empty()) {
         if (index < listeCases_.size()) {
             if (signeLettre.size() == 2) {
@@ -200,7 +200,7 @@ void Sequence::modifierCase(const unsigned int index, const std::string &signeLe
 /**********************************************************************************
 ***** AjouterCase : Ajoute un nouvel element dans la liste a l'endroit choisi *****
 **********************************************************************************/
-void Sequence::ajouterCase(const unsigned int index, const std::string &signeLettre) {
+void Sequence::ajouterCase(const unsigned int index, const string &signeLettre) {
     if (index < listeCases_.size()) {
         if (signeLettre.size() == 2) {
             listeCases_.emplace(listeCases_.begin() + index, signeLettre[0], signeLettre[1]);
@@ -221,7 +221,7 @@ unsigned int calculerDistanceLevenshtein(const Sequence &sequence1, const Sequen
 
     // MatriceDistances est un tableau de longueurChaine1+1 rangées et longueurChaine2+1 colonnes
     // MatriceDistances est indexé à partir de 0, les chaînes à partir de 1
-    std::vector MatriceDistances(tailleSequence1 + 1, std::vector<int>(tailleSequence2 + 1));
+    vector MatriceDistances(tailleSequence1 + 1, vector<int>(tailleSequence2 + 1));
     // Initialisation de la première ligne et de la première colonne du tableau D
     for (int i = 0; i <= tailleSequence1; i++) {
         MatriceDistances[i][0] = i;
@@ -239,8 +239,8 @@ unsigned int calculerDistanceLevenshtein(const Sequence &sequence1, const Sequen
             if (const char lettre2 = sequence2.obtenirCase(colonne - 1).lireLettre(); lettre1 != lettre2) {
                 coutSubstitution = 1;
             }
-            MatriceDistances[ligne][colonne] =  std::min(MatriceDistances[ligne - 1][colonne] + 1, // effacement du nouveau caractère de séquence1
-                                                std::min(MatriceDistances[ligne][colonne - 1] + 1, // insertion dans séquence2 du nouveau caractère de séquence1
+            MatriceDistances[ligne][colonne] =  min(MatriceDistances[ligne - 1][colonne] + 1, // effacement du nouveau caractère de séquence1
+                                                min(MatriceDistances[ligne][colonne - 1] + 1, // insertion dans séquence2 du nouveau caractère de séquence1
                                                 MatriceDistances[ligne - 1][colonne - 1] + coutSubstitution) // substitution
             );
         }

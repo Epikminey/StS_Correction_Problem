@@ -9,29 +9,29 @@
 **************************************************/
 Algorithme::Algorithme(const Instance &instance): instance_(instance.obtenirSource(), instance.obtenirTerminale()),
                                                   meilleureSolution_(instance, instance.obtenirDistanceLevenshtein()) {
-    listeSolutions_ = std::vector<Solution>();
+    listeSolutions_ = vector<Solution>();
     nombreMouvements_ = instance.obtenirDistanceLevenshtein();
 }
 
 void Algorithme::afficherNombreMouvements() const {
-    std::cout << "Nombre de mouvements : " << nombreMouvements_ << std::endl;
+    cout << "Nombre de mouvements : " << nombreMouvements_ << endl;
 }
 
 void Algorithme::afficherMeilleureSolution() const {
-    std::cout << "Meilleure solution : " << std::endl;
+    cout << "Meilleure solution : " << endl;
     meilleureSolution_.afficherSolution();
 }
 
-std::pair<std::vector<Mouvement>, std::vector<Mouvement> > Algorithme::croisement(
-    const std::vector<Mouvement> &mouvementsParent1, const std::vector<Mouvement> &mouvementsParent2) {
-    std::vector<Mouvement> mouvementsEnfant1;
-    std::vector<Mouvement> mouvementsEnfant2;
+pair<vector<Mouvement>, vector<Mouvement> > Algorithme::croisement(
+    const vector<Mouvement> &mouvementsParent1, const vector<Mouvement> &mouvementsParent2) {
+    vector<Mouvement> mouvementsEnfant1;
+    vector<Mouvement> mouvementsEnfant2;
 
     const int min = static_cast<int>(0.3 * static_cast<double>(mouvementsParent1.size()));
     const int max = static_cast<int>(0.7 * static_cast<double>(mouvementsParent1.size()));
-    std::uniform_int_distribution<int> dis(min, max);
-    std::random_device rd;
-    std::mt19937 gen(rd());
+    uniform_int_distribution<int> dis(min, max);
+    random_device rd;
+    mt19937 gen(rd());
 
     const unsigned int separation = dis(gen);
 
@@ -46,17 +46,17 @@ std::pair<std::vector<Mouvement>, std::vector<Mouvement> > Algorithme::croisemen
     return make_pair(mouvementsEnfant1, mouvementsEnfant2);
 }
 
-std::vector<Solution> Algorithme::selectionParTournoi(const std::vector<Solution> &generationCourante,
+vector<Solution> Algorithme::selectionParTournoi(const vector<Solution> &generationCourante,
                                                       const unsigned int nbSolutionParGen) {
     // On crée une liste pour que chaque individus ne fasse qu'une seule fois partie du tournoi
-    std::vector<unsigned int> listeCroisement(nbSolutionParGen);
+    vector<unsigned int> listeCroisement(nbSolutionParGen);
     iota(listeCroisement.begin(), listeCroisement.end(), 0);
     // Mélange de la liste
-    std::random_device random_liste;
-    std::mt19937 generation_liste(random_liste());
-    std::ranges::shuffle(listeCroisement, generation_liste);
+    random_device random_liste;
+    mt19937 generation_liste(random_liste());
+    ranges::shuffle(listeCroisement, generation_liste);
 
-    auto generationSuivante = std::vector<Solution>();
+    auto generationSuivante = vector<Solution>();
 
     for (unsigned int i = 0; i < listeCroisement.size(); i += 2) {
         const unsigned int indexSolution1 = listeCroisement[i];
@@ -86,17 +86,13 @@ bool Algorithme::rechercheSolution(const unsigned int nbGenerationMax, const flo
     bool solutionOptimaleTrouvee = false;
     unsigned int numGeneration = 0;
 
-    std::cout << "Debut de la recherche de solution." << std::endl;
-    std::cout << "Sequence de depart S : " << std::endl;
+    cout << "Début de la recherche de solution." << endl;
+    cout << "Séquence de départ S : " << endl;
     instance_.obtenirSource().afficherSequence();
-    std::cout << "Sequence d'arrivee T : " << std::endl;
+    cout << "Séquence d'arrivée T : " << endl;
     instance_.obtenirTerminale().afficherSequence();
 
-    std::cout << "Distance levenshtein (valeur optimale a atteindre: " << nombreMouvements_ << ")" << std::endl;
-
-    for (unsigned int i = 0; i < nbSolutionParGen; i++) {
-        listeSolutions_.emplace_back(instance_, nombreMouvements_);
-    }
+    cout << "Distance levenshtein (valeur optimale à atteindre: " << nombreMouvements_ << ")" << endl;
 
     // Algorithme de recherche de solution
     while (numGeneration < nbGenerationMax) {
@@ -121,16 +117,17 @@ bool Algorithme::rechercheSolution(const unsigned int nbGenerationMax, const flo
                     break;
                 }
             }
+
         } else {
             // On rajoute la partie de la population manquante (après sélection par tournoi)
 
             // On crée une liste pour croiser les individus gagnants du tournoi aléatoirement entre eux
-            std::vector<unsigned int> listeCroisement(nbSolutionParGen / 2);
+            vector<unsigned int> listeCroisement(nbSolutionParGen / 2);
             iota(listeCroisement.begin(), listeCroisement.end(), 0);
             // Mélange de la liste
-            std::random_device random_liste;
-            std::mt19937 generation_liste(random_liste());
-            std::ranges::shuffle(listeCroisement, generation_liste);
+            random_device random;
+            mt19937 generation_liste(random());
+            ranges::shuffle(listeCroisement, generation_liste);
 
             // Croisement des solutions gagnantes du tournoi pour reproduire des enfants et retrouver le nombre de solutions initial
             for (unsigned int i = 0; i < listeCroisement.size(); i += 2) {
@@ -138,37 +135,20 @@ bool Algorithme::rechercheSolution(const unsigned int nbGenerationMax, const flo
                     listeSolutions_[listeCroisement[i]].obtenirListeMouvements(),
                     listeSolutions_[listeCroisement[i + 1]].obtenirListeMouvements());
 
-                if (affichageDetaille) {
-                    std::cout << "Croisement de la solution n°" << listeCroisement[i] << " avec " << listeCroisement[
-                                i + 1]
-                            << ":" << std::endl;
-                    std::cout << "Parent 1 : ";
-                    //listeSolutions_[listeCroisement[i]].afficherSolutionSimplifiee();
-
-                    std::cout << "Parent 2 :";
-                    //listeSolutions_[listeCroisement[i + 1]].afficherSolutionSimplifiee();
-                }
-
                 listeSolutions_.emplace_back(instance_, mouvementsEnfant1);
                 listeSolutions_.emplace_back(instance_, mouvementsEnfant2);
-
-                if (affichageDetaille) {
-                    std::cout << "Enfant 1 : ";
-                    listeSolutions_[listeCroisement[listeCroisement.size() + i]].afficherSolutionSimplifiee();
-
-                    std::cout << "Enfant 2 :";
-                    listeSolutions_[listeCroisement[listeCroisement.size() + i + 1]].afficherSolutionSimplifiee();
-                }
             }
 
             // Mutation des solutions venant d'être créées
-            /*for (Solution &solution: listeSolutions_) {
-                for (unsigned int i = 0; i < nbMutationParGen; i++) {
-                    const unsigned int indexSolution = rand() % listeSolutions_.size();
-                    listeSolutions_[indexSolution].mutation(tauxMutation);
-                }
-            }*/
+            for (unsigned int i = 0; i < nbMutationParGen; i++) {
+                mt19937 gen(random());
+                const int max_index = static_cast<int>(listeSolutions_.size()) - 1;
+                uniform_int_distribution<> dis(0, max_index);
+                const unsigned int indexSolution = dis(gen);
 
+                // On applique toujours une seule mutation par solution
+                listeSolutions_[indexSolution].Mutation(tauxMutation, 1);
+            }
 
             // On evalue les nouveaux individus uniquement
             const auto numSolution = listeSolutions_.size() / 2;
@@ -184,27 +164,31 @@ bool Algorithme::rechercheSolution(const unsigned int nbGenerationMax, const flo
                 }
 
                 if (affichageDetaille) {
-                    std::cout << "Solution n°" << i + 1 << " : " << evaluation << std::endl;
+                    cout << "Solution n°" << i + 1 << " : " << evaluation << endl;
                 }
             }
         }
 
         // Sélection des meilleures solutions pour la génération future
         if (affichageDetaille) {
-            std::cout << "Sélection par tournoi des meilleures solutions." << std::endl;
+            cout << "Sélection par tournoi des meilleures solutions." << endl;
         }
+
 
         listeSolutions_ = selectionParTournoi(listeSolutions_, nbSolutionParGen);
 
-        if (affichageDetaille) {
-            std::cout << std::endl << "Fin de l'itération pour la génération n°" << numGeneration << std::endl;
-        }
+
+        //if (affichageDetaille) {
+            cout << "Fin de l'itération pour la génération n°" << numGeneration << "; " << listeSolutions_.size() << endl;
+        //}
 
         numGeneration++;
 
         if (solutionOptimaleTrouvee) {
+            cout << "Meilleure solution trouvée !" << endl;
             numGeneration = 0;
         }
     }
+
     return solutionOptimaleTrouvee;
 }

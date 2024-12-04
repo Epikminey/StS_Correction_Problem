@@ -3,6 +3,8 @@
 
 #include <tuple>
 
+using namespace std;
+
 // Contient la structure d'une case de la sequence.
 class Case {
 private:
@@ -56,7 +58,7 @@ public:
     /***********************************************************************
     ***** LireCase : Accesseur direct de lecture sur lettre_ et signe_ *****
     ***********************************************************************/
-    [[nodiscard]] std::tuple<char, char> lireCase() const;
+    [[nodiscard]] tuple<char, char> lireCase() const;
 
     /******************************************************
     ***** AfficherCase : Affiche la valeur de la case *****

@@ -13,9 +13,10 @@ public:
     static void testModification();
     static void testAjout();
 
-    /*static bool testEnzo();
-    static bool testAffichage();
-    static bool testSolutionOptimale();*/
+    static bool testAntoine();
+    static bool testEnzo();
+    static bool testAffichage(bool aleatoire);
+    static bool testSolutionOptimale();
 };
 
 #endif

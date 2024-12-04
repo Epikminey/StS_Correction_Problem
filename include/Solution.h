@@ -8,7 +8,7 @@ struct Mouvement {
     unsigned int indexDepart;
     unsigned int nombreCases;
     unsigned int indexDestination;
-    std::string nomCase;
+    string nomCase;
 };
 
 enum Mouvements {
@@ -26,8 +26,8 @@ enum Mouvements {
 class Solution {
 private:
     /*** Attributs ***/
-    std::vector<Sequence> listeSequences_; // Le chemin de sequences
-    std::vector<Mouvement> listeMouvements_; // Les mouvements pour faire le chemin de sequences
+    vector<Sequence> listeSequences_; // Le chemin de sequences
+    vector<Mouvement> listeMouvements_; // Les mouvements pour faire le chemin de sequences
     unsigned int evaluation_; // L'évaluation de la solution
 
 public:
@@ -44,7 +44,7 @@ public:
     /***********************************************************************************************
     ***** Solution : Le constructeur de confort via une liste de mouvements (apres croisement) *****
     ***********************************************************************************************/
-    explicit Solution(const Instance &instance, const std::vector<Mouvement> &mouvements);
+    explicit Solution(const Instance &instance, const vector<Mouvement> &mouvements);
 
     /*************************************************************
     ***** Solution : Le constructeur de recopie (par defaut) *****
@@ -63,10 +63,26 @@ public:
     *****************************************************************************/
     Solution &operator=(const Solution &param) = default;
 
-    /********************************************************************
-    ***** Mutation : Pour modifier un des mouvements de la Solution *****
-    ********************************************************************/
-    //void Mutation(unsigned int index, const Mouvement &mouvement);
+    /**********************************************************************************
+    ***** Mutation : Créée un mouvement aléatoire selon le taux de mutation donné *****
+    **********************************************************************************/
+    void Mutation(float tauxMutation, unsigned int nombreMutations);
+
+    /****************************************************************************************
+    ***** ModifierMouvement : Modifie un mouvement de la solution à une position donnée *****
+    ****************************************************************************************/
+    void ModifierMouvement(const Mouvement & mouvement, unsigned int numMouvement);
+
+    /*****************************************************************************************
+    ***** GenererMouvementAleatoire : Créée et renvoie un mouvement généré aléatoirement *****
+    *****                             se base sur la séquence à la position donnée       *****
+    *****************************************************************************************/
+    Mouvement GenererMouvementAleatoire(Sequence &sequence);
+
+    /*******************************************************************************************
+    ***** AppliquerMouvement :Applique un mouvement sur la dernière séquence de la solution *****
+    *******************************************************************************************/
+    void AppliquerMouvement(const Mouvement & mouvement);
 
     /***********************************************************************************************************************************
     ***** CalculerEvaluation : Pour calculer la distance de Levenshtein entre la dernière séquence de la Solution et la séquence T *****
@@ -86,12 +102,12 @@ public:
     /****************************************************************************
     ***** ObtenirListeSequences : Pour avoir la suite de sequences modifies *****
     ****************************************************************************/
-    [[nodiscard]] std::vector<Sequence> obtenirListeSequences() const;
+    [[nodiscard]] vector<Sequence> obtenirListeSequences() const;
 
     /**********************************************************************************************
     ***** ObtenirListeMouvements : Pour avoir tous les mouvements effectues sur la sequence S *****
     **********************************************************************************************/
-    [[nodiscard]] std::vector<Mouvement> obtenirListeMouvements() const;
+    [[nodiscard]] vector<Mouvement> obtenirListeMouvements() const;
 
     /***************************************************************************************************
     ***** AfficherSolution : Affiche la solution avec l'ensemble des mouvements de cette solution. *****

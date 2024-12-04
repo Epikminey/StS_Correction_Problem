@@ -1,6 +1,7 @@
 #include "Test.h"
 
 #include <iostream>
+#include <bits/random.h>
 
 /**********************************************************************************************/
 #define ASSERT_INVERSE(a, b) \
@@ -153,7 +154,7 @@ void Test::testAjout() {
 /**********************************************************************************************/
 
 
-/*string genererChaineAleatoire(const vector<char>& caracteresPossibles, int longeurMax) {
+string genererChaineAleatoire(const vector<char>& caracteresPossibles, int longeurMax) {
     string chaine;
     random_device rd;
     mt19937 gen(rd());
@@ -207,43 +208,51 @@ bool Test::testEnzo() {
 }
 
 
-bool Test::testAffichage() {
+bool Test::testAffichage(const bool aleatoire) {
 
     const string ADN1 = "+A-B+C-D+E-F+G-H+I";
     const string ADN2 = "+A-B+C-D+E-F+G-C+I";
-    const string ADN3 = "+A-B+C-D+E-F-C+I";
-    const string ADN4 = "+I-C-F+E-D+C-B+A";
-    const string ADN5 = "+I-C+G-F+E-D+C-B+A";
-    const string ADN6 = "+I-H+G-F+E-D+C-B+A";
-    const string ADN7 = "+I-D+C-B-H+G-F+E+A";
-
-    vector<string> listeSequencesBrutes = {ADN1, ADN2, ADN3, ADN4, ADN5, ADN6, ADN7};
 
     auto sequence1 = Sequence(ADN1);
     auto sequence2 = Sequence(ADN2);
-    auto sequence3 = Sequence(ADN3);
-    auto sequence4 = Sequence(ADN4);
-    auto sequence5 = Sequence(ADN5);
-    auto sequence6 = Sequence(ADN6);
-    auto sequence7 = Sequence(ADN7);
 
-    vector<Sequence> listeSequences = {sequence1, sequence2, sequence3, sequence4, sequence5, sequence6};
+    Instance instance = Instance(sequence1, sequence2);
 
-    Mouvement mouvement1 = {SUBSTITUTION, 8, 1, 8, "str"};
-    Mouvement mouvement2 = {SUPPRESSION, 7, 1, 7, "str"};
-    Mouvement mouvement3 = {INVERSION, 1, 8, 1, "str"};
-    Mouvement mouvement4 = {AJOUT, 3, 1, 3, "str"};
-    Mouvement mouvement5 = {SUBSTITUTION, 2, 1, 8, "str"};
-    Mouvement mouvement6 = {TRANSPOSITION, 2, 4, 5, "str"};
+    Solution solution = Solution(instance, 20);
 
-    vector<Mouvement> listeMouvements = {mouvement1, mouvement2, mouvement3, mouvement4, mouvement5};
+    if(!aleatoire)
+    {
+        const string ADN3 = "+A-B+C-D+E-F-C+I";
+        const string ADN4 = "+I-C-F+E-D+C-B+A";
+        const string ADN5 = "+I-C+G-F+E-D+C-B+A";
+        const string ADN6 = "+I-H+G-F+E-D+C-B+A";
+        const string ADN7 = "+I-D+C-B-H+G-F+E+A";
 
-    auto instance = Instance(sequence1, sequence2);
-    vector<Instance> listeInstances = {instance};
+        vector<string> listeSequencesBrutes = {ADN1, ADN2, ADN3, ADN4, ADN5, ADN6, ADN7};
 
-    // Exemple d'initialisation d'une solution et d'affichage
-    auto solution = Solution(listeInstances[0], 6);
-    //solution1.obtenirListeMouvements() = listeMouvements_; // Potentielle erreur de pointeurs
+
+        auto sequence3 = Sequence(ADN3);
+        auto sequence4 = Sequence(ADN4);
+        auto sequence5 = Sequence(ADN5);
+        auto sequence6 = Sequence(ADN6);
+        auto sequence7 = Sequence(ADN7);
+
+        vector<Sequence> listeSequences = {sequence1, sequence2, sequence3, sequence4, sequence5, sequence6};
+
+        Mouvement mouvement1 = {SUBSTITUTION, 8, 1, 8, "str"};
+        Mouvement mouvement2 = {SUPPRESSION, 7, 1, 7, "str"};
+        Mouvement mouvement3 = {INVERSION, 1, 8, 1, "str"};
+        Mouvement mouvement4 = {AJOUT, 3, 1, 3, "str"};
+        Mouvement mouvement5 = {SUBSTITUTION, 2, 1, 8, "str"};
+        Mouvement mouvement6 = {TRANSPOSITION, 2, 4, 5, "str"};
+
+        vector<Mouvement> listeMouvements = {mouvement1, mouvement2, mouvement3, mouvement4, mouvement5};
+
+        vector<Instance> listeInstances = {instance};
+
+        solution = Solution(listeInstances[0], listeMouvements);
+    }
+
 
     solution.afficherSolution();
 
@@ -252,32 +261,30 @@ bool Test::testAffichage() {
 
 bool Test::testSolutionOptimale() {
 
+
     const string ADN1 = "+A-B+C-D+E-F+G-H+I";
     const string ADN2 = "+A-B+C-D+E-F+G-C+I";
-    const string ADN6 = "+I-H+G-F+E-D+C-B+A";
     //const string ADN7 = "+I-D+C-B-H+G-F+E+A";
 
     vector<string> listeSequencesBrutes = {ADN1,  ADN2};
 
-    const auto sequence1 = Sequence(ADN1);
-    const auto sequence2 = Sequence(ADN6);
+    auto sequence1 = Sequence(ADN1);
+    auto sequence2 = Sequence(ADN2);
+
+    Instance instance = Instance(sequence1, sequence2);
 
 
-    const auto instance = Instance(sequence1, sequence2);
-
-
-    //Algorithme algo(instance);
+    Algorithme algo(instance);
 
     cout << "Test : ";
     instance.obtenirTerminale().afficherSequence();
 
-    const unsigned int nbGenerationMax = 1000;
-    const float tauxMutation = 0.5;
-    const unsigned int nbMutationParGen = 10;
-    const unsigned int nbSolutionParGen = 16;
+    unsigned int nbGenerationMax = 10;
+    float tauxMutation = 0.2;
+    unsigned int nbMutationParGen = 10;
+    unsigned int nbSolutionParGen = 16;
 
-
-    //algo.rechercheSolution(nbGenerationMax, tauxMutation, nbMutationParGen, nbSolutionParGen, false);
+    algo.rechercheSolution(nbGenerationMax, tauxMutation, nbMutationParGen, nbSolutionParGen, true);
 
     return true;
-}*/
+}

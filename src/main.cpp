@@ -16,8 +16,8 @@ int main() {
     // Pour s'assurer que l'affichage de la console soit en UTF8
     SetConsoleOutputCP(CP_UTF8);
 
-    //Test de l'affichage d'une solution
-    //Test::testSolutionOptimale();
+    // Test de l'affichage d'une solution
+    //Test::testAffichage(true);
 
     const unsigned int nbGenerationMax = 2;
     const float tauxMutation = 0.5;
@@ -33,13 +33,9 @@ int main() {
 
     const auto instance = Instance(sequence1, sequence2);
 
-    auto sequence3 = Sequence(ADN1);
-
     auto algo = Algorithme(instance);
 
-    std::cout << "coucou";
-
-    std::vector<Solution> listeSoluce;
+    cout << "coucou";
 
     algo.rechercheSolution(nbGenerationMax, tauxMutation, nbMutationParGen, nbSolutionParGen, affichageDetaille);
 
