@@ -75,6 +75,10 @@ vector<Solution> Algorithme::selectionParTournoi(const vector<Solution> &generat
     return generationSuivante;
 }
 
+Solution & Algorithme::obtenirMeilleureSolution() {
+    return meilleureSolution_;
+}
+
 
 /*****************************************************************************************************
 ***** rechercheSolution : Exécute l'algorithme de recherche de la solution optimale au problème. *****
@@ -96,7 +100,7 @@ bool Algorithme::rechercheSolution(const unsigned int nbGenerationMax, const flo
 
     // Algorithme de recherche de solution
     while (numGeneration < nbGenerationMax) {
-        if (affichageDetaille) {
+        if (affichageDetaille || true) {
             std::cout << "Génération n°" << numGeneration << std::endl;
         }
 
@@ -164,7 +168,7 @@ bool Algorithme::rechercheSolution(const unsigned int nbGenerationMax, const flo
                 }
 
                 if (affichageDetaille) {
-                    cout << "Solution n°" << i + 1 << " : " << evaluation << endl;
+                    //cout << "Solution n°" << i + 1 << " : " << evaluation << endl;
                 }
             }
         }
@@ -178,14 +182,15 @@ bool Algorithme::rechercheSolution(const unsigned int nbGenerationMax, const flo
         listeSolutions_ = selectionParTournoi(listeSolutions_, nbSolutionParGen);
 
 
-        //if (affichageDetaille) {
-            cout << "Fin de l'itération pour la génération n°" << numGeneration << "; " << listeSolutions_.size() << endl;
-        //}
+        if (affichageDetaille) {
+            cout << "Fin de l'itération pour la génération n°" << numGeneration << endl;
+        }
 
         numGeneration++;
 
         if (solutionOptimaleTrouvee) {
             cout << "Meilleure solution trouvée !" << endl;
+            cout << "Nombre de mouvements : " << meilleureSolution_.obtenirListeMouvements().size() << endl;
             numGeneration = 0;
         }
     }

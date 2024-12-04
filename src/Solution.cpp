@@ -74,16 +74,20 @@ void Solution::Mutation(const float tauxMutation, const unsigned int nombreMutat
 ****************************************************************************************/
 void Solution::ModifierMouvement(const Mouvement &mouvement, const unsigned int numMouvement) {
 
-    // Modification du mouvement dans la liste
-    listeMouvements_[numMouvement] = mouvement;
 
+    // Variable temporaire, puisqu'on va modiifer listeMouvements_ ensuite
+    vector<Mouvement> nouvelleListeMouvement = listeMouvements_;
+
+    // Modification du mouvement dans la liste
+    nouvelleListeMouvement[numMouvement] = mouvement;
 
     // Suppression des séquences "obsolètes"
     listeSequences_.erase(listeSequences_.begin() + numMouvement + 1, listeSequences_.end());
+    listeMouvements_.erase(listeMouvements_.begin() + numMouvement, listeMouvements_.end());
 
     // Recalcul des séquences en conséquent
-    for(unsigned int numSequence = numMouvement; numSequence < listeSequences_.size(); numSequence++) {
-        AppliquerMouvement(listeMouvements_[numMouvement]);
+    for (auto it = nouvelleListeMouvement.begin() + numMouvement; it != nouvelleListeMouvement.end(); ++it) {
+        AppliquerMouvement(*it);
     }
 }
 
@@ -150,6 +154,7 @@ void Solution::AppliquerMouvement(const Mouvement &mouvement) {
         default: { break; }
     }
 }
+
 
 /*****************************************************************************************
 ***** GenererMouvementAleatoire : Créée et renvoie un mouvement généré aléatoirement *****

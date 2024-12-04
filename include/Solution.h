@@ -84,6 +84,11 @@ public:
     *******************************************************************************************/
     void AppliquerMouvement(const Mouvement & mouvement);
 
+    /*******************************************************************************************
+    ***** AppliquerMouvement :Applique un mouvement sur la dernière séquence de la solution *****
+    *******************************************************************************************/
+    void SupprimerMouvements(unsigned int numMouvements);
+
     /***********************************************************************************************************************************
     ***** CalculerEvaluation : Pour calculer la distance de Levenshtein entre la dernière séquence de la Solution et la séquence T *****
     ***********************************************************************************************************************************/

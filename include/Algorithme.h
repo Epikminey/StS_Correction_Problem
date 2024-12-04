@@ -45,6 +45,8 @@ public:
     static vector<Solution> selectionParTournoi(const vector<Solution> &generationCourante,
                                                      unsigned int nbSolutionParGen);
 
+    Solution &obtenirMeilleureSolution();
+
     /*****************************************************************************************************
     ***** rechercheSolution : Exécute l'algorithme de recherche de la solution optimale au problème. *****
     *****************************************************************************************************/

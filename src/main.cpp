@@ -3,6 +3,7 @@
 
 #include <iostream>
 
+
 int main() {
 
     /*Test::testInverse();
@@ -12,28 +13,34 @@ int main() {
     Test::testModification();
     Test::testAjout();*/
 
-    // Test de l'affichage d'une solution
-    //Test::testAffichage(true);
-
-    const unsigned int nbGenerationMax = 2;
-    const float tauxMutation = 0.5;
+    const unsigned int nbGenerationMax = 300;
+    const float tauxMutation = 0.3;
     const unsigned int nbMutationParGen = 10;
-    const unsigned int nbSolutionParGen = 16;
-    const bool affichageDetaille = true;
+    const unsigned int nbSolutionParGen = 48;
+    const bool affichageDetaille = false;
 
     const std::string ADN1 = "+A-B+C-D+E-F+G-H+I";
-    const std::string ADN6 = "+I-H+G-F+E-D+C-B+A";
+    const std::string ADN2 = "+I-H+G-F+E-D+C-B+A";
 
     const auto sequence1 = Sequence(ADN1);
-    const auto sequence2 = Sequence(ADN6);
+    const auto sequence2 = Sequence(ADN2);
 
     const auto instance = Instance(sequence1, sequence2);
 
     auto algo = Algorithme(instance);
 
-    cout << "coucou";
+    const bool trouvee = algo.rechercheSolution(nbGenerationMax, tauxMutation, nbMutationParGen, nbSolutionParGen, affichageDetaille);
 
-    algo.rechercheSolution(nbGenerationMax, tauxMutation, nbMutationParGen, nbSolutionParGen, affichageDetaille);
+    if(trouvee) {
+        cout << "Solution optimale trouvée !" << endl;
+    } else {
+        cout << "Solution non optimale trouvée :" << endl;
+    }
+
+    cout << "score : " << algo.obtenirMeilleureSolution().obtenirEvaluation() << endl;
+    //algo.afficherNombreMouvements();
+    //algo.afficherMeilleureSolution();
+
 
     return 0;
 }
