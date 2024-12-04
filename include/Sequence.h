@@ -6,9 +6,6 @@
 #include <string>
 #include <vector>
 
-using namespace std;
-
-
 // Contient tous les mouvements pour modifier une sequence.
 class Sequence {
 private:

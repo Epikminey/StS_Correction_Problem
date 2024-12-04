@@ -164,9 +164,8 @@ Mouvement Solution::GenererMouvementAleatoire(Sequence &sequence) {
     random_device graine;
     mt19937 generation(graine());
 
-    for (unsigned int boucle = 0; boucle < nombreMutations; ++boucle) {
-        uniform_int_distribution<> distrOperation1(0, 6);
-        const unsigned int chiffreAleatoire = distrOperation1(generation);
+    uniform_int_distribution<> distrOperation1(0, 6);
+    unsigned int chiffreAleatoire = distrOperation1(generation);
 
     // Pour obtenir la taille de la sequence precedente
     const unsigned int tailleSequence = sequence.obtenirTailleSequence();

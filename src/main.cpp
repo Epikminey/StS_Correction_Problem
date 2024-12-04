@@ -1,20 +1,16 @@
 #include "Algorithme.h"
-#include "Test.h"
+//#include "Test.h"
 
 #include <iostream>
-#include <windows.h>
 
 int main() {
 
-    Test::testInverse();
+    /*Test::testInverse();
     Test::testTransposee();
     Test::testSuppression();
     Test::testDuplication();
     Test::testModification();
-    Test::testAjout();
-
-    // Pour s'assurer que l'affichage de la console soit en UTF8
-    SetConsoleOutputCP(CP_UTF8);
+    Test::testAjout();*/
 
     // Test de l'affichage d'une solution
     //Test::testAffichage(true);

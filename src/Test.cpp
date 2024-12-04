@@ -1,7 +1,8 @@
 #include "Test.h"
 
 #include <iostream>
-#include <bits/random.h>
+#include <algorithm>
+#include <random>
 
 /**********************************************************************************************/
 #define ASSERT_INVERSE(a, b) \
