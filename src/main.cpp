@@ -35,12 +35,10 @@ int main() {
         cout << "Solution optimale trouvee !" << endl;
     } else {
         cout << "Solution optimale non trouvee :" << endl;
+        cout << "distance : " << algo.obtenirMeilleureSolution().obtenirEvaluation() << endl;
     }
 
-    cout << "score : " << algo.obtenirMeilleureSolution().obtenirEvaluation() << endl;
-    //algo.afficherNombreMouvements();
     algo.afficherMeilleureSolution();
-
 
     return 0;
 }
