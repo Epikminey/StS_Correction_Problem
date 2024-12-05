@@ -96,25 +96,33 @@ bool Algorithme::rechercheSolution(const unsigned int nbGenerationMax, const flo
     cout << "Sequence d'arrivee T : " << endl;
     instance_.obtenirTerminale().afficherSequence();
 
-    cout << "Distance levenshtein (valeur optimale a atteindre: " << nombreMouvements_ << ")" << endl;
+    cout << "Distance levenshtein (valeur optimale a atteindre: " << nombreMouvements_ << ")" << endl << endl << endl;
 
     // Algorithme de recherche de solution
     while (numGeneration < nbGenerationMax && nombreMouvements_ > 0) {
 
-        cout << "Generation numero " << numGeneration << " avec " << nombreMouvements_ << " mouvements." << endl;
+        if(affichageDetaille && numGeneration%100 == 0)
+            cout << "Generation numero " << numGeneration << " avec " << nombreMouvements_ << " mouvements." << endl;
 
         if (numGeneration == 0) {
+
+            if(affichageDetaille && numGeneration%100 == 0)
+                cout << "Generation de " << nbSolutionParGen << " solutions aleatoires." << endl;
             // Initialisation de la premiere generation de solutions avec nbSolutionParGen solutions aléatoires
             for (unsigned int i = 0; i < nbSolutionParGen; i++) {
                 listeSolutions_.emplace_back(instance_, nombreMouvements_);
             }
+
+            if(affichageDetaille && numGeneration%100 == 0)
+                cout << "Evaluation des solutions." << endl;
 
             // On evalue chaque nouvel individu
             for (Solution &solution: listeSolutions_) {
                 solution.calculerEvaluation(instance_.obtenirTerminale());
                 if (const unsigned int evaluation = solution.obtenirEvaluation();
                     evaluation == 0) {
-                    cout << "Meilleure solution trouvee pour " << nombreMouvements_ << " mouvements!" << endl;
+                    if(affichageDetaille)
+                        cout << "Meilleure solution trouvee pour " << nombreMouvements_ << " mouvements!" << endl;
                     meilleureSolution_ = solution;
                     nombreMouvements_--;
                     solutionOptimaleTrouvee = true;
@@ -125,6 +133,9 @@ bool Algorithme::rechercheSolution(const unsigned int nbGenerationMax, const flo
 
         } else {
             // On rajoute la partie de la population manquante (après sélection par tournoi)
+
+            if(affichageDetaille && numGeneration%100 == 0)
+                cout << "Croisement des solutions." << endl;
 
             // On crée une liste pour croiser les individus gagnants du tournoi aléatoirement entre eux
             vector<unsigned int> listeCroisement(nbSolutionParGen / 2);
@@ -144,6 +155,9 @@ bool Algorithme::rechercheSolution(const unsigned int nbGenerationMax, const flo
                 listeSolutions_.emplace_back(instance_, mouvementsEnfant2);
             }
 
+            if(affichageDetaille && numGeneration%100 == 0)
+                cout << "Mutations des solutions." << endl;
+
             // Mutation des solutions venant d'être créées
             for (unsigned int i = 0; i < nbMutationParGen; i++) {
                 mt19937 gen(random());
@@ -155,47 +169,44 @@ bool Algorithme::rechercheSolution(const unsigned int nbGenerationMax, const flo
                 listeSolutions_[indexSolution].Mutation(tauxMutation, 1);
             }
 
+            if(affichageDetaille && numGeneration%100 == 0)
+                cout << "Evaluation des solutions." << endl;
+
             // On evalue les nouveaux individus uniquement
             const auto numSolution = listeSolutions_.size() / 2;
             for (unsigned int i = numSolution; i < listeSolutions_.size(); i++) {
                 Solution &solution = listeSolutions_[i];
                 solution.calculerEvaluation(instance_.obtenirTerminale());
                 if (const unsigned int evaluation = solution.obtenirEvaluation(); evaluation == 0) {
-                    cout << "Meilleure solution trouvee pour " << nombreMouvements_ << " mouvements!" << endl;
+                    if(affichageDetaille)
+                        cout << "Meilleure solution trouvee pour " << nombreMouvements_ << " mouvements!" << endl;
                     meilleureSolution_ = solution;
                     nombreMouvements_--;
                     solutionOptimaleTrouvee = true;
                     break;
                 }
-
-                if (affichageDetaille) {
-                    //cout << "Solution n°" << i + 1 << " : " << evaluation << endl;
-                }
             }
         }
 
         // Sélection des meilleures solutions pour la génération future
-        if (affichageDetaille) {
+        if(affichageDetaille && numGeneration%100 == 0)
             cout << "Selection par tournoi des meilleures solutions." << endl;
-        }
-
 
         listeSolutions_ = selectionParTournoi(listeSolutions_, nbSolutionParGen);
-
-
-        if (affichageDetaille) {
-            cout << "Fin de l'iteration pour la generation numero " << numGeneration << endl;
-        }
 
         numGeneration++;
 
         if (solutionOptimaleTrouvee) {
-            cout << "Meilleure solution trouvee !" << endl;
-            cout << "Nombre de mouvements : " << meilleureSolution_.obtenirListeMouvements().size() << endl;
+            if(affichageDetaille)
+                cout << "Meilleure solution trouvee pour " << nombreMouvements_ << " mouvements!" << endl;
+
             numGeneration = 0;
             solutionOptimaleTrouvee = false;
             listeSolutions_.clear();
         }
+
+        if(affichageDetaille && numGeneration%100 == 0)
+            cout << endl;
     }
 
     return !meilleureSolution_.obtenirListeMouvements().empty();

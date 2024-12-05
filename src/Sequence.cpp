@@ -238,6 +238,7 @@ unsigned int calculerDistanceLevenshtein(const Sequence &sequence1, const Sequen
             if (const char lettre2 = sequence2.obtenirCase(colonne - 1).lireLettre(); lettre1 != lettre2) {
                 coutSubstitution = 1;
             }
+
             MatriceDistances[ligne][colonne] =  min(MatriceDistances[ligne - 1][colonne] + 1, // effacement du nouveau caractère de séquence1
                                                 min(MatriceDistances[ligne][colonne - 1] + 1, // insertion dans séquence2 du nouveau caractère de séquence1
                                                 MatriceDistances[ligne - 1][colonne - 1] + coutSubstitution) // substitution

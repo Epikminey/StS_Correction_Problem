@@ -346,7 +346,7 @@ void Solution::afficherSolution() const {
     //!!!!! Faire une gestion d'expression plus propre
     if (const unsigned int nbMouvements = listeMouvements_.size(); nbMouvements + 1 != nbSequences) {
         //!!!!! Faire une gestion d'exception plus propre
-        cout << "Solution incohérente : Nombre de séquences incohérent par rapport au nombre de mouvements." << endl;
+        cout << "Solution incoherente : Nombre de sequences incoherent par rapport au nombre de mouvements." << endl;
     } else {
         // Recherche de la longueur max parmis la liste de séquences pour aligner l'affichage des mouvements
         unsigned int taille_sequence_max = 0;
@@ -396,44 +396,44 @@ void Solution::afficherMouvement(const Mouvement &mouvement, const char delimite
     switch (mouvement.idMouvement) {
         case INVERSION: {
             cout << "Inversion de " << mouvement.nombreCases <<
-                    " caractères à la position " << mouvement.indexDepart << endl;
+                    " caracteres a la position " << mouvement.indexDepart << endl;
             break;
         }
         case TRANSPOSITION: {
             cout << "Transposition de " << mouvement.nombreCases <<
-                    " caractères à la position " << mouvement.indexDepart <<
+                    " caracteres a la position " << mouvement.indexDepart <<
                     " vers la position " << mouvement.indexDestination << endl;
             break;
         }
         case INVERSION_TRANSPOSEE: {
             cout << "Transposition et inversion de " << mouvement.nombreCases <<
-                    " caractères à la position " << mouvement.indexDepart <<
+                    " caracteres a la position " << mouvement.indexDepart <<
                     " vers la position " << mouvement.indexDestination << endl;
             break;
         }
         case DUPLICATION: {
             cout << "Duplication de " << mouvement.nombreCases <<
-                    " caractères à la position " << mouvement.indexDepart <<
+                    " caracteres a la position " << mouvement.indexDepart <<
                     " vers la position " << mouvement.indexDestination << endl;
             break;
         }
         case SUPPRESSION: {
             cout << "Suppresion de " << mouvement.nombreCases <<
-                    " caractères à la position " << mouvement.indexDepart << endl;
+                    " caractères a la position " << mouvement.indexDepart << endl;
             break;
         }
         case SUBSTITUTION: {
             cout << "Subsitution de " << mouvement.nombreCases <<
-                    " caractères à la position " << mouvement.indexDepart << endl;
+                    " caracteres a la position " << mouvement.indexDepart << endl;
             break;
         }
         case AJOUT: {
             cout << "Ajout de " << mouvement.nombreCases <<
-                    " caractères à la position " << mouvement.indexDepart << endl;
+                    " caracteres a la position " << mouvement.indexDepart << endl;
             break;
         }
         default: {
-            cout << "MOUVEMENT INCONNU !!!" << endl;
+            cout << "Mouvement inconnu !" << endl;
             break;
         }
     }

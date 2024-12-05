@@ -7,18 +7,18 @@
 /**********************************************************************************************/
 #define ASSERT_INVERSE(a, b) \
 if (!((a) == (b))) { \
-std::cout << "Test failed: " #a " != " #b << " at line " << __LINE__ << std::endl; \
+cout << "Test failed: " #a " != " #b << " at line " << __LINE__ << endl; \
 } else { \
-std::cout << "Test passed." << std::endl; \
+cout << "Test passed." << endl; \
 }
 
 void Test::testInverse() {
-    const std::string ADN = "+A-B+C-D+E-F+G-H+I";
+    const string ADN = "+A-B+C-D+E-F+G-H+I";
     auto sequence = Sequence(ADN);
-    const std::string ADNvide;
+    const string ADNvide;
     auto sequenceVide = Sequence(ADNvide);
 
-    std::string ADNtest = "-A-B+C-D+E-F+G-H+I";
+    string ADNtest = "-A-B+C-D+E-F+G-H+I";
     auto sequenceTest = Sequence(ADNtest);
     sequence.inverser(0,1);
     ASSERT_INVERSE(sequence , sequenceTest);
@@ -56,18 +56,18 @@ void Test::testInverse() {
 /**********************************************************************************************/
 #define ASSERT_TRANSPOSEE(a, b) \
 if (!(a == b)) { \
-std::cout << "Test failed: " #a " != " #b << " at line " << __LINE__ << std::endl; \
+cout << "Test failed: " #a " != " #b << " at line " << __LINE__ << endl; \
 } else { \
-std::cout << "Test passed." << std::endl; \
+cout << "Test passed." << endl; \
 }
 
 void Test::testTransposee() {
-    const std::string ADN = "-A-B+C-G+F-I+H-D+E";
+    const string ADN = "-A-B+C-G+F-I+H-D+E";
     auto sequence = Sequence(ADN);
-    const std::string ADNvide;
+    const string ADNvide;
     auto sequenceVide = Sequence(ADNvide);
 
-    std::string ADNtest = "-G-A-B+C+F-I+H-D+E";
+    string ADNtest = "-G-A-B+C+F-I+H-D+E";
     auto sequenceTest = Sequence(ADNtest);
     sequence.transposer(0,3,1);
     ASSERT_TRANSPOSEE(sequence , sequenceTest);
@@ -115,9 +115,9 @@ void Test::testTransposee() {
 /**********************************************************************************************/
 #define ASSERT_SUPPRESSION(a, b) \
 if (!(a == b)) { \
-std::cout << "Test failed: " #a " != " #b << " at line " << __LINE__ << std::endl; \
+cout << "Test failed: " #a " != " #b << " at line " << __LINE__ << endl; \
 } else { \
-std::cout << "Test passed." << std::endl; \
+cout << "Test passed." << endl; \
 }
 
 void Test::testSuppression() {
@@ -125,9 +125,9 @@ void Test::testSuppression() {
 /**********************************************************************************************/
 #define ASSERT_DUPLICATION(a, b) \
 if (!(a == b)) { \
-std::cout << "Test failed: " #a " != " #b << " at line " << __LINE__ << std::endl; \
+cout << "Test failed: " #a " != " #b << " at line " << __LINE__ << endl; \
 } else { \
-std::cout << "Test passed." << std::endl; \
+cout << "Test passed." << endl; \
 }
 
 void Test::testDuplication() {
@@ -135,9 +135,9 @@ void Test::testDuplication() {
 /**********************************************************************************************/
 #define ASSERT_MODIFICATION(a, b) \
 if (!(a == b)) { \
-std::cout << "Test failed: " #a " != " #b << " at line " << __LINE__ << std::endl; \
+cout << "Test failed: " #a " != " #b << " at line " << __LINE__ << endl; \
 } else { \
-std::cout << "Test passed." << std::endl; \
+cout << "Test passed." << endl; \
 }
 
 void Test::testModification() {
@@ -145,9 +145,9 @@ void Test::testModification() {
 /**********************************************************************************************/
 #define ASSERT_AJOUT(a, b) \
 if (!(a == b)) { \
-std::cout << "Test failed: " #a " != " #b << " at line " << __LINE__ << std::endl; \
+cout << "Test failed: " #a " != " #b << " at line " << __LINE__ << endl; \
 } else { \
-std::cout << "Test passed." << std::endl; \
+cout << "Test passed." << endl; \
 }
 
 void Test::testAjout() {
